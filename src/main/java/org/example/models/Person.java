@@ -1,4 +1,7 @@
-package org.example;
+package org.example.models;
+
+import org.example.enums.Color;
+import org.example.enums.Country;
 
 public class Person {
     private String name; //Поле не может быть null, Строка не может быть пустой

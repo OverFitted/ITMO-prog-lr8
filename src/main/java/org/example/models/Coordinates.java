@@ -1,4 +1,4 @@
-package org.example;
+package org.example.models;
 
 public class Coordinates {
     private Double x; //Поле не может быть null

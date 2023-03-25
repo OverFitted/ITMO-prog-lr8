@@ -1,4 +1,6 @@
-package org.example;
+package org.example.models;
+
+import org.example.enums.UnitOfMeasure;
 
 public class Product {
     private Long id; //Поле не может быть null, Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
