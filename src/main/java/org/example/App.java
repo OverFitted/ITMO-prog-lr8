@@ -2,21 +2,20 @@ package org.example;
 
 import org.example.models.Product;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Vector;
 
 public class App {
     private boolean status;
     private Vector<Product> products;
-    private String fileName;
+    private final String fileName;
 
-    public App(String[] args) {
+    public App(String filename) {
         this.status = true;
-        if (args.length == 0) {
-            System.out.println("Пожалуйста, укажите имя файла с данными в качестве аргумента командной строки.");
-            System.exit(1);
-        }
-        fileName = args[0];
-        products = new Vector<>();
+        this.fileName = filename;
         loadData();
         status = true;
     }
@@ -33,7 +32,14 @@ public class App {
 //        TODO
     }
 
-    public void loadData() {
-//        TODO
+    private void loadData() {
+        // Реализуйте чтение данных из файла с использованием InputStreamReader
+        try {
+            File file = new File(fileName);
+            InputStreamReader reader = new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8);
+            // YAML -> Product -> this.products
+        } catch (Exception e) {
+            System.out.println("Не удалось загрузить данные из файла: " + e.getMessage());
+        }
     }
 }
