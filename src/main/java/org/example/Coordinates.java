@@ -1,0 +1,6 @@
+package org.example;
+
+public class Coordinates {
+    private Double x; //Поле не может быть null
+    private Float y; //Значение поля должно быть больше -452, Поле не может быть null
+}
