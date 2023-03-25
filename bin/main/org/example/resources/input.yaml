@@ -1,0 +1,43 @@
+products:
+  - id: 1
+    name: Product1
+    coordinates:
+      x: 12.5
+      y: 23.4
+    creationDate: "2023-03-25T10:15:30Z"
+    price: 100
+    partNumber: A12345
+    manufactureCost: 20.5
+    unitOfMeasure: KILOGRAMS
+    owner:
+      name: Alice
+      height: 170
+      eyeColor: GREEN
+      hairColor: BLUE
+      nationality: RUSSIA
+      location:
+        x: 2.1
+        y: 3.2
+        z: 4.3
+        name: Moscow
+  - id: 2
+    name: Product2
+    coordinates:
+      x: 45.8
+      y: 56.7
+    creationDate: "2023-03-25T11:20:40Z"
+    price: 200
+    partNumber: B67890
+    manufactureCost: 50.0
+    unitOfMeasure: METERS
+    owner:
+      name: Bob
+      height: 180
+      eyeColor: BLUE
+      hairColor: WHITE
+      nationality: INDIA
+      location:
+        x: 5.1
+        y: 6.2
+        z: 7.3
+        name: Delhi
