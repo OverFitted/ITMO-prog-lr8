@@ -1,4 +1,4 @@
-package org.example.enums;
+package exmp.enums;
 
 public enum UnitOfMeasure {
     KILOGRAMS,

@@ -1,7 +1,7 @@
-package org.example.models;
+package exmp.models;
 
-import org.example.enums.Color;
-import org.example.enums.Country;
+import exmp.enums.Color;
+import exmp.enums.Country;
 
 public class Person {
     private String name; //Поле не может быть null, Строка не может быть пустой

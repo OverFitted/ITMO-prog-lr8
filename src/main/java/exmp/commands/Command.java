@@ -1,4 +1,4 @@
-package org.example.commands;
+package exmp.commands;
 
 public interface Command {
 

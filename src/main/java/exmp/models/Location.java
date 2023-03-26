@@ -1,4 +1,4 @@
-package org.example.models;
+package exmp.models;
 
 public class Location {
     private float x;

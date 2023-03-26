@@ -1,10 +1,10 @@
-package org.example;
+package exmp;
 
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        App app = new App("resources/input.yaml");
+        App app = new App("src/main/resources/input.yaml");
         Scanner keyboard = new Scanner(System.in);
 
         while (app.getStatus()) {
