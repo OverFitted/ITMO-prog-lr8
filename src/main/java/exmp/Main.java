@@ -4,13 +4,19 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        exmp.App app = new exmp.App("src/main/resources/input.yaml");
+        exmp.App app = new exmp.App("../resources/input.xml");
+        Scanner scanner = new Scanner(System.in);
 
         while (app.getStatus()) {
-            Scanner scanner = new Scanner(System.in);
-            String line = scanner.nextLine();
-            app.readLine(line);
-            scanner.close();
+            if (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                app.readLine(line);
+            } else {
+                System.out.println("Ввод закончился. Завершение программы.");
+                app.switchOff();
+                scanner.close();
+                break;
+            }
         }
     }
 }

@@ -1,23 +1,22 @@
 package exmp;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.type.CollectionType;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import exmp.commands.HelpCommand;
+import exmp.commands.InfoCommand;
+import exmp.commands.ShowCommand;
 import exmp.models.Product;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
-import java.util.function.Consumer;
 
 public class App {
-    private boolean status;
-    private LinkedList<Product> products;
     private final String fileName;
+    private boolean status;
+    private Vector<Product> products;
     private HashSet<Long> idList;
-    private HashMap<String, Consumer<String>> commandHandlers;
+    private HashMap<String, exmp.commands.Command> commandHandlers;
 
     public App(String filename) {
         this.status = true;
@@ -25,7 +24,7 @@ public class App {
         this.commandHandlers = new HashMap<>();
 
         initCommands();
-        loadData();
+//        loadData();
     }
 
     public void switchOff() {
@@ -39,38 +38,47 @@ public class App {
     public void readLine(String line) {
         String[] parsedLine = line.split(" ");
         String command = parsedLine[0];
-        String arguments = String.join(" ", Arrays.copyOfRange(parsedLine, 1, parsedLine.length));
+        String[] arguments = Arrays.copyOfRange(parsedLine, 1, parsedLine.length);
 
         if (commandHandlers.containsKey(command)) {
-            commandHandlers.get(command).accept(arguments);
+            commandHandlers.get(command).execute(this, arguments);
         } else {
             System.out.println("Неизвестная команда. Попробуйте снова или введите 'help' для получения списка доступных команд.");
         }
     }
 
-    private void helpCommandHandler(String arguments) {
-        HelpCommand helpCommand = new HelpCommand();
-        helpCommand.execute(this, arguments.split(" "));
+    public HashMap<String, exmp.commands.Command> getCommandHandler() {
+        return this.commandHandlers;
     }
 
     private void initCommands() {
-         this.commandHandlers.put("help", this::helpCommandHandler);
+        this.commandHandlers.put("help", new HelpCommand());
+        this.commandHandlers.put("info", new InfoCommand());
+        this.commandHandlers.put("show", new ShowCommand());
     }
 
     private void loadData() {
+        ObjectMapper xmlMapper = new XmlMapper();
+        File file = new File(this.fileName);
         try {
-            ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
-            File productsFile = new File(this.fileName);
-            CollectionType listType = objectMapper.getTypeFactory().constructCollectionType(LinkedList.class, Product.class);
-            objectMapper.registerModule(new JavaTimeModule());
-            this.products = objectMapper.readValue(productsFile, listType);
-            System.out.println("Файл успешно считан, коллекция заполнена данными с файла.");
-            for (Product product : products) {
-                this.idList.add(product.getId());
-            }
+            // Загрузка данных из файла
+            List<Product> loadedProducts = xmlMapper.readValue(file, xmlMapper.getTypeFactory().constructCollectionType(List.class, Product.class));
+
+            // Добавление загруженных данных в коллекцию products
+            products.addAll(loadedProducts);
+
+            System.out.println("Данные успешно загружены из файла: " + this.fileName);
         } catch (IOException e) {
-            this.products = new LinkedList<Product>();
-            System.out.println("Файл не найден.");
+            System.out.println("Ошибка при загрузке данных из файла: " + this.fileName);
+            e.printStackTrace();
         }
+    }
+
+    public Vector<Product> getProducts() {
+        return products;
+    }
+
+    public Date getInitializationDate() {
+        return new Date();
     }
 }
