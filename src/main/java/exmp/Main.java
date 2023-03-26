@@ -5,13 +5,12 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         App app = new App("src/main/resources/input.yaml");
-        Scanner keyboard = new Scanner(System.in);
 
         while (app.getStatus()) {
-            String line = keyboard.nextLine();
+            Scanner scanner = new Scanner(System.in);
+            String line = scanner.nextLine();
             app.readLine(line);
+            scanner.close();
         }
-
-        keyboard.close();
     }
 }

@@ -14,6 +14,9 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Consumer;
 import java.util.LinkedList;
 
 public class App {
@@ -22,10 +25,15 @@ public class App {
     private final String fileName;
     private File productsFile;
     private HashSet<Long> idList;
+    private Map<String, Consumer<String>> commandHandlers;
 
     public App(String filename) {
         this.status = true;
         this.fileName = filename;
+
+        commandHandlers = new HashMap<>();
+        initCommands();
+
         loadData();
         status = true;
     }
@@ -40,6 +48,10 @@ public class App {
 
     public void readLine(String line) {
         // TODO
+    }
+
+    private void initCommands() {
+        // commandHandlers.put("exmp", addCommandExample);
     }
 
     private void loadData() {
