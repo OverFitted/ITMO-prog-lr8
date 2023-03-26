@@ -1,7 +1,9 @@
 package exmp;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
+import com.fasterxml.jackson.databind.type.CollectionType;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import exmp.models.Product;
 
@@ -11,12 +13,15 @@ import java.util.List;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.Vector;
+import java.util.HashSet;
+import java.util.LinkedList;
 
 public class App {
     private boolean status;
-    private Vector<Product> products;
+    private LinkedList<Product> products;
     private final String fileName;
+    private File productsFile;
+    private HashSet<Long> idList;
 
     public App(String filename) {
         this.status = true;
@@ -38,18 +43,19 @@ public class App {
     }
 
     private void loadData() {
-        ObjectMapper yamlMapper = new yamlMapper();
-        File file = new File(this.fileName);
         try {
-            List<Product> loadedProducts = yamlMapper.readValue(file,
-                    yamlMapper.getTypeFactory().constructCollectionType(List.class, Product.class));
-
-            this.products.addAll(loadedProducts);
-
-            System.out.println("Данные успешно загружены из файла: " + this.fileName);
+            ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
+            this.productsFile = new File(this.fileName);
+            CollectionType listType = objectMapper.getTypeFactory().constructCollectionType(LinkedList.class, Product.class);
+            objectMapper.registerModule(new JavaTimeModule());
+            this.products = objectMapper.readValue(this.productsFile, listType);
+            System.out.println("Файл успешно считан, коллекция заполнена данными с файла.");
+            for (Product product : products) {
+                this.idList.add(product.getId());
+            }
         } catch (IOException e) {
-            System.out.println("Ошибка при загрузке данных из файла: " + this.fileName);
-            e.printStackTrace();
+            this.products = new LinkedList<Product>();
+            System.out.println("Файл не найден.");
         }
     }
 }

@@ -16,4 +16,8 @@ public class Product {
     private Float manufactureCost; // Поле не может быть null
     private UnitOfMeasure unitOfMeasure; // Поле не может быть null
     private Person owner; // Поле может быть null
+
+    public Long getId() {
+        return id;
+    }
 }
