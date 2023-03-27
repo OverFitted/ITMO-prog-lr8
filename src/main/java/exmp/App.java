@@ -87,10 +87,10 @@ public class App {
         this.commandHandlers.put("add", new exmp.commands.AddCommand());
         this.commandHandlers.put("update_by_id", new exmp.commands.UpdateIdCommand());
         this.commandHandlers.put("remove_by_id", new exmp.commands.RemoveIdCommand());
-//        this.commandHandlers.put("clear", new exmp.commands.ClearCommand());
-//        this.commandHandlers.put("save", new exmp.commands.SaveCommand());
+        this.commandHandlers.put("clear", new exmp.commands.ClearCommand());
+        this.commandHandlers.put("save", new exmp.commands.SaveCommand());
 //        this.commandHandlers.put("execute_script", new exmp.commands.ExecuteCommand());
-//        this.commandHandlers.put("exit", new exmp.commands.ExitCommand());
+        this.commandHandlers.put("exit", new exmp.commands.ExitCommand());
 //        this.commandHandlers.put("remove_at_index", new exmp.commands.RemoveIndexCommand());
 //        this.commandHandlers.put("add_if_max", new exmp.commands.AddMaxCommand());
 //        this.commandHandlers.put("add_if_min", new exmp.commands.AddMinCommand());

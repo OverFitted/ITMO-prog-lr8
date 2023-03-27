@@ -23,7 +23,7 @@ public class UpdateIdCommand implements exmp.commands.Command {
     @Override
     public void execute(exmp.App app, String[] args) {
         if (args.length != 1) {
-            System.out.println("Использование: update_by_id id");
+            System.out.println("Использование: update_by_id {id}");
             return;
         }
 
