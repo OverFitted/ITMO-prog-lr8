@@ -2,10 +2,7 @@ package exmp;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import exmp.commands.AddCommand;
-import exmp.commands.HelpCommand;
-import exmp.commands.InfoCommand;
-import exmp.commands.ShowCommand;
+import exmp.commands.*;
 import exmp.models.Product;
 
 import java.io.File;
@@ -88,8 +85,8 @@ public class App {
         this.commandHandlers.put("info", new InfoCommand());
         this.commandHandlers.put("show", new ShowCommand());
         this.commandHandlers.put("add", new AddCommand());
-//        this.commandHandlers.put("update_by_id", new UpdateIdCommand());
-//        this.commandHandlers.put("remove_by_id", new RemoveIdCommand());
+        this.commandHandlers.put("update_by_id", new UpdateIdCommand());
+        this.commandHandlers.put("remove_by_id", new RemoveIdCommand());
 //        this.commandHandlers.put("clear", new ClearCommand());
 //        this.commandHandlers.put("save", new SaveCommand());
 //        this.commandHandlers.put("execute_script", new ExecuteCommand());
