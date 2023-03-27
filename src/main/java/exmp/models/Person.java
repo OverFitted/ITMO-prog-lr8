@@ -1,5 +1,7 @@
 package exmp.models;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import exmp.enums.Color;
 import exmp.enums.Country;
 import exmp.models.Location;
@@ -24,13 +26,31 @@ public class Person {
      * @param nationality - национальность человека.
      * @param location - местонахождение человека.
      */
-    public Person(String name, Long height, Color eyeColor, Color hairColor, Country nationality, Location location) {
+    @JsonCreator
+    public Person(@JsonProperty("name") String name,
+                  @JsonProperty("height") Long height,
+                  @JsonProperty("eyeColor") Color eyeColor,
+                  @JsonProperty("hairColor") Color hairColor,
+                  @JsonProperty("nationality") Country nationality,
+                  @JsonProperty("location") Location location) {
         setName(name);
         setHeight(height);
         setEyeColor(eyeColor);
         setHairColor(hairColor);
         setNationality(nationality);
         setLocation(location);
+    }
+
+    @Override
+    public String toString() {
+        return "Person{" +
+                "name=" + this.getName() +
+                ", Height=" + this.getHeight() +
+                ", EyeColor=" + this.getEyeColor() +
+                ", HairColor=" + this.getHairColor() +
+                ", Nationality=" + this.getNationality() +
+                ", Location=" + this.getLocation() +
+                '}';
     }
 
     /**

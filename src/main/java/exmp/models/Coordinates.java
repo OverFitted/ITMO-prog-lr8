@@ -1,5 +1,8 @@
 package exmp.models;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Класс, представляющий координаты объекта
  */
@@ -14,9 +17,18 @@ public class Coordinates {
      * @param y координата y
      * @throws IllegalArgumentException если x == null или y <= -452
      */
-    public Coordinates(Double x, Float y) {
+    @JsonCreator
+    public Coordinates(@JsonProperty("x") Double x, @JsonProperty("y") Float y) {
         setX(x);
         setY(y);
+    }
+
+    @Override
+    public String toString() {
+        return "Coordinates{" +
+                "X=" + this.getX() +
+                ", Y=" + this.getY() +
+                '}';
     }
 
     /**

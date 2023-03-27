@@ -16,7 +16,7 @@ public class ShowCommand implements exmp.commands.Command {
     @Override
     public void execute(exmp.App app, String[] args) {
         Vector< exmp.models.Product > products = app.getProducts();
-        if (products != null) {
+        if (products != null && !products.isEmpty()) {
             products.forEach(System.out::println);
         } else {
             System.out.println("Коллекция не содержит продуктов.");

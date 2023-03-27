@@ -1,5 +1,8 @@
 package exmp.models;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Класс, представляющий местоположение.
  */
@@ -17,11 +20,25 @@ public class Location {
      * @param z    координата z местоположения
      * @param name название местоположения
      */
-    public Location(float x, double y, double z, String name) {
+    @JsonCreator
+    public Location(@JsonProperty("x") float x,
+                    @JsonProperty("y") double y,
+                    @JsonProperty("z") double z,
+                    @JsonProperty("name") String name) {
         setX(x);
         setY(y);
         setZ(z);
         setName(name);
+    }
+
+    @Override
+    public String toString() {
+        return "Location{" +
+                "X=" + this.getX() +
+                ", Y=" + this.getY() +
+                ", Z=" + this.getZ() +
+                ", Name=" + this.getName() +
+                '}';
     }
 
     /**

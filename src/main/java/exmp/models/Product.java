@@ -1,5 +1,7 @@
 package exmp.models;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import exmp.enums.UnitOfMeasure;
 import exmp.models.Person;
 import exmp.models.Coordinates;
@@ -88,7 +90,14 @@ public class Product {
      * @param unitOfMeasure   - единица измерения продукта.
      * @param owner           - владелец продукта.
      */
-    public Product(String name, Coordinates coordinates, int price, String partNumber, Float manufactureCost, UnitOfMeasure unitOfMeasure, Person owner) {
+    @JsonCreator
+    public Product(@JsonProperty("name") String name,
+                   @JsonProperty("coordinates") Coordinates coordinates,
+                   @JsonProperty("price") int price,
+                   @JsonProperty("partNumber") String partNumber,
+                   @JsonProperty("manufactureCost") Float manufactureCost,
+                   @JsonProperty("unitOfMeasure") UnitOfMeasure unitOfMeasure,
+                   @JsonProperty("owner") Person owner) {
         this.id = idGenerator.getAndIncrement();
         setName(name);
         setCoordinates(coordinates);
@@ -98,6 +107,20 @@ public class Product {
         setManufactureCost(manufactureCost);
         setUnitOfMeasure(unitOfMeasure);
         setOwner(owner);
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", name=" + name +
+                ", coordinates=" + coordinates +
+                ", creationDate=" + creationDate +
+                ", price=" + price +
+                ", partNumber=" + partNumber +
+                ", unitOfMeasure=" + unitOfMeasure +
+                ", owner=" + owner +
+                '}';
     }
 
     /**
