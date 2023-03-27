@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        exmp.App app = new exmp.App("../resources/input.xml");
+        exmp.App app = new exmp.App("src/main/resources/input.xml");
         Scanner scanner = new Scanner(System.in);
 
         while (app.getStatus()) {
