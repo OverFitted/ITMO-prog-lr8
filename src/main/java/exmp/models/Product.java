@@ -1,8 +1,8 @@
 package exmp.models;
 
 import exmp.enums.UnitOfMeasure;
-import exmp.models.Coordinates;
 import exmp.models.Person;
+import exmp.models.Coordinates;
 
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -13,7 +13,7 @@ public class Product {
     /**
      * Генератор идентификаторов для объектов класса Product.
      */
-    private static AtomicLong idGenerator = new AtomicLong(1);
+    private static final AtomicLong idGenerator = new AtomicLong(1);
 
     /**
      * Уникальный идентификатор объекта.
@@ -22,7 +22,7 @@ public class Product {
      * Значение этого поля должно быть уникальным.
      * Значение этого поля должно генерироваться автоматически.
      */
-    private Long id;
+    private final Long id;
 
     /**
      * Название продукта.
@@ -237,6 +237,7 @@ public class Product {
 
     /**
      * Метод, возвращающий единицу измерения продукта.
+     *
      * @return - единица измерения продукта.
      */
     public UnitOfMeasure getUnitOfMeasure() {
@@ -245,6 +246,7 @@ public class Product {
 
     /**
      * Метод, устанавливающий единицу измерения продукта.
+     *
      * @param unitOfMeasure - единица измерения продукта.
      */
     public void setUnitOfMeasure(UnitOfMeasure unitOfMeasure) {
@@ -256,6 +258,7 @@ public class Product {
 
     /**
      * Метод, возвращающий владельца продукта.
+     *
      * @return - владелец продукта.
      */
     public Person getOwner() {
@@ -264,6 +267,7 @@ public class Product {
 
     /**
      * Метод, устанавливающий владельца продукта.
+     *
      * @param owner - владелец продукта.
      */
     public void setOwner(Person owner) {
