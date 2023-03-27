@@ -1,5 +1,7 @@
 package exmp.commands;
 
+import java.util.Vector;
+
 public class ShowCommand implements exmp.commands.Command {
     @Override
     public String getName() {
@@ -13,6 +15,11 @@ public class ShowCommand implements exmp.commands.Command {
 
     @Override
     public void execute(exmp.App app, String[] args) {
-        app.getProducts().forEach(System.out::println);
+        Vector< exmp.models.Product > products = app.getProducts();
+        if (products != null) {
+            products.forEach(System.out::println);
+        } else {
+            System.out.println("Коллекция не содержит продуктов.");
+        }
     }
 }

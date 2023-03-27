@@ -7,21 +7,35 @@ public enum UnitOfMeasure {
     /**
      * Килограммы.
      */
-    KILOGRAMS, // Килограммы
+    KILOGRAMS,
     /**
      * Метры.
      */
-    METERS, // Метры
+    METERS,
     /**
      * Сантиметры.
      */
-    CENTIMETERS, // Сантиметры
+    CENTIMETERS,
     /**
      * Квадратные метры.
      */
-    SQUARE_METERS, // Квадратные метры
+    SQUARE_METERS,
     /**
      * Миллиграммы.
      */
-    MILLIGRAMS; // Миллиграммы
+    MILLIGRAMS;
+
+    /**
+     * Метод, возвращающий все возможные значения перечисления в виде строки.
+     * @return - строка со всеми возможными значениями перечисления.
+     */
+    public static String getValues() {
+        StringBuilder sb = new StringBuilder();
+        for (UnitOfMeasure unit : UnitOfMeasure.values()) {
+            sb.append(unit.toString());
+            sb.append(", ");
+        }
+        sb.delete(sb.length() - 2, sb.length());
+        return sb.toString();
+    }
 }

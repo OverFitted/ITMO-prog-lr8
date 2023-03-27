@@ -1,5 +1,7 @@
 package exmp.commands;
 
+import java.util.Vector;
+
 public class InfoCommand implements exmp.commands.Command {
     @Override
     public String getName() {
@@ -12,8 +14,14 @@ public class InfoCommand implements exmp.commands.Command {
     }
     @Override
     public void execute(exmp.App app, String[] args) {
-        System.out.println("Тип коллекции: " + app.getProducts().getClass().getName());
         System.out.println("Дата инициализации: " + app.getInitializationDate());
-        System.out.println("Количество элементов: " + app.getProducts().size());
+
+        Vector< exmp.models.Product > products = app.getProducts();
+        if (products != null) {
+            System.out.println("Тип коллекции: " + products.getClass().getName());
+            System.out.println("Количество элементов: " + products.size());
+        } else {
+            System.out.println("Коллекция не содержит продуктов.");
+        }
     }
 }
