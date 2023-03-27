@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.*;
 
 public class App {
+    private final Date initializationDate;
     private final String fileName;
     private boolean status;
     private Vector<Product> products;
@@ -21,6 +22,7 @@ public class App {
     public App(String filename) {
         this.status = true;
         this.fileName = filename;
+        this.initializationDate = new Date();
         this.commandHandlers = new HashMap<>();
 
         initCommands();
@@ -65,7 +67,7 @@ public class App {
             List<Product> loadedProducts = xmlMapper.readValue(file, xmlMapper.getTypeFactory().constructCollectionType(List.class, Product.class));
 
             // Добавление загруженных данных в коллекцию products
-            products.addAll(loadedProducts);
+            this.products.addAll(loadedProducts);
 
             System.out.println("Данные успешно загружены из файла: " + this.fileName);
         } catch (IOException e) {
@@ -75,10 +77,10 @@ public class App {
     }
 
     public Vector<Product> getProducts() {
-        return products;
+        return this.products;
     }
 
     public Date getInitializationDate() {
-        return new Date();
+        return this.initializationDate;
     }
 }
