@@ -51,12 +51,12 @@ public class UpdateIdCommand implements exmp.commands.Command {
                 put("price", value -> oldProduct.setPrice(Integer.parseInt(value)));
                 put("partNumber", oldProduct::setPartNumber);
                 put("manufactureCost", value -> oldProduct.setManufactureCost(Float.parseFloat(value)));
-                put("unitOfMeasure", value -> oldProduct.setUnitOfMeasure(UnitOfMeasure.valueOf(value)));
+                put("unitOfMeasure", value -> oldProduct.setUnitOfMeasure(UnitOfMeasure.valueOf(value.toUpperCase())));
                 put("ownerName", value -> oldProduct.getOwner().setName(value));
-                put("ownerHeight", value -> oldProduct.getOwner().setHeight(Long.valueOf(value)));
-                put("ownerEyeColor", value -> oldProduct.getOwner().setEyeColor(Color.valueOf(value)));
-                put("ownerHairColor", value -> oldProduct.getOwner().setHairColor(Color.valueOf(value)));
-                put("ownerNationality", value -> oldProduct.getOwner().setNationality(Country.valueOf(value)));
+                put("ownerHeight", value -> oldProduct.getOwner().setHeight(Long.valueOf(value.toUpperCase())));
+                put("ownerEyeColor", value -> oldProduct.getOwner().setEyeColor(Color.valueOf(value.toUpperCase())));
+                put("ownerHairColor", value -> oldProduct.getOwner().setHairColor(Color.valueOf(value.toUpperCase())));
+                put("ownerNationality", value -> oldProduct.getOwner().setNationality(Country.valueOf(value.toUpperCase())));
                 put("ownerX", value -> oldProduct.getOwner().getLocation().setX(Float.parseFloat(value)));
                 put("ownerY", value -> oldProduct.getOwner().getLocation().setY(Double.parseDouble(value)));
                 put("ownerZ", value -> oldProduct.getOwner().getLocation().setZ(Double.parseDouble(value)));

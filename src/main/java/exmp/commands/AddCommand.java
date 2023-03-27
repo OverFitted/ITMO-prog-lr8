@@ -47,15 +47,15 @@ public class AddCommand implements exmp.commands.Command {
 
         System.out.println("Введите единицу измерения продукта (" + UnitOfMeasure.getValues() + "):");
         String unitOfMeasureStr = scanner.nextLine().trim().toUpperCase();
-        UnitOfMeasure unitOfMeasure = UnitOfMeasure.valueOf(unitOfMeasureStr);
+        UnitOfMeasure unitOfMeasure = UnitOfMeasure.valueOf(unitOfMeasureStr.toUpperCase());
 
         System.out.println("Введите информацию о владельце продукта (имя, рост, цвет глаз, цвет волос, страну):");
         String ownerName = scanner.nextLine().trim();
         long height = scanner.nextLong();
         scanner.nextLine();
-        Color eyeColor = Color.valueOf(scanner.nextLine().trim());
-        Color hairColor = Color.valueOf(scanner.nextLine().trim());
-        Country country = Country.valueOf(scanner.nextLine().trim());
+        Color eyeColor = Color.valueOf(scanner.nextLine().trim().toUpperCase());
+        Color hairColor = Color.valueOf(scanner.nextLine().trim().toUpperCase());
+        Country country = Country.valueOf(scanner.nextLine().trim().toUpperCase());
 
         System.out.println("Введите информацию о локации владельца продукта (координаты x, y, z и название местоположения):");
         float loc_x = scanner.nextFloat();

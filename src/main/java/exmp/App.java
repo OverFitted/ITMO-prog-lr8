@@ -94,9 +94,9 @@ public class App {
 //        this.commandHandlers.put("remove_at_index", new exmp.commands.RemoveIndexCommand());
 //        this.commandHandlers.put("add_if_max", new exmp.commands.AddMaxCommand());
 //        this.commandHandlers.put("add_if_min", new exmp.commands.AddMinCommand());
-//        this.commandHandlers.put("remove_all_by_part_number", new exmp.commands.RemovePartNumberCommand());
+        this.commandHandlers.put("remove_all_by_part_number", new exmp.commands.RemovePartNumberCommand());
 //        this.commandHandlers.put("group_counting_by_coordinates", new exmp.commands.GroupCoordinatesCommand());
-//        this.commandHandlers.put("filter_by_unit_of_measure", new exmp.commands.FilterUnitOfMeasureCommand());
+        this.commandHandlers.put("filter_by_unit_of_measure", new exmp.commands.FilterUnitOfMeasureCommand());
     }
 
     /**
