@@ -22,6 +22,16 @@ public enum Color {
      * Белый цвет.
      */
     WHITE;
+
+    public static String getValues() {
+        StringBuilder sb = new StringBuilder();
+        for (exmp.enums.Color unit : exmp.enums.Color.values()) {
+            sb.append(unit.toString());
+            sb.append(", ");
+        }
+        sb.delete(sb.length() - 2, sb.length());
+        return sb.toString();
+    }
 }
 
 //public enum Color {

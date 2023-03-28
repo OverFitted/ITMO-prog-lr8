@@ -48,7 +48,7 @@ public class Coordinates {
      */
     public void setX(Double x) {
         if (x == null) {
-            throw new IllegalArgumentException("Поле x не может быть null");
+            System.err.println("Поле x не может быть null");
         }
         this.x = x;
     }
@@ -70,7 +70,7 @@ public class Coordinates {
      */
     public void setY(Float y) {
         if (y == null || y <= -452) {
-            throw new IllegalArgumentException("Значение поля y должно быть больше -452 и не может быть null");
+            System.err.println("Значение поля y должно быть больше -452 и не может быть null");
         }
         this.y = y;
     }

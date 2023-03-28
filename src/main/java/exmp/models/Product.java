@@ -153,7 +153,7 @@ public class Product implements Comparable<Product>{
      */
     public void setName(String name) {
         if (name == null || name.isEmpty()) {
-            throw new IllegalArgumentException("Поле name не может быть null или пустым");
+            System.err.println("Поле name не может быть null или пустым");
         }
         this.name = name;
     }
@@ -174,7 +174,7 @@ public class Product implements Comparable<Product>{
      */
     public void setCoordinates(Coordinates coordinates) {
         if (coordinates == null) {
-            throw new IllegalArgumentException("Поле coordinates не может быть null");
+            System.err.println("Поле coordinates не может быть null");
         }
         this.coordinates = coordinates;
     }
@@ -195,7 +195,7 @@ public class Product implements Comparable<Product>{
      */
     public void setCreationDate(java.util.Date creationDate) {
         if (creationDate == null) {
-            throw new IllegalArgumentException("Поле creationDate не может быть null");
+            System.err.println("Поле creationDate не может быть null");
         }
         this.creationDate = creationDate;
     }
@@ -216,7 +216,7 @@ public class Product implements Comparable<Product>{
      */
     public void setPrice(int price) {
         if (price <= 0) {
-            throw new IllegalArgumentException("Значение поля price должно быть больше 0");
+            System.err.println("Значение поля price должно быть больше 0");
         }
         this.price = price;
     }
@@ -237,7 +237,7 @@ public class Product implements Comparable<Product>{
      */
     public void setPartNumber(String partNumber) {
         if (partNumber != null && (partNumber.length() < 30 || partNumber.length() > 51)) {
-            throw new IllegalArgumentException("Длина строки partNumber должна быть не меньше 30 и не больше 51");
+            System.err.println("Длина строки partNumber должна быть не меньше 30 и не больше 51");
         }
         this.partNumber = partNumber;
     }
@@ -258,7 +258,7 @@ public class Product implements Comparable<Product>{
      */
     public void setManufactureCost(Float manufactureCost) {
         if (manufactureCost == null) {
-            throw new IllegalArgumentException("Поле manufactureCost не может быть null");
+            System.err.println("Поле manufactureCost не может быть null");
         }
         this.manufactureCost = manufactureCost;
     }
@@ -279,7 +279,7 @@ public class Product implements Comparable<Product>{
      */
     public void setUnitOfMeasure(UnitOfMeasure unitOfMeasure) {
         if (unitOfMeasure == null) {
-            throw new IllegalArgumentException("Поле unitOfMeasure не может быть null");
+            System.err.println("Поле unitOfMeasure не может быть null");
         }
         this.unitOfMeasure = unitOfMeasure;
     }

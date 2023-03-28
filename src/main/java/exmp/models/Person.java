@@ -67,7 +67,7 @@ public class Person {
      */
     public void setName(String name) {
         if (name == null || name.isEmpty()) {
-            throw new IllegalArgumentException("Поле name не может быть null или пустым");
+            System.err.println("Поле name не может быть null или пустым");
         }
         this.name = name;
     }
@@ -86,7 +86,7 @@ public class Person {
      */
     public void setHeight(Long height) {
         if (height != null && height <= 0) {
-            throw new IllegalArgumentException("Значение поля height должно быть больше 0");
+            System.err.println("Значение поля height должно быть больше 0");
         }
         this.height = height;
     }
@@ -105,7 +105,7 @@ public class Person {
      */
     public void setEyeColor(Color eyeColor) {
         if (eyeColor == null) {
-            throw new IllegalArgumentException("Поле eyeColor не может быть null");
+            System.err.println("Поле eyeColor не может быть null");
         }
         this.eyeColor = eyeColor;
     }
@@ -156,7 +156,7 @@ public class Person {
      */
     public void setLocation(Location location) {
         if (location == null) {
-            throw new IllegalArgumentException("Поле location не может быть null");
+            System.err.println("Поле location не может быть null");
         }
         this.location = location;
     }
