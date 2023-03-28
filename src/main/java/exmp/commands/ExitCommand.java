@@ -16,6 +16,5 @@ public class ExitCommand implements exmp.commands.Command {
     @Override
     public void execute(exmp.App app, String[] args) {
         app.switchOff();
-        exit(0);
     }
 }

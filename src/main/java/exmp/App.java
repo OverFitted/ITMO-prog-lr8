@@ -2,7 +2,6 @@ package exmp;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import exmp.commands.*;
 import exmp.models.Product;
 
 import java.io.File;
@@ -89,13 +88,13 @@ public class App {
         this.commandHandlers.put("remove_by_id", new exmp.commands.RemoveIdCommand());
         this.commandHandlers.put("clear", new exmp.commands.ClearCommand());
         this.commandHandlers.put("save", new exmp.commands.SaveCommand());
-//        this.commandHandlers.put("execute_script", new exmp.commands.ExecuteCommand());
+        this.commandHandlers.put("execute_script", new exmp.commands.ExecuteCommand());
         this.commandHandlers.put("exit", new exmp.commands.ExitCommand());
         this.commandHandlers.put("remove_at", new exmp.commands.RemoveIndexCommand());
-//        this.commandHandlers.put("add_if_max", new exmp.commands.AddMaxCommand());
-//        this.commandHandlers.put("add_if_min", new exmp.commands.AddMinCommand());
+        this.commandHandlers.put("add_if_max", new exmp.commands.AddMaxCommand());
+        this.commandHandlers.put("add_if_min", new exmp.commands.AddMinCommand());
         this.commandHandlers.put("remove_all_by_part_number", new exmp.commands.RemovePartNumberCommand());
-//        this.commandHandlers.put("group_counting_by_coordinates", new exmp.commands.GroupCoordinatesCommand());
+        this.commandHandlers.put("group_counting_by_coordinates", new exmp.commands.GroupCoordinatesCommand());
         this.commandHandlers.put("filter_by_unit_of_measure", new exmp.commands.FilterUnitOfMeasureCommand());
     }
 

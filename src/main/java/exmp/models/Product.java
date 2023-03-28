@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * Класс Product, представляющий объект продукта в коллекции.
  */
-public class Product {
+public class Product implements Comparable<Product>{
     /**
      * Генератор идентификаторов для объектов класса Product.
      */
@@ -121,6 +121,11 @@ public class Product {
                 ", unitOfMeasure=" + unitOfMeasure +
                 ", owner=" + owner +
                 '}';
+    }
+
+    @Override
+    public int compareTo(Product other) {
+        return Integer.compare(this.getPrice(), other.getPrice());
     }
 
     /**

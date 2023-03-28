@@ -1,5 +1,7 @@
 package exmp.commands;
 
+import exmp.models.Product;
+
 import java.util.Vector;
 
 public class ShowCommand implements exmp.commands.Command {
@@ -15,7 +17,7 @@ public class ShowCommand implements exmp.commands.Command {
 
     @Override
     public void execute(exmp.App app, String[] args) {
-        Vector< exmp.models.Product > products = app.getProducts();
+        Vector<Product> products = app.getProducts();
         if (products != null && !products.isEmpty()) {
             products.forEach(System.out::println);
         } else {
