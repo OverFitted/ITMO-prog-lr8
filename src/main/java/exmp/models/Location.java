@@ -31,6 +31,11 @@ public class Location {
         setName(name);
     }
 
+    /**
+     * Возвращает строковое представление объекта Location.
+     *
+     * @return строковое представление объекта Location, содержащее значения всех полей объекта
+     */
     @Override
     public String toString() {
         return "Location{" +

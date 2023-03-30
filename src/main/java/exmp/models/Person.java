@@ -41,6 +41,11 @@ public class Person {
         setLocation(location);
     }
 
+    /**
+     * Возвращает строковое представление объекта Person.
+     *
+     * @return строковое представление объекта Person, содержащее значения всех полей объекта
+     */
     @Override
     public String toString() {
         return "Person{" +

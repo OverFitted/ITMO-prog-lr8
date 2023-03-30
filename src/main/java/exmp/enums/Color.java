@@ -23,6 +23,10 @@ public enum Color {
      */
     WHITE;
 
+    /**
+     * Метод, возвращающий все возможные значения перечисления в виде строки.
+     * @return - строка со всеми возможными значениями перечисления.
+     */
     public static String getValues() {
         StringBuilder sb = new StringBuilder();
         for (exmp.enums.Color unit : exmp.enums.Color.values()) {

@@ -21,6 +21,10 @@ public enum Country {
      */
     NORTH_KOREA;
 
+    /**
+     * Метод, возвращающий все возможные значения перечисления в виде строки.
+     * @return - строка со всеми возможными значениями перечисления.
+     */
     public static String getValues() {
         StringBuilder sb = new StringBuilder();
         for (exmp.enums.Country unit : exmp.enums.Country.values()) {

@@ -109,6 +109,11 @@ public class Product implements Comparable<Product>{
         setOwner(owner);
     }
 
+    /**
+     * Возвращает строковое представление объекта Product.
+     *
+     * @return строковое представление объекта Product, содержащее значения всех полей объекта
+     */
     @Override
     public String toString() {
         return "Product{" +
@@ -123,6 +128,14 @@ public class Product implements Comparable<Product>{
                 '}';
     }
 
+    /**
+     * Сравнивает объекты типа Product по их цене.
+     *
+     * @param other объект типа Product для сравнения
+     * @return отрицательное число, если цена данного объекта меньше чем у other;
+     *         положительное число, если цена данного объекта больше чем у other;
+     *         0, если цены равны
+     */
     @Override
     public int compareTo(Product other) {
         return Integer.compare(this.getPrice(), other.getPrice());

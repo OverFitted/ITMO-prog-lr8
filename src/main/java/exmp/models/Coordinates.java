@@ -23,6 +23,11 @@ public class Coordinates {
         setY(y);
     }
 
+    /**
+     * Возвращает строковое представление объекта Coordinates.
+     *
+     * @return строковое представление объекта Coordinates, содержащее значения всех полей объекта
+     */
     @Override
     public String toString() {
         return "Coordinates{" +
