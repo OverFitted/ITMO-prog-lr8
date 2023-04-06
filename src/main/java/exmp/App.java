@@ -15,7 +15,7 @@ public class App {
     private final Date initializationDate;
     private final String fileName;
     private boolean status;
-    private final Vector<Product> products = new Vector<Product>();
+    private Vector<Product> products = new Vector<Product>();
     private HashSet<Long> idList;
     private HashMap<String, exmp.commands.Command> commandHandlers;
 
@@ -108,11 +108,10 @@ public class App {
         File file = new File(this.fileName);
         try {
             // Загрузка данных из файла
-            List<Product> loadedProducts = xmlMapper.readValue(file, xmlMapper.getTypeFactory().constructCollectionType(List.class, Product.class));
+            Vector<Product> file_products = xmlMapper.readValue(file, xmlMapper.getTypeFactory().constructCollectionType(Vector.class, Product.class));
 
             // Добавление загруженных данных в коллекцию products
-            this.products.addAll(loadedProducts);
-
+            this.products.addAll(file_products);
             System.out.println("Данные успешно загружены из файла: " + this.fileName);
         } catch (IOException e) {
             System.out.println("Ошибка при загрузке данных из файла: " + this.fileName);
