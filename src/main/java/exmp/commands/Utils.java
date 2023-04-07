@@ -11,7 +11,15 @@ import exmp.models.Product;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+/**
+ * Класс вспомогательных utils функций для избежания дублирования кода
+ */
 public class Utils {
+    /**
+     * Считывает новый продукт
+     *
+     * @return объект типа Product
+     */
     public Product ScanNewProduct() {
         Scanner scanner = new Scanner(System.in);
 

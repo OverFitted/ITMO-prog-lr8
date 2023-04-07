@@ -9,17 +9,36 @@ import java.util.HashMap;
 import java.util.Scanner;
 import java.util.function.Consumer;
 
+/**
+ * Команда update_by_id для изменения информации о продукте коллекции по заданному id
+ */
 public class UpdateIdCommand implements exmp.commands.Command {
+    /**
+     * Возвращает название команды update_by_id.
+     *
+     * @return название команды update_by_id.
+     */
     @Override
     public String getName() {
         return "update_by_id";
     }
 
+    /**
+     * Возвращает описание команды update_by_id.
+     *
+     * @return описание команды update_by_id.
+     */
     @Override
     public String getDescription() {
         return "обновить значение элемента коллекции, id которого равен заданному";
     }
 
+    /**
+     * Выполняет команду обновления информации о продукте по id
+     *
+     * @param app объект приложения, над которым выполняется команда.
+     * @param args массив аргументов команды.
+     */
     @Override
     public void execute(exmp.App app, String[] args) {
         if (args.length != 1) {
