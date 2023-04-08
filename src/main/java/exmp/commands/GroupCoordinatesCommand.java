@@ -38,7 +38,7 @@ public class GroupCoordinatesCommand implements exmp.commands.Command {
      * @param args массив аргументов команды.
      */
     @Override
-    public void execute(App app, String[] args) {
+    public void execute(App app, Object... args) {
         Map<String, Integer> coordinatesGroups = new HashMap<>();
 
         app.getProducts().forEach(product -> {

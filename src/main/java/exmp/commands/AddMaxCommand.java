@@ -7,8 +7,6 @@ import exmp.models.Product;
  * Команда add_if_max для добавления нового продукта в коллекцию, если его значение превышает максимальное значение в коллекции
  */
 public class AddMaxCommand implements exmp.commands.Command {
-    exmp.commands.Utils utils = new exmp.commands.Utils();
-
     /**
      * Возвращает название команды add_if_max.
      *
@@ -36,7 +34,7 @@ public class AddMaxCommand implements exmp.commands.Command {
      * @param args массив аргументов команды.
      */
     @Override
-    public void execute(App app, String[] args) {
+    public void execute(App app, Object... args) {
         Product newProduct = utils.ScanNewProduct();
         Product maxProduct = app.getProducts().stream().max(Product::compareTo).orElse(null);
 
