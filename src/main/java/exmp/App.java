@@ -2,6 +2,9 @@ package exmp;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import exmp.commands.ArgDescriptor;
+import exmp.commands.Command;
+import exmp.commands.Utils;
 import exmp.models.Product;
 
 import java.io.File;
@@ -15,7 +18,7 @@ public class App {
     private final Date initializationDate;
     private final String fileName;
     private boolean status;
-    private Vector<Product> products = new Vector<Product>();
+    private final exmp.repository.ProductRepository productRepository = new exmp.repository.InMemoryProductRepository();
     private HashSet<Long> idList;
     private HashMap<String, exmp.commands.Command> commandHandlers;
 
@@ -31,7 +34,7 @@ public class App {
         this.commandHandlers = new HashMap<>();
 
         initCommands();
-        loadData();
+        productRepository.loadData(fileName);
     }
 
     /**
@@ -50,21 +53,41 @@ public class App {
         return status;
     }
 
+    public void executeCommand(String commandName, String input) {
+        Command command = commandHandlers.get(commandName);
+        if (command == null) {
+            System.out.println("Неизвестная команда: " + commandName);
+            return;
+        }
+
+        List<ArgDescriptor> argDescriptors = command.getArguments();
+        List<Object> args = new ArrayList<>();
+
+        Scanner scanner = new Scanner(input);
+        for (ArgDescriptor argDescriptor : argDescriptors) {
+            if (argDescriptor.getType() == Product.class) {
+                args.add(Utils.ScanNewProduct(scanner));
+            }
+        }
+
+        command.execute(this, args.toArray());
+    }
+
     /**
      * Обрабатывает введенную пользователем команду.
      *
      * @param line - введенная пользователем команда.
      */
     public void readLine(String line) {
-        String[] parsedLine = line.split(" ");
-        String command = parsedLine[0];
-        String[] arguments = Arrays.copyOfRange(parsedLine, 1, parsedLine.length);
-
-        if (commandHandlers.containsKey(command)) {
-            commandHandlers.get(command).execute(this, arguments);
-        } else {
-            System.out.println("Неизвестная команда. Попробуйте снова или введите 'help' для получения списка доступных команд.");
+        if (line == null || line.trim().isEmpty()) {
+            return;
         }
+
+        String[] inputParts = line.trim().split("\\s+", 2);
+        String commandName = inputParts[0];
+        String arguments = inputParts.length > 1 ? inputParts[1] : "";
+
+        executeCommand(commandName, arguments);
     }
 
     /**
@@ -98,34 +121,8 @@ public class App {
         this.commandHandlers.put("filter_by_unit_of_measure", new exmp.commands.FilterUnitOfMeasureCommand());
     }
 
-    /**
-     * Загружает данные из файла и инициализирует коллекцию {@code products}.
-     * Если загрузка данных прошла успешно, выводит сообщение об успешной загрузке.
-     * Если возникла ошибка при загрузке данных, выводит сообщение об ошибке.
-     */
-    private void loadData() {
-        ObjectMapper xmlMapper = new XmlMapper();
-        File file = new File(this.fileName);
-        try {
-            // Загрузка данных из файла
-            Vector<Product> file_products = xmlMapper.readValue(file, xmlMapper.getTypeFactory().constructCollectionType(Vector.class, Product.class));
-
-            // Добавление загруженных данных в коллекцию products
-            this.products.addAll(file_products);
-            System.out.println("Данные успешно загружены из файла: " + this.fileName);
-        } catch (IOException e) {
-            System.out.println("Ошибка при загрузке данных из файла: " + this.fileName);
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Возвращает коллекцию объектов {@link Product}.
-     *
-     * @return коллекция объектов {@link Product}.
-     */
-    public Vector<Product> getProducts() {
-        return this.products;
+    public exmp.repository.ProductRepository getProductRepository() {
+        return productRepository;
     }
 
     /**

@@ -24,7 +24,7 @@ public class Product implements Comparable<Product>{
      * Значение этого поля должно быть уникальным.
      * Значение этого поля должно генерироваться автоматически.
      */
-    private final Long id;
+    private Long id;
 
     /**
      * Название продукта.
@@ -141,6 +141,13 @@ public class Product implements Comparable<Product>{
         return Integer.compare(this.getPrice(), other.getPrice());
     }
 
+
+    public void setId(long id) {
+        if (id < 0) {
+            System.err.println("Поле id должно быть больше 0");
+        }
+        this.id = id;
+    }
     /**
      * Метод, возвращающий идентификатор продукта.
      *
