@@ -56,7 +56,7 @@ public class App {
     public void executeCommand(String commandName, String input) {
         Command command = commandHandlers.get(commandName);
         if (command == null) {
-            System.out.println("Неизвестная команда: " + commandName);
+            System.err.println("Неизвестная команда: " + commandName);
             return;
         }
 
@@ -67,6 +67,18 @@ public class App {
         for (ArgDescriptor argDescriptor : argDescriptors) {
             if (argDescriptor.getType() == Product.class) {
                 args.add(Utils.ScanNewProduct(scanner));
+            } else if (argDescriptor.getType() == Integer.class) {
+                args.add(scanner.nextInt());
+            } else if (argDescriptor.getType() == Long.class) {
+                args.add(scanner.nextLong());
+            } else if (argDescriptor.getType() == Float.class) {
+                args.add(scanner.nextFloat());
+            } else if (argDescriptor.getType() == Double.class) {
+                args.add(scanner.nextDouble());
+            } else if (argDescriptor.getType() == String.class) {
+                args.add(scanner.next());
+            } else {
+                throw new IllegalArgumentException("Неизвестный тип аргумента: " + argDescriptor.getType());
             }
         }
 
