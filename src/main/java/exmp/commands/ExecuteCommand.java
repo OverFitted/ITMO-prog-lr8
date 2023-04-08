@@ -3,6 +3,8 @@ package exmp.commands;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Команда execute_script для загрузки и выполнения скриптов
@@ -19,6 +21,13 @@ public class ExecuteCommand implements exmp.commands.Command {
     @Override
     public String getName() {
         return "execute_script";
+    }
+
+    @Override
+    public List<exmp.commands.ArgDescriptor> getArguments() {
+        List<exmp.commands.ArgDescriptor> args = new ArrayList<>();
+        args.add(new exmp.commands.ArgDescriptor("fileName", String.class));
+        return args;
     }
 
     /**
@@ -43,7 +52,7 @@ public class ExecuteCommand implements exmp.commands.Command {
             System.out.println("Не указан путь к файлу скрипта.");
             return;
         }
-        String fileName = args[0];
+        String fileName = (String) args[0];
 
         if (recursionDepth >= RECURSION_LIMIT) {
             System.out.println("Достигнут предел рекурсии для выполнения скриптов.");

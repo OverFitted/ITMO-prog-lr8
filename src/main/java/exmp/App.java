@@ -1,14 +1,10 @@
 package exmp;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import exmp.commands.ArgDescriptor;
 import exmp.commands.Command;
 import exmp.commands.Utils;
 import exmp.models.Product;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.*;
 
 /**
@@ -20,7 +16,7 @@ public class App {
     private boolean status;
     private final exmp.repository.ProductRepository productRepository = new exmp.repository.InMemoryProductRepository();
     private HashSet<Long> idList;
-    private HashMap<String, exmp.commands.Command> commandHandlers;
+    private final HashMap<String, exmp.commands.Command> commandHandlers;
 
     /**
      * Конструктор класса App.
@@ -65,20 +61,26 @@ public class App {
 
         Scanner scanner = new Scanner(input);
         for (ArgDescriptor argDescriptor : argDescriptors) {
-            if (argDescriptor.getType() == Product.class) {
+            if (argDescriptor.type() == Product.class) {
                 args.add(Utils.ScanNewProduct(scanner));
-            } else if (argDescriptor.getType() == Integer.class) {
+            } else if (argDescriptor.type() == exmp.enums.Color.class) {
+                args.add(exmp.enums.Color.valueOf(scanner.next()));
+            }else if (argDescriptor.type() == exmp.enums.Country.class) {
+                args.add(exmp.enums.Country.valueOf(scanner.next()));
+            }else if (argDescriptor.type() == exmp.enums.UnitOfMeasure.class) {
+                args.add(exmp.enums.UnitOfMeasure.valueOf(scanner.next()));
+            } else if (argDescriptor.type() == Integer.class) {
                 args.add(scanner.nextInt());
-            } else if (argDescriptor.getType() == Long.class) {
+            } else if (argDescriptor.type() == Long.class) {
                 args.add(scanner.nextLong());
-            } else if (argDescriptor.getType() == Float.class) {
+            } else if (argDescriptor.type() == Float.class) {
                 args.add(scanner.nextFloat());
-            } else if (argDescriptor.getType() == Double.class) {
+            } else if (argDescriptor.type() == Double.class) {
                 args.add(scanner.nextDouble());
-            } else if (argDescriptor.getType() == String.class) {
+            } else if (argDescriptor.type() == String.class) {
                 args.add(scanner.next());
             } else {
-                throw new IllegalArgumentException("Неизвестный тип аргумента: " + argDescriptor.getType());
+                throw new IllegalArgumentException("Неизвестный тип аргумента: " + argDescriptor.type());
             }
         }
 

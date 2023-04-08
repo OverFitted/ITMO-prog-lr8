@@ -4,6 +4,8 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Команда save для сохранения коллекции в файл
@@ -17,6 +19,13 @@ public class SaveCommand implements exmp.commands.Command {
     @Override
     public String getName() {
         return "save";
+    }
+
+    @Override
+    public List<exmp.commands.ArgDescriptor> getArguments() {
+        List<exmp.commands.ArgDescriptor> args = new ArrayList<>();
+        args.add(new exmp.commands.ArgDescriptor("fileName", String.class));
+        return args;
     }
 
     /**
@@ -42,12 +51,12 @@ public class SaveCommand implements exmp.commands.Command {
             System.out.println("Путь не предоставлен, коллекция будет сохранена в output.xml");
             savePath = "output.xml";
         } else {
-            savePath = args[0];
+            savePath = (String) args[0];
         }
 
         XmlMapper xmlMapper = new XmlMapper();
         try {
-            xmlMapper.writeValue(new File(savePath), app.getProducts());
+            xmlMapper.writeValue(new File(savePath), app.getProductRepository().findAll());
             System.out.println("Коллекция сохранена в файл " + savePath);
         } catch (IOException e) {
             System.err.println("Не удалось сохранить коллекцию в файл: " + e.getMessage());

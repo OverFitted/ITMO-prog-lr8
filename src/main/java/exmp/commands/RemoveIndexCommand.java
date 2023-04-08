@@ -1,5 +1,8 @@
 package exmp.commands;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Команда remove_at для удаления продукта из колелкции по его индексу
  */
@@ -12,6 +15,13 @@ public class RemoveIndexCommand implements exmp.commands.Command {
     @Override
     public String getName() {
         return "remove_at";
+    }
+
+    @Override
+    public List<exmp.commands.ArgDescriptor> getArguments() {
+        List<exmp.commands.ArgDescriptor> args = new ArrayList<>();
+        args.add(new exmp.commands.ArgDescriptor("productIndex", Integer.class));
+        return args;
     }
 
     /**
@@ -32,21 +42,12 @@ public class RemoveIndexCommand implements exmp.commands.Command {
      */
     @Override
     public void execute(exmp.App app, Object... args) {
-        if (args.length == 0) {
-            System.out.println("Необходимо указать порядковый номер элемента для удаления");
+        int index = (Integer) args[0];
+        if (index < 1 || index > app.getProductRepository().findAll().size()) {
+            System.out.println("Некорректный индекс элемента для удаления");
             return;
         }
-
-        try {
-            int index = Integer.parseInt(args[0]);
-            if (index < 1 || index > app.getProducts().size()) {
-                System.out.println("Некорректный индекс элемента для удаления");
-                return;
-            }
-            app.getProducts().remove(index - 1);
-            System.out.println("Элемент с порядковым номером " + index + " удален из коллекции");
-        } catch (NumberFormatException e) {
-            System.out.println("Некорректный формат порядкового номера элемента для удаления");
-        }
+        app.getProductRepository().findAll().remove(index - 1);
+        System.out.println("Элемент с порядковым номером " + index + " удален из коллекции");
     }
 }

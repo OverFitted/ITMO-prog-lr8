@@ -3,6 +3,9 @@ package exmp.commands;
 import exmp.App;
 import exmp.models.Product;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Команда add_if_max для добавления нового продукта в коллекцию, если его значение меньше минимального значения в коллекции
  */
@@ -15,6 +18,13 @@ public class AddMinCommand implements exmp.commands.Command {
     @Override
     public String getName() {
         return "add_if_min";
+    }
+
+    @Override
+    public List<exmp.commands.ArgDescriptor> getArguments() {
+        List<exmp.commands.ArgDescriptor> args = new ArrayList<>();
+        args.add(new exmp.commands.ArgDescriptor("Product", Product.class));
+        return args;
     }
 
     /**

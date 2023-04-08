@@ -43,7 +43,7 @@ public class ShowCommand implements exmp.commands.Command {
      */
     @Override
     public void execute(exmp.App app, Object... args) {
-        Vector<Product> products = app.getProducts();
+        List<Product> products = app.getProductRepository().findAll();
         if (products != null && !products.isEmpty()) {
             products.forEach(System.out::println);
         } else {

@@ -2,6 +2,9 @@ package exmp.commands;
 
 import exmp.models.Product;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Команда remove_by_id для удаления продукта из колелкции по его id
  */
@@ -26,6 +29,13 @@ public class RemoveIdCommand implements exmp.commands.Command {
         return "удалить элемент из коллекции по его id";
     }
 
+    @Override
+    public List<exmp.commands.ArgDescriptor> getArguments() {
+        List<exmp.commands.ArgDescriptor> args = new ArrayList<>();
+        args.add(new exmp.commands.ArgDescriptor("productId", Long.class));
+        return args;
+    }
+
     /**
      * Выполняет команду удаления элемента по заданному id
      *
@@ -34,33 +44,8 @@ public class RemoveIdCommand implements exmp.commands.Command {
      */
     @Override
     public void execute(exmp.App app, Object... args) {
-        if (args.length != 1) {
-            System.out.println("Команда должна принимать только один аргумент - id элемента");
-            return;
-        }
-
-        try {
-            Long id = Long.parseLong(args[0]);
-            Product productToRemove = null;
-
-            // Find the product to remove based on its ID
-            for (Product product : app.getProducts()) {
-                if (product.getId().equals(id)) {
-                    productToRemove = product;
-                    break;
-                }
-            }
-
-            if (productToRemove == null) {
-                System.out.println("Продукт с указанным id не найден");
-                return;
-            }
-
-            // Remove the product from the collection
-            app.getProducts().remove(productToRemove);
-            System.out.println("Продукт с id " + id + " удален из коллекции");
-        } catch (NumberFormatException e) {
-            System.out.println("Некорректный аргумент - id должен быть числом");
-        }
+        Long id = (Long) args[0];
+        app.getProductRepository().deleteById(id);
+        System.out.println("Продукт с id " + id + " удален из коллекции");
     }
 }

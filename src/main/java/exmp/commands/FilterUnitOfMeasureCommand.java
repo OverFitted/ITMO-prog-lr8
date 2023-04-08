@@ -3,6 +3,7 @@ package exmp.commands;
 import exmp.enums.UnitOfMeasure;
 import exmp.models.Product;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,6 +19,13 @@ public class FilterUnitOfMeasureCommand implements exmp.commands.Command {
     @Override
     public String getName() {
         return "filter_by_unit_of_measure";
+    }
+
+    @Override
+    public List<exmp.commands.ArgDescriptor> getArguments() {
+        List<exmp.commands.ArgDescriptor> args = new ArrayList<>();
+        args.add(new exmp.commands.ArgDescriptor("unit_of_measure", UnitOfMeasure.class));
+        return args;
     }
 
     /**
@@ -43,15 +51,8 @@ public class FilterUnitOfMeasureCommand implements exmp.commands.Command {
             return;
         }
 
-        UnitOfMeasure unitOfMeasure;
-        try {
-            unitOfMeasure = UnitOfMeasure.valueOf(args[0].toUpperCase());
-        } catch (IllegalArgumentException e) {
-            System.out.println("Некорректный аргумент: " + args[0]);
-            return;
-        }
-
-        List<Product> filteredProducts = app.getProducts().stream()
+        UnitOfMeasure unitOfMeasure = (UnitOfMeasure) args[0];
+        List<Product> filteredProducts = app.getProductRepository().findAll().stream()
                 .filter(product -> product.getUnitOfMeasure() == unitOfMeasure)
                 .toList();
 

@@ -3,6 +3,9 @@ package exmp.commands;
 import exmp.App;
 import exmp.models.Product;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Команда add_if_max для добавления нового продукта в коллекцию, если его значение превышает максимальное значение в коллекции
  */
@@ -15,6 +18,13 @@ public class AddMaxCommand implements exmp.commands.Command {
     @Override
     public String getName() {
         return "add_if_max";
+    }
+
+    @Override
+    public List<exmp.commands.ArgDescriptor> getArguments() {
+        List<exmp.commands.ArgDescriptor> args = new ArrayList<>();
+        args.add(new exmp.commands.ArgDescriptor("Product", Product.class));
+        return args;
     }
 
     /**
@@ -35,14 +45,14 @@ public class AddMaxCommand implements exmp.commands.Command {
      */
     @Override
     public void execute(App app, Object... args) {
-        Product newProduct = utils.ScanNewProduct();
-        Product maxProduct = app.getProducts().stream().max(Product::compareTo).orElse(null);
+        Product newProduct = (Product) args[0];
+        Product maxProduct = app.getProductRepository().findAll().stream().max(Product::compareTo).orElse(null);
 
         if (maxProduct == null || newProduct.compareTo(maxProduct) > 0) {
-            app.getProducts().add(newProduct);
+            app.getProductRepository().save(newProduct);
             System.out.println("Новый элемент успешно добавлен в коллекцию.");
         } else {
-            System.out.println("Новый элемент не добавлен, так как его значение не превышает значение наибольшего элемента коллекции.");
+            System.out.println("Новый элемент не добавлен, так как его значение не превышает значения максимального элемента коллекции.");
         }
     }
 }
