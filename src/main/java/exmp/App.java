@@ -5,7 +5,9 @@ import exmp.commands.Command;
 import exmp.commands.Utils;
 import exmp.models.Product;
 
+import java.lang.reflect.Executable;
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * Класс приложения.
@@ -17,6 +19,7 @@ public class App {
     private final exmp.repository.ProductRepository productRepository = new exmp.repository.InMemoryProductRepository();
     private HashSet<Long> idList;
     private final HashMap<String, exmp.commands.Command> commandHandlers;
+    private HashMap<Class<?>, Consumer<Scanner>> argHandlers;
 
     /**
      * Конструктор класса App.
@@ -28,6 +31,7 @@ public class App {
         this.fileName = filename;
         this.initializationDate = new Date();
         this.commandHandlers = new HashMap<>();
+        this.argHandlers = new HashMap<>();
 
         initCommands();
         productRepository.loadData(fileName);
@@ -58,30 +62,11 @@ public class App {
 
         List<ArgDescriptor> argDescriptors = command.getArguments();
         List<Object> args = new ArrayList<>();
+        initArgs(args);
 
         Scanner scanner = new Scanner(input);
         for (ArgDescriptor argDescriptor : argDescriptors) {
-            if (argDescriptor.type() == Product.class) {
-                args.add(Utils.ScanNewProduct(scanner));
-            } else if (argDescriptor.type() == exmp.enums.Color.class) {
-                args.add(exmp.enums.Color.valueOf(scanner.next()));
-            }else if (argDescriptor.type() == exmp.enums.Country.class) {
-                args.add(exmp.enums.Country.valueOf(scanner.next()));
-            }else if (argDescriptor.type() == exmp.enums.UnitOfMeasure.class) {
-                args.add(exmp.enums.UnitOfMeasure.valueOf(scanner.next()));
-            } else if (argDescriptor.type() == Integer.class) {
-                args.add(scanner.nextInt());
-            } else if (argDescriptor.type() == Long.class) {
-                args.add(scanner.nextLong());
-            } else if (argDescriptor.type() == Float.class) {
-                args.add(scanner.nextFloat());
-            } else if (argDescriptor.type() == Double.class) {
-                args.add(scanner.nextDouble());
-            } else if (argDescriptor.type() == String.class) {
-                args.add(scanner.next());
-            } else {
-                throw new IllegalArgumentException("Неизвестный тип аргумента: " + argDescriptor.type());
-            }
+            this.argHandlers.get(argDescriptor.type()).accept(scanner);
         }
 
         boolean commandExecuted = command.execute(this, args.toArray());
@@ -138,6 +123,18 @@ public class App {
         this.commandHandlers.put("remove_all_by_part_number", new exmp.commands.RemovePartNumberCommand());
         this.commandHandlers.put("group_counting_by_coordinates", new exmp.commands.GroupCoordinatesCommand());
         this.commandHandlers.put("filter_by_unit_of_measure", new exmp.commands.FilterUnitOfMeasureCommand());
+    }
+
+    private void initArgs(List<Object> args) {
+        this.argHandlers.put(Product.class, scanner -> args.add(Utils.ScanNewProduct(scanner)));
+        this.argHandlers.put(exmp.enums.Color.class, scanner -> args.add(exmp.enums.Color.valueOf(scanner.next())));
+        this.argHandlers.put(exmp.enums.Country.class, scanner -> args.add(exmp.enums.Country.valueOf(scanner.next())));
+        this.argHandlers.put(exmp.enums.UnitOfMeasure.class, scanner -> args.add(exmp.enums.UnitOfMeasure.valueOf(scanner.next())));
+        this.argHandlers.put(Integer.class, scanner -> args.add(scanner.nextInt()));
+        this.argHandlers.put(Long.class, scanner -> args.add(scanner.nextLong()));
+        this.argHandlers.put(Float.class, scanner -> args.add(scanner.nextFloat()));
+        this.argHandlers.put(Double.class, scanner -> args.add(scanner.nextDouble()));
+        this.argHandlers.put(String.class, scanner -> args.add(scanner.next()));
     }
 
     public exmp.repository.ProductRepository getProductRepository() {

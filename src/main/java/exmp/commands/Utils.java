@@ -15,8 +15,8 @@ public class Utils {
     public static Product ScanNewProduct(Scanner scanner) {
         String name = scanner.next().trim();
 
-        double x = 0;
-        float y = 0;
+        double x;
+        float y;
         try {
             x = scanner.nextDouble();
             y = scanner.nextFloat();
@@ -26,7 +26,7 @@ public class Utils {
         }
         Coordinates coordinates = new Coordinates(x, y);
 
-        int price = 0;
+        int price;
         try {
             price = scanner.nextInt();
         } catch (InputMismatchException e) {
@@ -36,7 +36,7 @@ public class Utils {
 
         String partNumber = scanner.next().trim();
 
-        float manufactureCost = 0;
+        float manufactureCost;
         try {
             manufactureCost = scanner.nextFloat();
         } catch (InputMismatchException e) {
@@ -44,7 +44,7 @@ public class Utils {
             return ScanNewProduct(scanner);
         }
 
-        String unitOfMeasureStr = "";
+        String unitOfMeasureStr;
         unitOfMeasureStr = scanner.next().trim().toUpperCase();
         if (!UnitOfMeasure.getValues().contains(unitOfMeasureStr)) {
             System.err.println("Ошибка ввода, попробуйте еще раз.");
@@ -54,7 +54,7 @@ public class Utils {
 
         String ownerName = scanner.next().trim();
 
-        long height = 0;
+        long height;
         try {
             height = scanner.nextLong();
         } catch (InputMismatchException e) {
@@ -62,7 +62,7 @@ public class Utils {
             return ScanNewProduct(scanner);
         }
 
-        String eyeColorStr = "";
+        String eyeColorStr;
         eyeColorStr = scanner.next().trim().toUpperCase();
         if (!Color.getValues().contains(eyeColorStr)) {
             System.err.println("Ошибка ввода, попробуйте еще раз.");
@@ -70,7 +70,7 @@ public class Utils {
         }
         Color eyeColor = Color.valueOf(eyeColorStr);
 
-        String hairColorStr = "";
+        String hairColorStr;
         hairColorStr = scanner.next().trim().toUpperCase();
         if (!Color.getValues().contains(hairColorStr)) {
             System.err.println("Ошибка ввода, попробуйте еще раз.");
@@ -78,7 +78,7 @@ public class Utils {
         }
         Color hairColor = Color.valueOf(hairColorStr);
 
-        String countryStr = "";
+        String countryStr;
         countryStr = scanner.next().trim().toUpperCase();
         if (!Country.getValues().contains(countryStr)) {
             System.err.println("Ошибка ввода, попробуйте еще раз.");
@@ -86,9 +86,9 @@ public class Utils {
         }
         Country country = Country.valueOf(countryStr);
 
-        float loc_x = 0;
-        double loc_y = 0;
-        double loc_z = 0;
+        float loc_x;
+        double loc_y;
+        double loc_z;
         try {
             loc_x = scanner.nextFloat();
             loc_y = scanner.nextDouble();
