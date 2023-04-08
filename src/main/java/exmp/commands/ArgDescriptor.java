@@ -1,4 +1,3 @@
 package exmp.commands;
 
-public record ArgDescriptor(String description, Class<?> type) {
-}
+public record ArgDescriptor(String description, Class<?> type) { }

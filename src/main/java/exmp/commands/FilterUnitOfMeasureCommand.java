@@ -45,22 +45,26 @@ public class FilterUnitOfMeasureCommand implements exmp.commands.Command {
      * @param args массив аргументов команды.
      */
     @Override
-    public void execute(exmp.App app, Object... args) {
-        if (args.length != 1) {
-            System.out.println("Использование: filter_by_unit_of_measure {unit_of_measure}");
-            return;
+    public boolean execute(exmp.App app, Object... args) {
+        try {
+            if (args.length != 1) {
+                return false;
+            }
+
+            UnitOfMeasure unitOfMeasure = (UnitOfMeasure) args[0];
+            List<Product> filteredProducts = app.getProductRepository().findAll().stream()
+                    .filter(product -> product.getUnitOfMeasure() == unitOfMeasure)
+                    .toList();
+
+            if (filteredProducts.isEmpty()) {
+                return false;
+            }
+
+            filteredProducts.forEach(System.out::println);
+
+            return true;
+        } catch (Exception e) {
+            return false;
         }
-
-        UnitOfMeasure unitOfMeasure = (UnitOfMeasure) args[0];
-        List<Product> filteredProducts = app.getProductRepository().findAll().stream()
-                .filter(product -> product.getUnitOfMeasure() == unitOfMeasure)
-                .toList();
-
-        if (filteredProducts.isEmpty()) {
-            System.out.println("Продукты с единицей измерения " + unitOfMeasure + " не найдены");
-            return;
-        }
-
-        filteredProducts.forEach(System.out::println);
     }
 }

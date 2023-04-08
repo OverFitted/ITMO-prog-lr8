@@ -43,10 +43,16 @@ public class HelpCommand implements Command {
      * @param args массив аргументов команды.
      */
     @Override
-    public void execute(exmp.App app, Object... args) {
-        System.out.println("Список доступных команд:");
-        for (Map.Entry<String, Command> entry : app.getCommandHandler().entrySet()) {
-            System.out.println(entry.getKey() + ": " + entry.getValue().getDescription());
+    public boolean execute(exmp.App app, Object... args) {
+        try {
+            System.out.println("Список доступных команд:");
+            for (Map.Entry<String, Command> entry : app.getCommandHandler().entrySet()) {
+                System.out.println(entry.getKey() + ": " + entry.getValue().getDescription());
+            }
+
+            return true;
+        } catch (Exception e) {
+            return false;
         }
     }
 }

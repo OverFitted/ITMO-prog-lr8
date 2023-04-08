@@ -50,17 +50,20 @@ public class UpdateIdCommand implements exmp.commands.Command {
      * @param args массив аргументов команды.
      */
     @Override
-    public void execute(exmp.App app, Object... args) {
-        if (args.length != 2) {
-            System.out.println("Использование: update_by_id {id} {element}");
-            return;
+    public boolean execute(exmp.App app, Object... args) {
+        try {
+            if (args.length != 2) {
+                return false;
+            }
+
+            long id = (Long) args[0];
+            Product newProduct = (Product) args[1];
+            app.getProductRepository().deleteById(id);
+            app.getProductRepository().save(newProduct);
+
+            return true;
+        } catch (Exception e) {
+            return false;
         }
-
-        long id = (Long) args[0];
-        Product newProduct = (Product) args[1];
-        app.getProductRepository().deleteById(id);
-        app.getProductRepository().save(newProduct);
-
-        System.out.println("Элемент с id " + id + " обновлен");
     }
 }

@@ -35,5 +35,5 @@ public interface Command {
      * @param app объект приложения, над которым выполняется команда.
      * @param args массив аргументов команды.
      */
-    void execute(exmp.App app, Object... args);
+     boolean execute(exmp.App app, Object... args);
 }

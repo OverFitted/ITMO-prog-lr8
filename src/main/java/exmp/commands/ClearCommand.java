@@ -20,10 +20,15 @@ public class ClearCommand implements exmp.commands.Command {
     }
 
     @Override
-    public void execute(exmp.App app, Object... args) {
-        for (exmp.models.Product product: app.getProductRepository().findAll()) {
-            app.getProductRepository().delete(product);
+    public boolean execute(exmp.App app, Object... args) {
+        try {
+            for (exmp.models.Product product: app.getProductRepository().findAll()) {
+                app.getProductRepository().delete(product);
+            }
+
+            return true;
+        } catch (Exception e) {
+            return false;
         }
-        System.out.println("Коллекция очищена");
     }
 }

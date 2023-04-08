@@ -39,7 +39,13 @@ public class ExitCommand implements exmp.commands.Command {
      * @param args массив аргументов команды.
      */
     @Override
-    public void execute(exmp.App app, Object... args) {
-        app.switchOff();
+    public boolean execute(exmp.App app, Object... args) {
+        try {
+            app.switchOff();
+
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

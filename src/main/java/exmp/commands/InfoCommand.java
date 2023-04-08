@@ -2,6 +2,7 @@ package exmp.commands;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 /**
@@ -40,15 +41,21 @@ public class InfoCommand implements exmp.commands.Command {
      * @param args массив аргументов команды.
      */
     @Override
-    public void execute(exmp.App app, Object... args) {
-        System.out.println("Дата инициализации: " + app.getInitializationDate());
+    public boolean execute(exmp.App app, Object... args) {
+        try {
+            System.out.println("Дата инициализации: " + app.getInitializationDate());
 
-        Vector< exmp.models.Product > products = app.getProducts();
-        if (products != null) {
-            System.out.println("Тип коллекции: " + products.getClass().getName());
-            System.out.println("Количество элементов: " + products.size());
-        } else {
-            System.out.println("Коллекция не содержит продуктов.");
+            List<exmp.models.Product> products = app.getProductRepository().findAll();
+            if (products != null) {
+                System.out.println("Тип коллекции: " + products.getClass().getName());
+                System.out.println("Количество элементов: " + products.size());
+            } else {
+                System.out.println("Коллекция не содержит продуктов.");
+            }
+
+            return true;
+        } catch (Exception e) {
+            return false;
         }
     }
 }

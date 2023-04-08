@@ -41,13 +41,17 @@ public class RemoveIndexCommand implements exmp.commands.Command {
      * @param args массив аргументов команды.
      */
     @Override
-    public void execute(exmp.App app, Object... args) {
-        int index = (Integer) args[0];
-        if (index < 1 || index > app.getProductRepository().findAll().size()) {
-            System.out.println("Некорректный индекс элемента для удаления");
-            return;
+    public boolean execute(exmp.App app, Object... args) {
+        try {
+            int index = (Integer) args[0];
+            if (index < 1 || index > app.getProductRepository().findAll().size()) {
+                return false;
+            }
+            app.getProductRepository().findAll().remove(index - 1);
+
+            return true;
+        } catch (Exception e) {
+            return false;
         }
-        app.getProductRepository().findAll().remove(index - 1);
-        System.out.println("Элемент с порядковым номером " + index + " удален из коллекции");
     }
 }

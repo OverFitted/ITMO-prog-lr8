@@ -45,22 +45,25 @@ public class SaveCommand implements exmp.commands.Command {
      * @param args массив аргументов команды.
      */
     @Override
-    public void execute(exmp.App app, Object... args) {
-        String savePath;
-        if (args.length != 1) {
-            System.out.println("Путь не предоставлен, коллекция будет сохранена в output.xml");
-            savePath = "output.xml";
-        } else {
-            savePath = (String) args[0];
-        }
-
-        XmlMapper xmlMapper = new XmlMapper();
+    public boolean execute(exmp.App app, Object... args) {
         try {
-            xmlMapper.writeValue(new File(savePath), app.getProductRepository().findAll());
-            System.out.println("Коллекция сохранена в файл " + savePath);
-        } catch (IOException e) {
-            System.err.println("Не удалось сохранить коллекцию в файл: " + e.getMessage());
-            e.printStackTrace();
+            String savePath;
+            if (args.length != 1) {
+                savePath = "output.xml";
+            } else {
+                savePath = (String) args[0];
+            }
+
+            XmlMapper xmlMapper = new XmlMapper();
+            try {
+                xmlMapper.writeValue(new File(savePath), app.getProductRepository().findAll());
+            } catch (IOException e) {
+                return false;
+            }
+
+            return true;
+        } catch (Exception e) {
+            return false;
         }
     }
 }

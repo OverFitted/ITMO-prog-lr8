@@ -47,29 +47,31 @@ public class ExecuteCommand implements exmp.commands.Command {
      * @param args массив аргументов команды.
      */
     @Override
-    public void execute(exmp.App app, Object... args) {
-        if (args.length < 1) {
-            System.out.println("Не указан путь к файлу скрипта.");
-            return;
-        }
-        String fileName = (String) args[0];
+    public boolean execute(exmp.App app, Object... args) {
+        try {
+            String fileName = (String) args[0];
 
-        if (recursionDepth >= RECURSION_LIMIT) {
-            System.out.println("Достигнут предел рекурсии для выполнения скриптов.");
-            return;
-        }
-
-        recursionDepth++;
-
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName))) {
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                app.readLine(line);
+            if (recursionDepth >= RECURSION_LIMIT) {
+                System.out.println("Достигнут предел рекурсии для выполнения скриптов.");
+                return true;
             }
-        } catch (IOException e) {
-            System.out.println("Ошибка чтения файла: " + e.getMessage());
-        } finally {
-            recursionDepth--;
+
+            recursionDepth++;
+
+            try (BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName))) {
+                String line;
+                while ((line = bufferedReader.readLine()) != null) {
+                    app.readLine(line);
+                }
+            } catch (IOException e) {
+                return false;
+            } finally {
+                recursionDepth--;
+            }
+
+            return true;
+        } catch (Exception e) {
+            return false;
         }
     }
 }

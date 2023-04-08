@@ -84,7 +84,12 @@ public class App {
             }
         }
 
-        command.execute(this, args.toArray());
+        boolean commandExecuted = command.execute(this, args.toArray());
+
+        if (commandExecuted)
+            System.out.println("Команда успешно выполнена");
+        else
+            System.err.println("Ошибка выполнения команды");
     }
 
     /**

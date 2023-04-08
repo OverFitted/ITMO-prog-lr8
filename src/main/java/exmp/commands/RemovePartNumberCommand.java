@@ -44,21 +44,15 @@ public class RemovePartNumberCommand implements exmp.commands.Command {
      * @param args массив аргументов команды.
      */
     @Override
-    public void execute(exmp.App app, Object... args) {
-        if (args.length < 1) {
-            System.out.println("Не задано значение поля partNumber");
-            return;
-        }
+    public boolean execute(exmp.App app, Object... args) {
+        try {
+            String partNumber = (String) args[0];
+            app.getProductRepository().findAll().removeIf((Product product) -> product.getPartNumber() != null
+                    && product.getPartNumber().equals(partNumber));
 
-        String partNumber = (String) args[0];
-
-        int count = app.getProductRepository().findAll().removeIf((Product product) -> product.getPartNumber()
-                != null && product.getPartNumber().equals(partNumber)) ? 1 : 0;
-
-        if (count == 0) {
-            System.out.println("Не найдено ни одного элемента с заданным значением поля partNumber");
-        } else {
-            System.out.println("Удалено элементов: " + count);
+            return true;
+        } catch (Exception e) {
+            return false;
         }
     }
 }

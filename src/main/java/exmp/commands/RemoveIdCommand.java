@@ -4,6 +4,7 @@ import exmp.models.Product;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Команда remove_by_id для удаления продукта из колелкции по его id
@@ -43,9 +44,14 @@ public class RemoveIdCommand implements exmp.commands.Command {
      * @param args массив аргументов команды.
      */
     @Override
-    public void execute(exmp.App app, Object... args) {
-        Long id = (Long) args[0];
-        app.getProductRepository().deleteById(id);
-        System.out.println("Продукт с id " + id + " удален из коллекции");
+    public boolean execute(exmp.App app, Object... args) {
+        try {
+            Long id = (Long) args[0];
+            app.getProductRepository().deleteById(id);
+
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

@@ -1,7 +1,10 @@
 package exmp.commands;
 
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import exmp.models.Product;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -42,12 +45,18 @@ public class ShowCommand implements exmp.commands.Command {
      * @param args массив аргументов команды.
      */
     @Override
-    public void execute(exmp.App app, Object... args) {
-        List<Product> products = app.getProductRepository().findAll();
-        if (products != null && !products.isEmpty()) {
-            products.forEach(System.out::println);
-        } else {
-            System.out.println("Коллекция не содержит продуктов.");
+    public boolean execute(exmp.App app, Object... args) {
+        try {
+            List<Product> products = app.getProductRepository().findAll();
+            if (products != null && !products.isEmpty()) {
+                products.forEach(System.out::println);
+            } else {
+                System.out.println("Коллекция не содержит продуктов.");
+            }
+
+            return true;
+        } catch (Exception e) {
+            return false;
         }
     }
 }
