@@ -47,7 +47,8 @@ public class RemoveIndexCommand implements exmp.commands.Command {
             if (index < 1 || index > app.getProductRepository().findAll().size()) {
                 return false;
             }
-            app.getProductRepository().findAll().remove(index - 1);
+            long id = app.getProductRepository().findAll().get(index).getId();
+            app.getProductRepository().deleteById(id);
 
             return true;
         } catch (Exception e) {
