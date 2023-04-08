@@ -5,17 +5,36 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * Команда save для сохранения коллекции в файл
+ */
 public class SaveCommand implements exmp.commands.Command {
+    /**
+     * Возвращает название команды save.
+     *
+     * @return название команды save.
+     */
     @Override
     public String getName() {
         return "save";
     }
 
+    /**
+     * Возвращает описание команды save.
+     *
+     * @return описание команды save.
+     */
     @Override
     public String getDescription() {
         return "сохранить коллекцию в файл";
     }
 
+    /**
+     * Выполняет команду сохранения коллекции в файл
+     *
+     * @param app объект приложения, над которым выполняется команда.
+     * @param args массив аргументов команды.
+     */
     @Override
     public void execute(exmp.App app, String[] args) {
         String savePath;

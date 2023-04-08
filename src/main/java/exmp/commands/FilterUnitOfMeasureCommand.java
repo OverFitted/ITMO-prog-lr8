@@ -6,17 +6,36 @@ import exmp.models.Product;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Команда filter_by_unit_of_measure для применения фильтра по значению unitOfMeasure к элементам коллекции
+ */
 public class FilterUnitOfMeasureCommand implements exmp.commands.Command {
+    /**
+     * Возвращает название команды filter_by_unit_of_measure.
+     *
+     * @return название команды filter_by_unit_of_measure.
+     */
     @Override
     public String getName() {
         return "filter_by_unit_of_measure";
     }
 
+    /**
+     * Возвращает описание команды filter_by_unit_of_measure.
+     *
+     * @return описание команды filter_by_unit_of_measure.
+     */
     @Override
     public String getDescription() {
         return "вывести элементы, значение поля unitOfMeasure которых равно заданному";
     }
 
+    /**
+     * Выполняет команду применения фильтра
+     *
+     * @param app объект приложения, над которым выполняется команда.
+     * @param args массив аргументов команды.
+     */
     @Override
     public void execute(exmp.App app, String[] args) {
         if (args.length != 1) {
