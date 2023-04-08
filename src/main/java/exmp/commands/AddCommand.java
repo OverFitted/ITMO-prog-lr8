@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AddCommand implements exmp.commands.Command {
-    exmp.commands.Utils utils = new exmp.commands.Utils();
-
     @Override
     public String getName() {
         return "add";
@@ -27,7 +25,7 @@ public class AddCommand implements exmp.commands.Command {
 
     @Override
     public void execute(exmp.App app, Object... args) {
-        app.getProducts().add((Product) args[0]);
+        app.getProductRepository().save((Product) args[0]);
         System.out.println("Продукт успешно добавлен в коллекцию.");
     }
 }
