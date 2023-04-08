@@ -31,7 +31,7 @@ public class RemoveIndexCommand implements exmp.commands.Command {
      * @param args массив аргументов команды.
      */
     @Override
-    public void execute(exmp.App app, String[] args) {
+    public void execute(exmp.App app, Object... args) {
         if (args.length == 0) {
             System.out.println("Необходимо указать порядковый номер элемента для удаления");
             return;

@@ -1,5 +1,7 @@
 package exmp.commands;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 /**
@@ -14,6 +16,11 @@ public class InfoCommand implements exmp.commands.Command {
     @Override
     public String getName() {
         return "info";
+    }
+
+    @Override
+    public List<exmp.commands.ArgDescriptor> getArguments() {
+        return new ArrayList<>();
     }
 
     /**
@@ -33,7 +40,7 @@ public class InfoCommand implements exmp.commands.Command {
      * @param args массив аргументов команды.
      */
     @Override
-    public void execute(exmp.App app, String[] args) {
+    public void execute(exmp.App app, Object... args) {
         System.out.println("Дата инициализации: " + app.getInitializationDate());
 
         Vector< exmp.models.Product > products = app.getProducts();

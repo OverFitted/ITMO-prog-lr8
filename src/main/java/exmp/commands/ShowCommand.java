@@ -2,6 +2,8 @@ package exmp.commands;
 
 import exmp.models.Product;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 /**
@@ -16,6 +18,11 @@ public class ShowCommand implements exmp.commands.Command {
     @Override
     public String getName() {
         return "show";
+    }
+
+    @Override
+    public List<exmp.commands.ArgDescriptor> getArguments() {
+        return new ArrayList<>();
     }
 
     /**
@@ -35,7 +42,7 @@ public class ShowCommand implements exmp.commands.Command {
      * @param args массив аргументов команды.
      */
     @Override
-    public void execute(exmp.App app, String[] args) {
+    public void execute(exmp.App app, Object... args) {
         Vector<Product> products = app.getProducts();
         if (products != null && !products.isEmpty()) {
             products.forEach(System.out::println);

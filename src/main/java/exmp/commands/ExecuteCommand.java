@@ -38,7 +38,7 @@ public class ExecuteCommand implements exmp.commands.Command {
      * @param args массив аргументов команды.
      */
     @Override
-    public void execute(exmp.App app, String[] args) {
+    public void execute(exmp.App app, Object... args) {
         if (args.length < 1) {
             System.out.println("Не указан путь к файлу скрипта.");
             return;

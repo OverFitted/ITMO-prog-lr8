@@ -33,7 +33,7 @@ public class RemoveIdCommand implements exmp.commands.Command {
      * @param args массив аргументов команды.
      */
     @Override
-    public void execute(exmp.App app, String[] args) {
+    public void execute(exmp.App app, Object... args) {
         if (args.length != 1) {
             System.out.println("Команда должна принимать только один аргумент - id элемента");
             return;

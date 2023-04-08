@@ -37,7 +37,7 @@ public class FilterUnitOfMeasureCommand implements exmp.commands.Command {
      * @param args массив аргументов команды.
      */
     @Override
-    public void execute(exmp.App app, String[] args) {
+    public void execute(exmp.App app, Object... args) {
         if (args.length != 1) {
             System.out.println("Использование: filter_by_unit_of_measure {unit_of_measure}");
             return;

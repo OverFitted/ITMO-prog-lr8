@@ -1,5 +1,8 @@
 package exmp.commands;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Команда exit для завершения работы приложения
  */
@@ -12,6 +15,11 @@ public class ExitCommand implements exmp.commands.Command {
     @Override
     public String getName() {
         return "exit";
+    }
+
+    @Override
+    public List<exmp.commands.ArgDescriptor> getArguments() {
+        return new ArrayList<>();
     }
 
     /**
@@ -31,7 +39,7 @@ public class ExitCommand implements exmp.commands.Command {
      * @param args массив аргументов команды.
      */
     @Override
-    public void execute(exmp.App app, String[] args) {
+    public void execute(exmp.App app, Object... args) {
         app.switchOff();
     }
 }

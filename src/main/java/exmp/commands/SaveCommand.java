@@ -36,7 +36,7 @@ public class SaveCommand implements exmp.commands.Command {
      * @param args массив аргументов команды.
      */
     @Override
-    public void execute(exmp.App app, String[] args) {
+    public void execute(exmp.App app, Object... args) {
         String savePath;
         if (args.length != 1) {
             System.out.println("Путь не предоставлен, коллекция будет сохранена в output.xml");
