@@ -36,9 +36,6 @@ public class App {
 
         initCommands();
         productRepository.loadData(fileName);
-
-        Server server = new Server(5555, this);
-        server.start();
     }
 
     /**

@@ -1,5 +1,6 @@
 package exmp.client;
 
+import exmp.commands.CommandData;
 import exmp.commands.CommandResult;
 
 import java.io.IOException;
@@ -34,8 +35,9 @@ public class Client {
                     break;
                 }
 
-                output.writeUTF(commandName);
-                output.writeUTF(commandInput);
+                CommandData outCommand = new CommandData(commandName, commandInput);
+
+                output.writeObject(outCommand);
                 output.flush();
 
                 CommandResult result = (CommandResult) input.readObject();
