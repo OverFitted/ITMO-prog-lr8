@@ -1,6 +1,8 @@
 package exmp.commands;
 
-public class CommandResult {
+import java.io.Serializable;
+
+public class CommandResult implements Serializable {
     private int statusCode;
     private String output;
     private String errorMessage;

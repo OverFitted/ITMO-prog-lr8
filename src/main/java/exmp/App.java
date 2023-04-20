@@ -5,8 +5,8 @@ import exmp.commands.Command;
 import exmp.commands.CommandResult;
 import exmp.commands.Utils;
 import exmp.models.Product;
+import exmp.server.Server;
 
-import java.lang.reflect.Executable;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -36,6 +36,9 @@ public class App {
 
         initCommands();
         productRepository.loadData(fileName);
+
+        Server server = new Server(5555, this);
+        server.start();
     }
 
     /**
@@ -54,11 +57,11 @@ public class App {
         return status;
     }
 
-    public void executeCommand(String commandName, String input) {
+    public CommandResult executeCommand(String commandName, String input) {
         Command command = commandHandlers.get(commandName);
         if (command == null) {
             System.err.println("Неизвестная команда: " + commandName);
-            return;
+            return null;
         }
 
         List<ArgDescriptor> argDescriptors = command.getArguments();
@@ -70,12 +73,7 @@ public class App {
             this.argHandlers.get(argDescriptor.type()).accept(scanner);
         }
 
-        CommandResult result = command.execute(this, args.toArray());
-        if (result.isSuccess()) {
-            System.out.println(result.getOutput());
-        } else {
-            System.err.println("Команда завершилась с ошибкой: " + result.getErrorMessage());
-        }
+        return command.execute(this, args.toArray());
     }
 
     /**

@@ -30,6 +30,17 @@ test {
     useJUnitPlatform()
 }
 
-sourceSets.main.java.srcDirs = ['src/main/java/exmp', 'src/main/java/exmp/commands', 'src/main/java/exmp/enums', 'src/main/java/exmp/models']
-mainClassName = 'exmp.Main'
+sourceSets.main.java.srcDirs =  ['src/main/java/exmp', 'src/main/java/exmp/commands', 'src/main/java/exmp/server', 'src/main/java/exmp/client', 'src/main/java/exmp/enums', 'src/main/java/exmp/models']
 compileJava.options.encoding = 'UTF-8'
+
+tasks.register('runServer', JavaExec) {
+    mainClass.set('exmp.ServerApp')
+    classpath = sourceSets.main.runtimeClasspath
+    standardInput = System.in
+}
+
+tasks.register('runClient', JavaExec) {
+    mainClass.set('exmp.ClientApp')
+    classpath = sourceSets.main.runtimeClasspath
+    standardInput = System.in
+}

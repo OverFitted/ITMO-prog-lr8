@@ -5,7 +5,7 @@ import java.util.Scanner;
 /**
  * Главный класс приложения. Запускает приложение, и обрабатывает ввод пользователя.
  */
-public class Main {
+public class ServerApp {
 
     /**
      * Точка входа в приложение.
