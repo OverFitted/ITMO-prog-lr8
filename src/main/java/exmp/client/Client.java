@@ -3,10 +3,16 @@ package exmp.client;
 import exmp.commands.CommandData;
 import exmp.commands.CommandResult;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.Socket;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetSocketAddress;
+import java.nio.ByteBuffer;
+import java.nio.channels.DatagramChannel;
 import java.util.Scanner;
 
 public class Client {
@@ -19,17 +25,20 @@ public class Client {
     }
 
     public void start() {
-        try (Socket socket = new Socket(host, port);
-             ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
-             ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
-             Scanner scanner = new Scanner(System.in)) {
+        try (DatagramChannel channel = DatagramChannel.open()) {
+            channel.configureBlocking(false);
+            channel.connect(new InetSocketAddress(host, port));
+            System.out.println("Подключено к серверу: " + host + ":" + port);
 
-            System.out.println("Подключено к серверу: " + socket.getRemoteSocketAddress());
+            Scanner scanner = new Scanner(System.in);
+            ByteBuffer buffer = ByteBuffer.allocate(65536);
 
             while (true) {
-                System.out.print("Введите команду: ");
-                String commandName = scanner.next();
-                String commandInput = scanner.nextLine().trim();
+                System.out.print("$ ");
+                String line = scanner.nextLine();
+                String[] inputParts = line.trim().split("\\s+", 2);
+                String commandName = inputParts[0];
+                String commandInput = inputParts.length > 1 ? inputParts[1] : "";
 
                 if (commandName.equalsIgnoreCase("exit")) {
                     break;
@@ -37,11 +46,29 @@ public class Client {
 
                 CommandData outCommand = new CommandData(commandName, commandInput);
 
-                output.writeObject(outCommand);
-                output.flush();
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
+                objectOutputStream.writeObject(outCommand);
+                byte[] data = byteArrayOutputStream.toByteArray();
 
-                CommandResult result = (CommandResult) input.readObject();
-                System.out.println("Результат выполнения команды: " + result.getOutput());
+                DatagramPacket sendPacket = new DatagramPacket(data, data.length, new InetSocketAddress(host, port));
+                DatagramSocket datagramSocket = new DatagramSocket();
+                datagramSocket.send(sendPacket);
+
+                buffer.clear();
+                DatagramPacket receivePacket = new DatagramPacket(buffer.array(), buffer.capacity());
+                datagramSocket.receive(receivePacket);
+                buffer.position(receivePacket.getLength());
+
+                buffer.flip();
+                ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(buffer.array(), 0, buffer.limit());
+                ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
+                CommandResult result = (CommandResult) objectInputStream.readObject();
+
+                if (result.getStatusCode() == 0)
+                    System.out.println(result.getOutput());
+                else
+                    System.err.println("Ошибка выполнения команды: " + result.getErrorMessage());
             }
         } catch (IOException | ClassNotFoundException e) {
             System.err.println("Ошибка при подключении к серверу: " + e.getMessage());

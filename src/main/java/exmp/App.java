@@ -58,7 +58,7 @@ public class App {
         Command command = commandHandlers.get(commandName);
         if (command == null) {
             System.err.println("Неизвестная команда: " + commandName);
-            return null;
+            return new exmp.commands.CommandResult(3, null, "Команда не найдена");
         }
 
         List<ArgDescriptor> argDescriptors = command.getArguments();

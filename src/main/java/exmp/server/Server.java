@@ -4,11 +4,15 @@ import exmp.App;
 import exmp.commands.CommandData;
 import exmp.commands.CommandResult;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.net.DatagramPacket;
+import java.net.InetSocketAddress;
+import java.nio.ByteBuffer;
+import java.nio.channels.DatagramChannel;
 
 public class Server {
     private final int port;
@@ -20,42 +24,37 @@ public class Server {
     }
 
     public void start() {
-        try (ServerSocket serverSocket = new ServerSocket(port)) {
+        try (DatagramChannel channel = DatagramChannel.open()) {
+            channel.configureBlocking(false);
+            channel.bind(new InetSocketAddress(port));
             System.out.println("Сервер запущен и ожидает подключений...");
 
-            while (true) {
-                Socket clientSocket = null;
-                try {
-                    clientSocket = serverSocket.accept();
-                    System.out.println("Клиент подключился: " + clientSocket.getRemoteSocketAddress());
+            ByteBuffer buffer = ByteBuffer.allocate(65536);
 
-                    try (ObjectInputStream input = new ObjectInputStream(clientSocket.getInputStream());
-                         ObjectOutputStream output = new ObjectOutputStream(clientSocket.getOutputStream())) {
+            while (app.getStatus()) {
+                buffer.clear();
+                InetSocketAddress clientAddress = (InetSocketAddress) channel.receive(buffer);
 
-                        while (app.getStatus()) {
-                            CommandData commandData = (CommandData) input.readObject();
-                            String commandName = commandData.getCommandName();
-                            String commandInput = commandData.getArguments();
-                            CommandResult result = app.executeCommand(commandName, commandInput);
-                            output.writeObject(result);
-                        }
-                    } catch (IOException | ClassNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                } catch (IOException e) {
-                    System.err.println("Ошибка при работе с клиентом: " + e.getMessage());
-                } finally {
-                    if (clientSocket != null) {
-                        try {
-                            clientSocket.close();
-                        } catch (IOException e) {
-                            System.err.println("Ошибка при закрытии сокета клиента: " + e.getMessage());
-                        }
-                    }
-                    System.out.println("Клиент отключился: " + (clientSocket != null ? clientSocket.getRemoteSocketAddress() : ""));
+                if (clientAddress == null) {
+                    continue;
                 }
+
+                buffer.flip();
+                ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(buffer.array(), 0, buffer.limit());
+                ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
+                CommandData commandData = (CommandData) objectInputStream.readObject();
+                String commandName = commandData.getCommandName();
+                String commandInput = commandData.getArguments();
+                CommandResult result = app.executeCommand(commandName, commandInput);
+
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
+                objectOutputStream.writeObject(result);
+                byte[] data = byteArrayOutputStream.toByteArray();
+
+                channel.send(ByteBuffer.wrap(data), clientAddress);
             }
-        } catch (IOException e) {
+        } catch (IOException | ClassNotFoundException e) {
             System.err.println("Ошибка при запуске сервера: " + e.getMessage());
         }
     }

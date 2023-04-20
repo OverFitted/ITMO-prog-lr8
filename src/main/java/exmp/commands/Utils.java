@@ -8,7 +8,6 @@ import exmp.models.Location;
 import exmp.models.Person;
 import exmp.models.Product;
 
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Utils {
@@ -20,7 +19,7 @@ public class Utils {
         try {
             x = scanner.nextDouble();
             y = scanner.nextFloat();
-        } catch (InputMismatchException e) {
+        } catch (Exception e) {
             System.err.println("Ошибка ввода, попробуйте еще раз.");
             return null;
         }
@@ -29,7 +28,7 @@ public class Utils {
         int price;
         try {
             price = scanner.nextInt();
-        } catch (InputMismatchException e) {
+        } catch (Exception e) {
             System.err.println("Ошибка ввода, попробуйте еще раз.");
             return null;
         }
@@ -39,7 +38,7 @@ public class Utils {
         float manufactureCost;
         try {
             manufactureCost = scanner.nextFloat();
-        } catch (InputMismatchException e) {
+        } catch (Exception e) {
             System.err.println("Ошибка ввода, попробуйте еще раз.");
             return null;
         }
@@ -57,7 +56,7 @@ public class Utils {
         long height;
         try {
             height = scanner.nextLong();
-        } catch (InputMismatchException e) {
+        } catch (Exception e) {
             System.err.println("Ошибка ввода, попробуйте еще раз.");
             return null;
         }
@@ -93,7 +92,7 @@ public class Utils {
             loc_x = scanner.nextFloat();
             loc_y = scanner.nextDouble();
             loc_z = scanner.nextDouble();
-        } catch (InputMismatchException e) {
+        } catch (Exception e) {
             System.err.println("Ошибка ввода, попробуйте еще раз.");
             return null;
         }
