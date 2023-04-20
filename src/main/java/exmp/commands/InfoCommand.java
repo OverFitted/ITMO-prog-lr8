@@ -44,11 +44,11 @@ public class InfoCommand implements exmp.commands.Command {
     public exmp.commands.CommandResult execute(exmp.App app, Object... args) {
         try {
             StringBuilder output = new StringBuilder();
-            output.append("Дата инициализации: ").append(app.getInitializationDate());
+            output.append("Дата инициализации: ").append(app.getInitializationDate()).append("; ");
 
             List<exmp.models.Product> products = app.getProductRepository().findAll();
             if (products != null) {
-                output.append("Тип коллекции: ").append(products.getClass().getName());
+                output.append("Тип коллекции: ").append(products.getClass().getName()).append("; ");
                 output.append("Количество элементов: ").append(products.size());
             } else {
                 output.append("Коллекция не содержит продуктов.");

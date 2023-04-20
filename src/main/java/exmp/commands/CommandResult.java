@@ -13,6 +13,15 @@ public class CommandResult implements Serializable {
         this.errorMessage = errorMessage;
     }
 
+    @Override
+    public String toString() {
+        return "CommandResult{" +
+                "statusCode=" + statusCode +
+                ", output=" + output +
+                ", errorMessage=" + errorMessage +
+                "}";
+    }
+
     public int getStatusCode() {
         return statusCode;
     }

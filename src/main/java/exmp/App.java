@@ -6,6 +6,8 @@ import exmp.commands.CommandResult;
 import exmp.commands.Utils;
 import exmp.models.Product;
 import exmp.server.Server;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -21,6 +23,7 @@ public class App {
     private HashSet<Long> idList;
     private final HashMap<String, exmp.commands.Command> commandHandlers;
     private HashMap<Class<?>, Consumer<Scanner>> argHandlers;
+    private static final Logger logger = LogManager.getLogger(App.class);
 
     /**
      * Конструктор класса App.
@@ -57,7 +60,7 @@ public class App {
     public CommandResult executeCommand(String commandName, String input) {
         Command command = commandHandlers.get(commandName);
         if (command == null) {
-            System.err.println("Неизвестная команда: " + commandName);
+            logger.error("Неизвестная команда: {}", commandName);
             return new exmp.commands.CommandResult(3, null, "Команда не найдена");
         }
 

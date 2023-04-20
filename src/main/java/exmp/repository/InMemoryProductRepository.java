@@ -3,6 +3,8 @@ package exmp.repository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import exmp.models.Product;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,6 +16,7 @@ import java.util.concurrent.atomic.AtomicLong;
 public class InMemoryProductRepository implements exmp.repository.ProductRepository {
     private final List<Product> products = new ArrayList<>();
     private final AtomicLong idGenerator = new AtomicLong(1);
+    private static final Logger logger = LogManager.getLogger(InMemoryProductRepository.class);
 
     @Override
     public List<Product> findAll() {
@@ -64,10 +67,9 @@ public class InMemoryProductRepository implements exmp.repository.ProductReposit
             List<Product> file_products = xmlMapper.readValue(file, xmlMapper.getTypeFactory().constructCollectionType(List.class, Product.class));
 
             products.addAll(file_products);
-            System.out.println("Данные успешно загружены из файла: " + fileName);
+            logger.info("Данные успешно загружены из файла: {}", fileName);
         } catch (IOException e) {
-            System.out.println("Ошибка при загрузке данных из файла: " + fileName);
-            e.printStackTrace();
+            logger.error("Ошибка при загрузке данных из файла: {}", fileName);
         }
     }
 }
