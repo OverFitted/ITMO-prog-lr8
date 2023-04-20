@@ -39,13 +39,13 @@ public class ExitCommand implements exmp.commands.Command {
      * @param args массив аргументов команды.
      */
     @Override
-    public boolean execute(exmp.App app, Object... args) {
+    public exmp.commands.CommandResult execute(exmp.App app, Object... args) {
         try {
             app.switchOff();
 
-            return true;
+            return new exmp.commands.CommandResult(0, "Программа успешно завершена", null);
         } catch (Exception e) {
-            return false;
+            return new exmp.commands.CommandResult(1, null, e.toString());
         }
     }
 }

@@ -45,7 +45,7 @@ public class SaveCommand implements exmp.commands.Command {
      * @param args массив аргументов команды.
      */
     @Override
-    public boolean execute(exmp.App app, Object... args) {
+    public exmp.commands.CommandResult execute(exmp.App app, Object... args) {
         try {
             String savePath;
             if (args.length != 1) {
@@ -58,12 +58,12 @@ public class SaveCommand implements exmp.commands.Command {
             try {
                 xmlMapper.writeValue(new File(savePath), app.getProductRepository().findAll());
             } catch (IOException e) {
-                return false;
+                return new exmp.commands.CommandResult(1, null, e.toString());
             }
 
-            return true;
+            return new exmp.commands.CommandResult(0, "Коллекция сохранена", null);
         } catch (Exception e) {
-            return false;
+            return new exmp.commands.CommandResult(1, null, e.toString());
         }
     }
 }

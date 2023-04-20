@@ -47,13 +47,13 @@ public class ExecuteCommand implements exmp.commands.Command {
      * @param args массив аргументов команды.
      */
     @Override
-    public boolean execute(exmp.App app, Object... args) {
+    public exmp.commands.CommandResult execute(exmp.App app, Object... args) {
         try {
             String fileName = (String) args[0];
 
             if (recursionDepth >= RECURSION_LIMIT) {
                 System.out.println("Достигнут предел рекурсии для выполнения скриптов.");
-                return true;
+                return new exmp.commands.CommandResult(0, "", null);
             }
 
             recursionDepth++;
@@ -64,14 +64,14 @@ public class ExecuteCommand implements exmp.commands.Command {
                     app.readLine(line);
                 }
             } catch (IOException e) {
-                return false;
+                return new exmp.commands.CommandResult(1, null, e.toString());
             } finally {
                 recursionDepth--;
             }
 
-            return true;
+            return new exmp.commands.CommandResult(0, "Скрипт выполнен", null);
         } catch (Exception e) {
-            return false;
+            return new exmp.commands.CommandResult(1, null, e.toString());
         }
     }
 }

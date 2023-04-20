@@ -45,26 +45,22 @@ public class FilterUnitOfMeasureCommand implements exmp.commands.Command {
      * @param args массив аргументов команды.
      */
     @Override
-    public boolean execute(exmp.App app, Object... args) {
+    public exmp.commands.CommandResult execute(exmp.App app, Object... args) {
         try {
-            if (args.length != 1) {
-                return false;
-            }
-
             UnitOfMeasure unitOfMeasure = (UnitOfMeasure) args[0];
             List<Product> filteredProducts = app.getProductRepository().findAll().stream()
                     .filter(product -> product.getUnitOfMeasure() == unitOfMeasure)
                     .toList();
 
             if (filteredProducts.isEmpty()) {
-                return false;
+                return new exmp.commands.CommandResult(1, null, "Продукты не найдены");
             }
 
-            filteredProducts.forEach(System.out::println);
-
-            return true;
+            StringBuilder output = new StringBuilder();
+            filteredProducts.forEach(product -> output.append(product.toString()).append("\n"));
+            return new exmp.commands.CommandResult(0, output.toString(), null);
         } catch (Exception e) {
-            return false;
+            return new exmp.commands.CommandResult(1, null, e.toString());
         }
     }
 }

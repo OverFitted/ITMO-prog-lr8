@@ -42,7 +42,7 @@ public class GroupCoordinatesCommand implements exmp.commands.Command {
      * @param args массив аргументов команды.
      */
     @Override
-    public boolean execute(App app, Object... args) {
+    public exmp.commands.CommandResult execute(App app, Object... args) {
         try {
             Map<String, Integer> coordinatesGroups = new HashMap<>();
 
@@ -53,12 +53,16 @@ public class GroupCoordinatesCommand implements exmp.commands.Command {
                 coordinatesGroups.put(coordinatesString, coordinatesGroups.getOrDefault(coordinatesString, 0) + 1);
             });
 
-            System.out.println("Группировка элементов коллекции по координатам:");
-            coordinatesGroups.forEach((coordinates, count) -> System.out.println("Координаты: " + coordinates + " | Количество элементов: " + count));
+            StringBuilder output = new StringBuilder("Группировка элементов коллекции по координатам:\n");
+            coordinatesGroups.forEach((coordinates, count) -> output.append("Координаты: ")
+                    .append(coordinates)
+                    .append(" | Количество элементов: ")
+                    .append(count)
+                    .append("\n"));
 
-            return true;
+            return new exmp.commands.CommandResult(0, output.toString(), null);
         } catch (Exception e) {
-            return false;
+            return new exmp.commands.CommandResult(1, null, e.toString());
         }
     }
 }

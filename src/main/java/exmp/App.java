@@ -2,6 +2,7 @@ package exmp;
 
 import exmp.commands.ArgDescriptor;
 import exmp.commands.Command;
+import exmp.commands.CommandResult;
 import exmp.commands.Utils;
 import exmp.models.Product;
 
@@ -69,12 +70,12 @@ public class App {
             this.argHandlers.get(argDescriptor.type()).accept(scanner);
         }
 
-        boolean commandExecuted = command.execute(this, args.toArray());
-
-        if (commandExecuted)
-            System.out.println("Команда успешно выполнена");
-        else
-            System.err.println("Ошибка выполнения команды");
+        CommandResult result = command.execute(this, args.toArray());
+        if (result.isSuccess()) {
+            System.out.println(result.getOutput());
+        } else {
+            System.err.println("Команда завершилась с ошибкой: " + result.getErrorMessage());
+        }
     }
 
     /**

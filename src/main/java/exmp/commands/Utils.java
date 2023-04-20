@@ -22,7 +22,7 @@ public class Utils {
             y = scanner.nextFloat();
         } catch (InputMismatchException e) {
             System.err.println("Ошибка ввода, попробуйте еще раз.");
-            return ScanNewProduct(scanner);
+            return null;
         }
         Coordinates coordinates = new Coordinates(x, y);
 
@@ -31,7 +31,7 @@ public class Utils {
             price = scanner.nextInt();
         } catch (InputMismatchException e) {
             System.err.println("Ошибка ввода, попробуйте еще раз.");
-            return ScanNewProduct(scanner);
+            return null;
         }
 
         String partNumber = scanner.next().trim();
@@ -41,14 +41,14 @@ public class Utils {
             manufactureCost = scanner.nextFloat();
         } catch (InputMismatchException e) {
             System.err.println("Ошибка ввода, попробуйте еще раз.");
-            return ScanNewProduct(scanner);
+            return null;
         }
 
         String unitOfMeasureStr;
         unitOfMeasureStr = scanner.next().trim().toUpperCase();
         if (!UnitOfMeasure.getValues().contains(unitOfMeasureStr)) {
             System.err.println("Ошибка ввода, попробуйте еще раз.");
-            return ScanNewProduct(scanner);
+            return null;
         }
         UnitOfMeasure unitOfMeasure = UnitOfMeasure.valueOf(unitOfMeasureStr.toUpperCase());
 
@@ -59,14 +59,14 @@ public class Utils {
             height = scanner.nextLong();
         } catch (InputMismatchException e) {
             System.err.println("Ошибка ввода, попробуйте еще раз.");
-            return ScanNewProduct(scanner);
+            return null;
         }
 
         String eyeColorStr;
         eyeColorStr = scanner.next().trim().toUpperCase();
         if (!Color.getValues().contains(eyeColorStr)) {
             System.err.println("Ошибка ввода, попробуйте еще раз.");
-            return ScanNewProduct(scanner);
+            return null;
         }
         Color eyeColor = Color.valueOf(eyeColorStr);
 
@@ -74,7 +74,7 @@ public class Utils {
         hairColorStr = scanner.next().trim().toUpperCase();
         if (!Color.getValues().contains(hairColorStr)) {
             System.err.println("Ошибка ввода, попробуйте еще раз.");
-            return ScanNewProduct(scanner);
+            return null;
         }
         Color hairColor = Color.valueOf(hairColorStr);
 
@@ -82,7 +82,7 @@ public class Utils {
         countryStr = scanner.next().trim().toUpperCase();
         if (!Country.getValues().contains(countryStr)) {
             System.err.println("Ошибка ввода, попробуйте еще раз.");
-            return ScanNewProduct(scanner);
+            return null;
         }
         Country country = Country.valueOf(countryStr);
 
@@ -95,7 +95,7 @@ public class Utils {
             loc_z = scanner.nextDouble();
         } catch (InputMismatchException e) {
             System.err.println("Ошибка ввода, попробуйте еще раз.");
-            return ScanNewProduct(scanner);
+            return null;
         }
 
         String loc_name = scanner.next().trim();

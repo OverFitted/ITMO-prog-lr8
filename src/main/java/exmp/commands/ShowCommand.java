@@ -45,18 +45,20 @@ public class ShowCommand implements exmp.commands.Command {
      * @param args массив аргументов команды.
      */
     @Override
-    public boolean execute(exmp.App app, Object... args) {
+    public exmp.commands.CommandResult execute(exmp.App app, Object... args) {
         try {
             List<Product> products = app.getProductRepository().findAll();
+            StringBuilder output = new StringBuilder();
+
             if (products != null && !products.isEmpty()) {
-                products.forEach(System.out::println);
+                products.forEach(product -> output.append(product.toString()).append("\n"));
             } else {
-                System.out.println("Коллекция не содержит продуктов.");
+                return new exmp.commands.CommandResult(1, null, "Коллекция не содержит продуктов.");
             }
 
-            return true;
+            return new exmp.commands.CommandResult(0, output.toString(), null);
         } catch (Exception e) {
-            return false;
+            return new exmp.commands.CommandResult(1, null, e.toString());
         }
     }
 }

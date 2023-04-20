@@ -44,14 +44,14 @@ public class RemoveIdCommand implements exmp.commands.Command {
      * @param args массив аргументов команды.
      */
     @Override
-    public boolean execute(exmp.App app, Object... args) {
+    public exmp.commands.CommandResult execute(exmp.App app, Object... args) {
         try {
             Long id = (Long) args[0];
             app.getProductRepository().deleteById(id);
 
-            return true;
+            return new exmp.commands.CommandResult(0, "Продукт успешно удален", null);
         } catch (Exception e) {
-            return false;
+            return new exmp.commands.CommandResult(1, null, e.toString());
         }
     }
 }

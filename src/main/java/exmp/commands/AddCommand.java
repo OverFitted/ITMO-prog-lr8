@@ -24,13 +24,13 @@ public class AddCommand implements exmp.commands.Command {
     }
 
     @Override
-    public boolean execute(exmp.App app, Object... args) {
+    public exmp.commands.CommandResult execute(exmp.App app, Object... args) {
         try {
             app.getProductRepository().save((Product) args[0]);
 
-            return true;
+            return new exmp.commands.CommandResult(0, "Продукт успешно добавлен", null);
         } catch (Exception e) {
-            return false;
+            return new exmp.commands.CommandResult(1, null, e.toString());
         }
     }
 }

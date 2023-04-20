@@ -41,18 +41,18 @@ public class RemoveIndexCommand implements exmp.commands.Command {
      * @param args массив аргументов команды.
      */
     @Override
-    public boolean execute(exmp.App app, Object... args) {
+    public exmp.commands.CommandResult execute(exmp.App app, Object... args) {
         try {
             int index = (Integer) args[0];
             if (index < 1 || index > app.getProductRepository().findAll().size()) {
-                return false;
+                return new exmp.commands.CommandResult(1, null, "Продукт не найден");
             }
             long id = app.getProductRepository().findAll().get(index).getId();
             app.getProductRepository().deleteById(id);
 
-            return true;
+            return new exmp.commands.CommandResult(0, "Продукт успешно удален", null);
         } catch (Exception e) {
-            return false;
+            return new exmp.commands.CommandResult(1, null, e.toString());
         }
     }
 }

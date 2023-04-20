@@ -41,21 +41,22 @@ public class InfoCommand implements exmp.commands.Command {
      * @param args массив аргументов команды.
      */
     @Override
-    public boolean execute(exmp.App app, Object... args) {
+    public exmp.commands.CommandResult execute(exmp.App app, Object... args) {
         try {
-            System.out.println("Дата инициализации: " + app.getInitializationDate());
+            StringBuilder output = new StringBuilder();
+            output.append("Дата инициализации: ").append(app.getInitializationDate());
 
             List<exmp.models.Product> products = app.getProductRepository().findAll();
             if (products != null) {
-                System.out.println("Тип коллекции: " + products.getClass().getName());
-                System.out.println("Количество элементов: " + products.size());
+                output.append("Тип коллекции: ").append(products.getClass().getName());
+                output.append("Количество элементов: ").append(products.size());
             } else {
-                System.out.println("Коллекция не содержит продуктов.");
+                output.append("Коллекция не содержит продуктов.");
             }
 
-            return true;
+            return new exmp.commands.CommandResult(0, output.toString(), null);
         } catch (Exception e) {
-            return false;
+            return new exmp.commands.CommandResult(1, null, e.toString());
         }
     }
 }

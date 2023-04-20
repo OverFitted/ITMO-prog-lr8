@@ -44,15 +44,15 @@ public class RemovePartNumberCommand implements exmp.commands.Command {
      * @param args массив аргументов команды.
      */
     @Override
-    public boolean execute(exmp.App app, Object... args) {
+    public exmp.commands.CommandResult execute(exmp.App app, Object... args) {
         try {
             String partNumber = (String) args[0];
             app.getProductRepository().findAll().removeIf((Product product) -> product.getPartNumber() != null
                     && product.getPartNumber().equals(partNumber));
 
-            return true;
+            return new exmp.commands.CommandResult(0, "Продукт(ы) успешно удален(ы)", null);
         } catch (Exception e) {
-            return false;
+            return new exmp.commands.CommandResult(1, null, e.toString());
         }
     }
 }

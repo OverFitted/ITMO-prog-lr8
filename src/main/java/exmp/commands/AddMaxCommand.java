@@ -44,7 +44,7 @@ public class AddMaxCommand implements exmp.commands.Command {
      * @param args массив аргументов команды.
      */
     @Override
-    public boolean execute(App app, Object... args) {
+    public exmp.commands.CommandResult execute(App app, Object... args) {
         try {
             Product newProduct = (Product) args[0];
             Product maxProduct = app.getProductRepository().findAll().stream().max(Product::compareTo).orElse(null);
@@ -52,12 +52,12 @@ public class AddMaxCommand implements exmp.commands.Command {
             if (maxProduct == null || newProduct.compareTo(maxProduct) > 0) {
                 app.getProductRepository().save(newProduct);
             } else {
-                return false;
+                return new exmp.commands.CommandResult(1, null, "Значение не превышает значение наибольшего элемента коллекции");
             }
 
-            return true;
+            return new exmp.commands.CommandResult(0, "Продукт успешно добавлен", null);
         } catch (Exception e) {
-            return false;
+            return new exmp.commands.CommandResult(1, null, e.toString());
         }
     }
 }
