@@ -113,7 +113,6 @@ public class App {
         this.commandHandlers.put("update", new exmp.commands.UpdateIdCommand());
         this.commandHandlers.put("remove_by_id", new exmp.commands.RemoveIdCommand());
         this.commandHandlers.put("clear", new exmp.commands.ClearCommand());
-        this.commandHandlers.put("save", new exmp.commands.SaveCommand());
         this.commandHandlers.put("execute_script", new exmp.commands.ExecuteCommand());
         this.commandHandlers.put("exit", new exmp.commands.ExitCommand());
         this.commandHandlers.put("remove_at", new exmp.commands.RemoveIndexCommand());
