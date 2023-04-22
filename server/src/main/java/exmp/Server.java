@@ -1,6 +1,5 @@
-package exmp.server;
+package exmp;
 
-import exmp.App;
 import exmp.commands.CommandData;
 import exmp.commands.CommandResult;
 
@@ -18,10 +17,10 @@ import org.apache.logging.log4j.Logger;
 
 public class Server {
     private final int port;
-    private final App app;
+    private final exmp.App app;
     private static final Logger logger = LogManager.getLogger(Server.class);
 
-    public Server(int port, App app) {
+    public Server(int port, exmp.App app) {
         this.port = port;
         this.app = app;
     }
@@ -50,10 +49,10 @@ public class Server {
                 CommandData commandData = (CommandData) objectInputStream.readObject();
                 String commandName = commandData.getCommandName();
                 String commandInput = commandData.getArguments();
-                logger.info("Получен запрос: {} {}", commandName, commandInput);
+                logger.debug("Получен запрос: {} {}", commandName, commandInput);
 
                 CommandResult result = app.executeCommand(commandName, commandInput);
-                logger.info("Получен результат: {}", result.toString());
+                logger.debug("Получен результат: {}", result.toString());
 
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                 ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);

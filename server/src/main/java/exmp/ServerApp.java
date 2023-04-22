@@ -1,7 +1,5 @@
 package exmp;
 
-import exmp.server.Server;
-
 /**
  * Главный класс приложения. Запускает приложение, и обрабатывает ввод пользователя.
  */
@@ -14,7 +12,7 @@ public class ServerApp {
      * @param args аргументы командной строки, не используются
      */
     public static void main(String[] args) {
-        Server server = new Server(5555, new exmp.App("src/main/resources/input.xml"));
+        exmp.Server server = new exmp.Server(38761, new exmp.App("src/main/resources/input.xml"));
         server.start();
     }
 }

@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'application'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
 group 'org.example'
@@ -35,14 +36,21 @@ test {
 sourceSets.main.java.srcDirs =  ['src/main/java/exmp', 'src/main/java/exmp/commands', 'src/main/java/exmp/server', 'src/main/java/exmp/client', 'src/main/java/exmp/enums', 'src/main/java/exmp/models']
 compileJava.options.encoding = 'UTF-8'
 
-tasks.register('runServer', JavaExec) {
-    mainClass.set('exmp.ServerApp')
-    classpath = sourceSets.main.runtimeClasspath
-    standardInput = System.in
+
+task runServer(type: com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar) {
+    group = 'shadow'
+    mainClassName = 'exmp.ServerApp'
+    archiveFileName = "ServerApp.jar"
+    manifest {
+        attributes 'Main-Class': 'exmp.ServerApp'
+    }
 }
 
-tasks.register('runClient', JavaExec) {
-    mainClass.set('exmp.ClientApp')
-    classpath = sourceSets.main.runtimeClasspath
-    standardInput = System.in
+task runClient(type: com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar) {
+    group = 'shadow'
+    mainClassName = 'exmp.client.ClientApp'
+    archiveFileName = "ClientApp.jar"
+    manifest {
+        attributes 'Main-Class': 'exmp.client.ClientApp'
+    }
 }

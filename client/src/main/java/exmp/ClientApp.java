@@ -1,10 +1,8 @@
 package exmp;
 
-import exmp.client.Client;
-
 public class ClientApp {
     public static void main(String[] args) {
-        Client client = new Client("localhost", 5555);
+        exmp.Client client = new exmp.Client("localhost", 38761);
         client.start();
     }
 }

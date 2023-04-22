@@ -1,7 +1,7 @@
-package exmp.client;
+package exmp;
 
-import exmp.internal.commands.CommandData;
-import exmp.internal.commands.CommandResult;
+import exmp.commands.CommandData;
+import exmp.commands.CommandResult;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

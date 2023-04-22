@@ -5,7 +5,6 @@ import exmp.commands.Command;
 import exmp.commands.CommandResult;
 import exmp.commands.Utils;
 import exmp.models.Product;
-import exmp.server.Server;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

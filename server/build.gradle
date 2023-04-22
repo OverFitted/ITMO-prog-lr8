@@ -1,0 +1,46 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
+plugins {
+    id 'java'
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.apache.logging.log4j:log4j-core:2.3.2'
+    implementation 'org.apache.logging.log4j:log4j-api:2.3.2'
+    implementation project(':internal')
+
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.mockito:mockito-core:5.2.0'
+}
+
+run {
+    standardInput = System.in
+}
+
+test {
+    useJUnitPlatform()
+}
+
+sourceSets.main.java.srcDirs =  ['src/main/java/exmp/']
+compileJava.options.encoding = 'UTF-8'
+
+
+tasks.register('runServer', ShadowJar) {
+    group = 'shadow'
+    mainClassName = 'exmp.ServerApp'
+    archiveFileName = "ServerApp.jar"
+    manifest {
+        attributes 'Main-Class': 'exmp.ServerApp'
+    }
+}
