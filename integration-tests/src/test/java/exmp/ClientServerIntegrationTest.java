@@ -21,7 +21,7 @@ public class ClientServerIntegrationTest {
     private static final int SERVER_PORT = 52333;
     private static final String HOST = "localhost";
     private static exmp.Server server;
-    private static final exmp.App app = new exmp.App("src/main/resources/input.xml");
+    private static final exmp.App app = new exmp.App("src/test/resources/input.xml");
 
     private static final Logger logger = LogManager.getLogger(ClientServerIntegrationTest.class);
 
@@ -54,7 +54,9 @@ public class ClientServerIntegrationTest {
 
     @Test
     public void testPacketLoss() throws IOException, ClassNotFoundException {
-        String commandName = "help";
+        logger.debug("Testing packet loss...");
+
+        String commandName = "clear";
         String commandInput = "";
 
         CommandResult expectedResult = app.executeCommand(commandName, commandInput);
@@ -81,6 +83,8 @@ public class ClientServerIntegrationTest {
 
     @Test
     public void testPacketDuplication() throws IOException, ClassNotFoundException {
+        logger.debug("Testing packet duplication...");
+
         String commandName = "help";
         String commandInput = "";
 
@@ -95,6 +99,8 @@ public class ClientServerIntegrationTest {
 
     @Test
     public void testPacketReordering() throws IOException, ClassNotFoundException {
+        logger.debug("Testing packet reordering...");
+
         String commandName1 = "info";
         String commandInput1 = "";
 
