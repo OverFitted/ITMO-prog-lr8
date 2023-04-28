@@ -3,9 +3,9 @@ package exmp.commands;
 import java.io.Serializable;
 
 public class CommandResult implements Serializable {
-    private int statusCode;
-    private String output;
-    private String errorMessage;
+    private final int statusCode;
+    private final String output;
+    private final String errorMessage;
 
     public CommandResult(int statusCode, String output, String errorMessage) {
         this.statusCode = statusCode;

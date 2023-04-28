@@ -22,7 +22,6 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testImplementation 'junit:junit:4.13.2'
-    testImplementation 'org.mockito:mockito-core:5.2.0'
 }
 
 run {
@@ -33,24 +32,4 @@ test {
     useJUnitPlatform()
 }
 
-sourceSets.main.java.srcDirs =  ['src/main/java/exmp', 'src/main/java/exmp/commands', 'src/main/java/exmp/server', 'src/main/java/exmp/client', 'src/main/java/exmp/enums', 'src/main/java/exmp/models']
-compileJava.options.encoding = 'UTF-8'
-
-
-task runServer(type: com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar) {
-    group = 'shadow'
-    mainClassName = 'exmp.ServerApp'
-    archiveFileName = "ServerApp.jar"
-    manifest {
-        attributes 'Main-Class': 'exmp.ServerApp'
-    }
-}
-
-task runClient(type: com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar) {
-    group = 'shadow'
-    mainClassName = 'exmp.client.ClientApp'
-    archiveFileName = "ClientApp.jar"
-    manifest {
-        attributes 'Main-Class': 'exmp.client.ClientApp'
-    }
-}
+sourceSets.main.java.srcDirs =  ['src/main/java/exmp', 'src/main/java/exmp/commands', 'src/main/java/exmp/enums', 'src/main/java/exmp/models', 'src/main/java/exmp/repository']

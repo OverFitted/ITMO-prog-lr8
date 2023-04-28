@@ -16,12 +16,10 @@ import java.util.function.Consumer;
  */
 public class App {
     private final Date initializationDate;
-    private final String fileName;
-    private boolean status;
+    private boolean state;
     private final exmp.repository.ProductRepository productRepository = new exmp.repository.InMemoryProductRepository();
-    private HashSet<Long> idList;
     private final HashMap<String, exmp.commands.Command> commandHandlers;
-    private HashMap<Class<?>, Consumer<Scanner>> argHandlers;
+    private final HashMap<Class<?>, Consumer<Scanner>> argHandlers;
     private static final Logger logger = LogManager.getLogger(App.class);
 
     /**
@@ -30,21 +28,20 @@ public class App {
      * @param filename - путь к файлу, содержащему данные.
      */
     public App(String filename) {
-        this.status = true;
-        this.fileName = filename;
+        this.state = true;
         this.initializationDate = new Date();
         this.commandHandlers = new HashMap<>();
         this.argHandlers = new HashMap<>();
 
         initCommands();
-        productRepository.loadData(fileName);
+        productRepository.loadData(filename);
     }
 
     /**
      * Выключает приложение.
      */
     public void switchOff() {
-        this.status = false;
+        this.state = false;
     }
 
     /**
@@ -52,8 +49,8 @@ public class App {
      *
      * @return true, если приложение работает, false - иначе.
      */
-    public Boolean getStatus() {
-        return status;
+    public Boolean getState() {
+        return state;
     }
 
     public CommandResult executeCommand(String commandName, String input) {

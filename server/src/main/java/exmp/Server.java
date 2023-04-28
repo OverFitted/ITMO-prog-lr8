@@ -33,7 +33,7 @@ public class Server {
 
             ByteBuffer buffer = ByteBuffer.allocate(65536);
 
-            while (app.getStatus()) {
+            while (app.getState()) {
                 buffer.clear();
                 InetSocketAddress clientAddress = (InetSocketAddress) channel.receive(buffer);
 
