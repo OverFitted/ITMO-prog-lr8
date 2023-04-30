@@ -54,7 +54,109 @@ public class PostgreSQLProductRepository implements exmp.repository.ProductRepos
 
     @Override
     public Product save(Product product) {
+        try (Connection connection = DatabaseConnection.getConnection()) {
+            connection.setAutoCommit(false);
+
+            // Сохранение связанных сущностей и получение их идентификаторов
+            int coordinatesId = saveCoordinates(connection, product.getCoordinates());
+            int ownerId = savePerson(connection, product.getOwner());
+
+            // Запрос на сохранение Product
+            String query = "INSERT INTO product (name, coordinates_id, price, part_number, manufacture_cost, unit_of_measure_id, owner_id) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id";
+
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                preparedStatement.setString(1, product.getName());
+                preparedStatement.setInt(2, coordinatesId);
+                preparedStatement.setDouble(3, product.getPrice());
+                preparedStatement.setString(4, product.getPartNumber());
+                preparedStatement.setFloat(5, product.getManufactureCost());
+                preparedStatement.setInt(6, product.getUnitOfMeasure().ordinal() + 1);
+                preparedStatement.setInt(7, ownerId);
+
+                ResultSet resultSet = preparedStatement.executeQuery();
+                if (resultSet.next()) {
+                    long productId = resultSet.getLong(1);
+                    product.setId(productId);
+                    connection.commit();
+                } else {
+                    connection.rollback();
+                    throw new RuntimeException("Ошибка при сохранении продукта.");
+                }
+            } catch (SQLException e) {
+                connection.rollback();
+                throw new RuntimeException("Ошибка при сохранении продукта: " + e.getMessage());
+            } finally {
+                connection.setAutoCommit(true);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Ошибка при подключении к базе данных: " + e.getMessage());
+        }
+
         return product;
+    }
+
+    private int saveCoordinates(Connection connection, exmp.models.Coordinates coordinates) {
+        String query = "INSERT INTO coordinates (x, y) VALUES (?, ?) RETURNING id";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setDouble(1, coordinates.getX());
+            preparedStatement.setFloat(2, coordinates.getY());
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            } else {
+                throw new RuntimeException("Ошибка при сохранении координат.");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Ошибка при сохранении координат: " + e.getMessage());
+        }
+    }
+
+    private int savePerson(Connection connection, exmp.models.Person person) {
+        int locationId = saveLocation(connection, person.getLocation());
+
+        String query = "INSERT INTO person (name, height, eye_color_id, hair_color_id, nationality_id, location_id) "
+                + "VALUES (?, ?, ?, ?, ?, ?) RETURNING id";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, person.getName());
+            preparedStatement.setFloat(2, person.getHeight());
+            preparedStatement.setInt(3, person.getEyeColor().ordinal() + 1);
+            preparedStatement.setInt(4, person.getHairColor().ordinal() + 1);
+            preparedStatement.setInt(5, person.getNationality().ordinal() + 1);
+            preparedStatement.setInt(6, locationId);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            } else {
+                throw new RuntimeException("Ошибка при сохранении человека.");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Ошибка при сохранении человека: " + e.getMessage());
+        }
+    }
+
+    private int saveLocation(Connection connection, exmp.models.Location location) {
+        String query = "INSERT INTO location (x, y, z, name) VALUES (?, ?, ?, ?) RETURNING id";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setFloat(1, location.getX());
+            preparedStatement.setDouble(2, location.getY());
+            preparedStatement.setDouble(3, location.getZ());
+            preparedStatement.setString(4, location.getName());
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            } else {
+                throw new RuntimeException("Ошибка при сохранении локации.");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Ошибка при сохранении локации: " + e.getMessage());
+        }
     }
 
     @Override
