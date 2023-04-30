@@ -38,9 +38,9 @@ compileJava.options.encoding = 'UTF-8'
 
 tasks.register('runClient', ShadowJar) {
     group = 'shadow'
-    mainClassName = 'exmp.client.ClientApp'
-    archiveFileName = "ClientApp.jar"
+    mainClassName = 'exmp.GatewayLBService.GatewayApp'
+    archiveFileName = "GatewayApp.jar"
     manifest {
-        attributes 'Main-Class': 'exmp.client.ClientApp'
+        attributes 'Main-Class': 'exmp.GatewayLBService.GatewayApp'
     }
 }

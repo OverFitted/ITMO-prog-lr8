@@ -3,12 +3,9 @@ package exmp;
 import exmp.commands.CommandData;
 import exmp.commands.CommandResult;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
 import java.sql.Connection;
@@ -36,6 +33,17 @@ public class Server {
     public Server(int port, exmp.App app) {
         this.port = port;
         this.app = app;
+    }
+
+    private void notifyGateway(InetSocketAddress gatewayAddress) {
+        try (DatagramChannel channel = DatagramChannel.open()) {
+            ByteBuffer buffer = ByteBuffer.allocate(256);
+            buffer.put(("REGISTER " + this.port).getBytes());
+            buffer.flip();
+            channel.send(buffer, gatewayAddress);
+        } catch (IOException e) {
+            System.err.println("Ошибка при уведомлении GatewayLBService: " + e);
+        }
     }
 
     private exmp.database.UserCreds authUser(String username, String password) {
@@ -91,6 +99,7 @@ public class Server {
             channel.bind(new InetSocketAddress(port));
             logger.info("Сервер запущен и ожидает подключений...");
 
+            notifyGateway(new InetSocketAddress("localhost", 38761));
             ByteBuffer buffer = ByteBuffer.allocate(65536);
 
             while (app.getState()) {
@@ -109,10 +118,10 @@ public class Server {
                 CommandData commandData = (CommandData) objectInputStream.readObject();
                 String commandName = commandData.getCommandName();
                 String commandInput = commandData.getArguments();
-                logger.debug("Получен запрос: {} {}", commandName, commandInput);
 
                 CommandResult result;
                 if (commandName.equalsIgnoreCase("login")) {
+                    logger.debug("Получен запрос: {}", commandName);
                     String[] credentials = commandInput.split(" ");
                     if (credentials.length == 2) {
                         exmp.database.UserCreds userCreds = authUser(credentials[0], credentials[1]);
@@ -128,6 +137,7 @@ public class Server {
                         result = new CommandResult(1, null, "Некорректный формат команды");
                     }
                 } else if (commandName.equalsIgnoreCase("register")) {
+                    logger.debug("Получен запрос: {}", commandName);
                     String[] credentials = commandInput.split(" ");
                     if (credentials.length == 2) {
                         if (registerUser(credentials[0], credentials[1])) {
@@ -143,6 +153,7 @@ public class Server {
                         result = new CommandResult(1, null, "Токен доступа не предоставлен. Сначала введите login/register");
                     } else {
                         try {
+                            logger.debug("Получен запрос: {} {}", commandName, commandInput);
                             Jwts.parserBuilder().setSigningKey(jwtSecretKey).build().parseClaimsJws(commandData.getToken());
                             result = app.executeCommand(commandName, commandInput);
                         } catch (io.jsonwebtoken.ExpiredJwtException e) {
@@ -153,6 +164,7 @@ public class Server {
                     }
                 }
 
+                result.setClientAddress(commandData.getClientAddress());
                 logger.debug("Получен результат: {}", result.toString());
 
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();

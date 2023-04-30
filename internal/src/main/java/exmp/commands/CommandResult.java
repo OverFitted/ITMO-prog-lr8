@@ -1,6 +1,7 @@
 package exmp.commands;
 
 import java.io.Serializable;
+import java.net.InetSocketAddress;
 
 public class CommandResult implements Serializable {
     private final int statusCode;
@@ -8,6 +9,7 @@ public class CommandResult implements Serializable {
     private final String errorMessage;
     private String token;
     private Long userId;
+    InetSocketAddress clientAddress;
 
     public CommandResult(int statusCode, String output, String errorMessage) {
         this.statusCode = statusCode;
@@ -22,6 +24,14 @@ public class CommandResult implements Serializable {
                 ", output=" + output +
                 ", errorMessage=" + errorMessage +
                 "}";
+    }
+
+    public InetSocketAddress getClientAddress() {
+        return this.clientAddress;
+    }
+
+    public void setClientAddress(InetSocketAddress clientAddress) {
+        this.clientAddress = clientAddress;
     }
 
     public String getToken() {

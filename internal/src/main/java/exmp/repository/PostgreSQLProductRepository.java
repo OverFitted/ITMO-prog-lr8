@@ -21,7 +21,20 @@ public class PostgreSQLProductRepository implements exmp.repository.ProductRepos
 
     @Override
     public List<Product> findAll() {
-        String query = "SELECT * FROM product";
+        this.products.clear();
+
+        String query = "SELECT product.*, coordinates.x, coordinates.y, unit_of_measure.name as unit_of_measure_name, " +
+                "person.name as person_name, person.height, eye_color.name as eye_color_name, " +
+                "hair_color.name as hair_color_name, country.name as country_name, " +
+                "location.id as location_id, location.x as location_x, location.y as location_y, location.z as location_z, location.name as location_name " +
+                "FROM product " +
+                "JOIN coordinates ON product.coordinates_id = coordinates.id " +
+                "JOIN unit_of_measure ON product.unit_of_measure_id = unit_of_measure.id " +
+                "JOIN person ON product.owner_id = person.id " +
+                "JOIN color AS eye_color ON person.eye_color_id = eye_color.id " +
+                "JOIN color AS hair_color ON person.hair_color_id = hair_color.id " +
+                "JOIN country ON person.nationality_id = country.id " +
+                "JOIN location ON person.location_id = location.id";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query);
              ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -247,9 +260,9 @@ public class PostgreSQLProductRepository implements exmp.repository.ProductRepos
     private exmp.models.Location extractLocationFromResultSet(ResultSet resultSet) throws SQLException {
         return new exmp.models.Location(
                 resultSet.getLong("location_id"),
-                resultSet.getInt("x"),
-                resultSet.getLong("y"),
-                resultSet.getLong("z"),
+                resultSet.getInt("location_x"),
+                resultSet.getLong("location_y"),
+                resultSet.getLong("location_z"),
                 resultSet.getString("location_name")
         );
     }

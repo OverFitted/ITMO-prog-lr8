@@ -12,7 +12,7 @@ public class ServerApp {
      * @param args аргументы командной строки, не используются
      */
     public static void main(String[] args) {
-        exmp.Server server = new exmp.Server(38761, new exmp.App("src/main/resources/input.xml"));
+        exmp.Server server = new exmp.Server(12515, new exmp.App("src/main/resources/input.xml"));
         server.start();
     }
 }
