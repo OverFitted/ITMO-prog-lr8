@@ -52,12 +52,14 @@ public class Client {
                 byte[] data = byteArrayOutputStream.toByteArray();
 
                 DatagramPacket sendPacket = new DatagramPacket(data, data.length, new InetSocketAddress(host, port));
-                DatagramSocket datagramSocket = new DatagramSocket();
-                datagramSocket.send(sendPacket);
+                DatagramPacket receivePacket;
+                try (DatagramSocket datagramSocket = new DatagramSocket()) {
+                    datagramSocket.send(sendPacket);
 
-                buffer.clear();
-                DatagramPacket receivePacket = new DatagramPacket(buffer.array(), buffer.capacity());
-                datagramSocket.receive(receivePacket);
+                    buffer.clear();
+                    receivePacket = new DatagramPacket(buffer.array(), buffer.capacity());
+                    datagramSocket.receive(receivePacket);
+                }
                 buffer.position(receivePacket.getLength());
 
                 buffer.flip();
