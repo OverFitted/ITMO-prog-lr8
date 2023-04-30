@@ -18,7 +18,7 @@ public class App {
     private final String filename;
     private final Date initializationDate;
     private boolean state;
-    private final exmp.repository.ProductRepository productRepository = new exmp.repository.InMemoryProductRepository();
+    private final exmp.repository.ProductRepository productRepository = new exmp.repository.PostgreSQLProductRepository();
     private final HashMap<String, exmp.commands.Command> commandHandlers;
     private final HashMap<Class<?>, Consumer<Scanner>> argHandlers;
     private static final Logger logger = LogManager.getLogger(App.class);

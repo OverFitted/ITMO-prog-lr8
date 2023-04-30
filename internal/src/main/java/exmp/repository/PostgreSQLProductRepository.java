@@ -13,13 +13,17 @@ import java.util.Optional;
 public class PostgreSQLProductRepository implements exmp.repository.ProductRepository {
     private final List<Product> products = new ArrayList<>();
     private static final Logger logger = LogManager.getLogger(exmp.repository.PostgreSQLProductRepository.class);
+    Connection connection;
+
+    public PostgreSQLProductRepository() {
+        this.connection = DatabaseConnection.getConnection();
+    }
 
     @Override
     public List<Product> findAll() {
         String query = "SELECT * FROM product";
 
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query);
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query);
              ResultSet resultSet = preparedStatement.executeQuery()) {
 
             while (resultSet.next()) {
@@ -37,8 +41,7 @@ public class PostgreSQLProductRepository implements exmp.repository.ProductRepos
         String query = "SELECT * FROM product WHERE id = ?";
         Product product = null;
 
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
             preparedStatement.setLong(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -163,8 +166,7 @@ public class PostgreSQLProductRepository implements exmp.repository.ProductRepos
     public void delete(Product product) {
         String query = "DELETE FROM product WHERE id = ?";
 
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
             preparedStatement.setLong(1, product.getId());
             preparedStatement.executeUpdate();
@@ -178,8 +180,7 @@ public class PostgreSQLProductRepository implements exmp.repository.ProductRepos
     public void deleteById(long id) {
         String query = "DELETE FROM product WHERE id = ?";
 
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
