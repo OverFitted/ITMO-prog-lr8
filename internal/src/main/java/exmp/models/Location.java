@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * Класс, представляющий местоположение.
  */
 public class Location {
+    private long id;
     private float x;
     private double y;
     private double z;
@@ -29,6 +30,22 @@ public class Location {
         setY(y);
         setZ(z);
         setName(name);
+    }
+
+    public Location(Long id, float x, double y, double z, String name) {
+        setId(id);
+        setX(x);
+        setY(y);
+        setZ(z);
+        setName(name);
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public long getId() {
+        return this.id;
     }
 
     /**

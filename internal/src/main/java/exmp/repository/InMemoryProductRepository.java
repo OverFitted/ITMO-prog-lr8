@@ -60,7 +60,8 @@ public class InMemoryProductRepository implements exmp.repository.ProductReposit
      * Если возникла ошибка при загрузке данных, выводит сообщение об ошибке.
      */
     @Override
-    public void loadData(String fileName) {
+    public void loadData(exmp.App app) {
+        String fileName = app.getFileName();
         ObjectMapper xmlMapper = new XmlMapper();
         File file = new File(fileName);
         try {

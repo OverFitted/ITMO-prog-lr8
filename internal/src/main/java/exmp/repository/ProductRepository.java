@@ -11,5 +11,5 @@ public interface ProductRepository {
     Product save(Product product);
     void delete(Product product);
     void deleteById(long id);
-    public void loadData(String fileName);
+    public void loadData(exmp.App app);
 }

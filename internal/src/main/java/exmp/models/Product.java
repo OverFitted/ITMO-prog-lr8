@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * Класс Product, представляющий объект продукта в коллекции.
  */
-public class Product implements Comparable<Product>{
+public class Product implements Comparable<Product> {
     /**
      * Генератор идентификаторов для объектов класса Product.
      */
@@ -109,6 +109,25 @@ public class Product implements Comparable<Product>{
         setOwner(owner);
     }
 
+    public Product(Long id,
+                   String name,
+                   Coordinates coordinates,
+                   int price,
+                   String partNumber,
+                   Float manufactureCost,
+                   UnitOfMeasure unitOfMeasure,
+                   Person owner) {
+        this.id = id;
+        setName(name);
+        setCoordinates(coordinates);
+        setCreationDate(new java.util.Date());
+        setPrice(price);
+        setPartNumber(partNumber);
+        setManufactureCost(manufactureCost);
+        setUnitOfMeasure(unitOfMeasure);
+        setOwner(owner);
+    }
+
     /**
      * Возвращает строковое представление объекта Product.
      *
@@ -133,8 +152,8 @@ public class Product implements Comparable<Product>{
      *
      * @param other объект типа Product для сравнения
      * @return отрицательное число, если цена данного объекта меньше чем у other;
-     *         положительное число, если цена данного объекта больше чем у other;
-     *         0, если цены равны
+     * положительное число, если цена данного объекта больше чем у other;
+     * 0, если цены равны
      */
     @Override
     public int compareTo(Product other) {
@@ -148,6 +167,7 @@ public class Product implements Comparable<Product>{
         }
         this.id = id;
     }
+
     /**
      * Метод, возвращающий идентификатор продукта.
      *

@@ -10,6 +10,7 @@ import exmp.models.Location;
  * Класс, представляющий сущность "Человек".
  */
 public class Person {
+    private Long id;
     private String name; // Поле не может быть null, Строка не может быть пустой
     private Long height; // Поле может быть null, Значение поля должно быть больше 0
     private Color eyeColor; // Поле не может быть null
@@ -19,12 +20,13 @@ public class Person {
 
     /**
      * Конструктор класса Person.
-     * @param name - имя человека.
-     * @param height - рост человека.
-     * @param eyeColor - цвет глаз человека.
-     * @param hairColor - цвет волос человека.
+     *
+     * @param name        - имя человека.
+     * @param height      - рост человека.
+     * @param eyeColor    - цвет глаз человека.
+     * @param hairColor   - цвет волос человека.
      * @param nationality - национальность человека.
-     * @param location - местонахождение человека.
+     * @param location    - местонахождение человека.
      */
     @JsonCreator
     public Person(@JsonProperty("name") String name,
@@ -39,6 +41,31 @@ public class Person {
         setHairColor(hairColor);
         setNationality(nationality);
         setLocation(location);
+    }
+
+    @JsonCreator
+    public Person(Long id,
+                  String name,
+                  Long height,
+                  Color eyeColor,
+                  Color hairColor,
+                  Country nationality,
+                  Location location) {
+        setId(id);
+        setName(name);
+        setHeight(height);
+        setEyeColor(eyeColor);
+        setHairColor(hairColor);
+        setNationality(nationality);
+        setLocation(location);
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public long getId() {
+        return this.id;
     }
 
     /**
@@ -60,6 +87,7 @@ public class Person {
 
     /**
      * Метод, возвращающий имя человека.
+     *
      * @return - имя человека.
      */
     public String getName() {
@@ -68,6 +96,7 @@ public class Person {
 
     /**
      * Метод, устанавливающий имя человека.
+     *
      * @param name - имя человека.
      */
     public void setName(String name) {
@@ -79,6 +108,7 @@ public class Person {
 
     /**
      * Метод, возвращающий рост человека.
+     *
      * @return - рост человека.
      */
     public Long getHeight() {
@@ -87,6 +117,7 @@ public class Person {
 
     /**
      * Метод, устанавливающий рост человека.
+     *
      * @param height - рост человека.
      */
     public void setHeight(Long height) {
@@ -98,6 +129,7 @@ public class Person {
 
     /**
      * Метод, возвращающий цвет глаз человека.
+     *
      * @return - цвет глаз человека.
      */
     public Color getEyeColor() {
@@ -106,6 +138,7 @@ public class Person {
 
     /**
      * Метод, устанавливающий цвет глаз человека.
+     *
      * @param eyeColor - цвет глаз человека.
      */
     public void setEyeColor(Color eyeColor) {
@@ -117,6 +150,7 @@ public class Person {
 
     /**
      * Метод, возвращающий цвет волос человека.
+     *
      * @return - цвет волос человека.
      */
     public Color getHairColor() {
@@ -125,6 +159,7 @@ public class Person {
 
     /**
      * Метод, устанавливающий цвет волос человека.
+     *
      * @param hairColor - цвет глаз человека.
      */
     public void setHairColor(Color hairColor) {
@@ -133,6 +168,7 @@ public class Person {
 
     /**
      * Метод, возвращающий национальность человека.
+     *
      * @return - национальность человека.
      */
     public Country getNationality() {
@@ -141,6 +177,7 @@ public class Person {
 
     /**
      * Метод, устанавливающий национальность человека.
+     *
      * @param nationality - национальность человека.
      */
     public void setNationality(Country nationality) {
@@ -149,6 +186,7 @@ public class Person {
 
     /**
      * Метод, возвращающий локацию человека.
+     *
      * @return - локация человека.
      */
     public Location getLocation() {
@@ -157,6 +195,7 @@ public class Person {
 
     /**
      * Метод, устанавливающий локацию человека.
+     *
      * @param location - локация человека.
      */
     public void setLocation(Location location) {

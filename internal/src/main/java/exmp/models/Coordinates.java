@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * Класс, представляющий координаты объекта
  */
 public class Coordinates {
+    private long id;
     private Double x; // Координата x. Поле не может быть null
     private Float y; // Координата y. Значение поля должно быть больше -452 и не может быть null
 
@@ -21,6 +22,20 @@ public class Coordinates {
     public Coordinates(@JsonProperty("x") Double x, @JsonProperty("y") Float y) {
         setX(x);
         setY(y);
+    }
+
+    public Coordinates(Long id, Double x, Float y) {
+        setId(id);
+        setX(x);
+        setY(y);
+    }
+
+    public void setId(long id){
+        this.id = id;
+    }
+
+    public long getId(){
+        return this.id;
     }
 
     /**

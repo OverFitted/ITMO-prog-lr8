@@ -15,6 +15,7 @@ import java.util.function.Consumer;
  * Класс приложения.
  */
 public class App {
+    private final String filename;
     private final Date initializationDate;
     private boolean state;
     private final exmp.repository.ProductRepository productRepository = new exmp.repository.InMemoryProductRepository();
@@ -28,13 +29,14 @@ public class App {
      * @param filename - путь к файлу, содержащему данные.
      */
     public App(String filename) {
+        this.filename = filename;
         this.state = true;
         this.initializationDate = new Date();
         this.commandHandlers = new HashMap<>();
         this.argHandlers = new HashMap<>();
 
         initCommands();
-        productRepository.loadData(filename);
+        productRepository.loadData(this);
     }
 
     /**
@@ -142,5 +144,9 @@ public class App {
      */
     public Date getInitializationDate() {
         return this.initializationDate;
+    }
+
+    public String getFileName() {
+        return this.filename;
     }
 }
