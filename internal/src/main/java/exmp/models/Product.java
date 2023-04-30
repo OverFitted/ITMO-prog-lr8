@@ -3,8 +3,6 @@ package exmp.models;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import exmp.enums.UnitOfMeasure;
-import exmp.models.Person;
-import exmp.models.Coordinates;
 
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -79,6 +77,8 @@ public class Product implements Comparable<Product> {
      */
     private Person owner;
 
+    private long userId;
+
     /**
      * Конструктор класса Product.
      *
@@ -116,7 +116,8 @@ public class Product implements Comparable<Product> {
                    String partNumber,
                    Float manufactureCost,
                    UnitOfMeasure unitOfMeasure,
-                   Person owner) {
+                   Person owner,
+                   Long userId) {
         this.id = id;
         setName(name);
         setCoordinates(coordinates);
@@ -126,6 +127,20 @@ public class Product implements Comparable<Product> {
         setManufactureCost(manufactureCost);
         setUnitOfMeasure(unitOfMeasure);
         setOwner(owner);
+        setUserId(userId);
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
+
+    /**
+     * Метод, возвращающий идентификатор продукта.
+     *
+     * @return - идентификатор продукта.
+     */
+    public Long getUserId() {
+        return userId;
     }
 
     /**

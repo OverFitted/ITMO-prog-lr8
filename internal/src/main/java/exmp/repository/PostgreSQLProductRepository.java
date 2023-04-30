@@ -63,10 +63,11 @@ public class PostgreSQLProductRepository implements exmp.repository.ProductRepos
             // Сохранение связанных сущностей и получение их идентификаторов
             int coordinatesId = saveCoordinates(connection, product.getCoordinates());
             int ownerId = savePerson(connection, product.getOwner());
+            long userId = product.getUserId();
 
             // Запрос на сохранение Product
-            String query = "INSERT INTO product (name, coordinates_id, price, part_number, manufacture_cost, unit_of_measure_id, owner_id) "
-                    + "VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id";
+            String query = "INSERT INTO product (name, coordinates_id, price, part_number, manufacture_cost, unit_of_measure_id, owner_id, user_id) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?) RETURNING id";
 
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
                 preparedStatement.setString(1, product.getName());
@@ -76,6 +77,7 @@ public class PostgreSQLProductRepository implements exmp.repository.ProductRepos
                 preparedStatement.setFloat(5, product.getManufactureCost());
                 preparedStatement.setInt(6, product.getUnitOfMeasure().ordinal() + 1);
                 preparedStatement.setInt(7, ownerId);
+                preparedStatement.setLong(8, userId);
 
                 ResultSet resultSet = preparedStatement.executeQuery();
                 if (resultSet.next()) {
@@ -205,7 +207,8 @@ public class PostgreSQLProductRepository implements exmp.repository.ProductRepos
                 resultSet.getString("part_number"),
                 resultSet.getFloat("manufacture_cost"),
                 extractUnitOfMeasureFromResultSet(resultSet),
-                extractPersonFromResultSet(resultSet)
+                extractPersonFromResultSet(resultSet),
+                resultSet.getLong("user_id")
         );
     }
 

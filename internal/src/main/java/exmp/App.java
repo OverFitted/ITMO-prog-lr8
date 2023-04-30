@@ -104,6 +104,8 @@ public class App {
      * Инициализирует обработчики команд.
      */
     private void initCommands() {
+        this.commandHandlers.put("login", new exmp.commands.LoginCommand());
+        this.commandHandlers.put("register", new exmp.commands.RegisterCommand());
         this.commandHandlers.put("help", new exmp.commands.HelpCommand());
         this.commandHandlers.put("info", new exmp.commands.InfoCommand());
         this.commandHandlers.put("show", new exmp.commands.ShowCommand());

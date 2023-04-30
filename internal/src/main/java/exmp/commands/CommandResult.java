@@ -6,6 +6,8 @@ public class CommandResult implements Serializable {
     private final int statusCode;
     private final String output;
     private final String errorMessage;
+    private String token;
+    private Long userId;
 
     public CommandResult(int statusCode, String output, String errorMessage) {
         this.statusCode = statusCode;
@@ -22,6 +24,22 @@ public class CommandResult implements Serializable {
                 "}";
     }
 
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
     public int getStatusCode() {
         return statusCode;
     }
@@ -32,9 +50,5 @@ public class CommandResult implements Serializable {
 
     public String getErrorMessage() {
         return errorMessage;
-    }
-
-    public boolean isSuccess() {
-        return statusCode == 0;
     }
 }

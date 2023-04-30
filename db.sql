@@ -52,10 +52,14 @@ CREATE TABLE product (
                          part_number VARCHAR(51) CHECK (LENGTH(part_number) >= 30),
                          manufacture_cost REAL NOT NULL,
                          unit_of_measure_id INT NOT NULL REFERENCES unit_of_measure(id),
-                         owner_id INT REFERENCES person(id)
+                         owner_id INT REFERENCES person(id),
+                         user_id INT REFERENCES users(id)
 );
 
 -- Заполните таблицы значениями из enum-классов
 INSERT INTO unit_of_measure (name) VALUES ('KILOGRAMS'), ('METERS'), ('CENTIMETERS'), ('SQUARE_METERS'), ('MILLIGRAMS');
 INSERT INTO color (name) VALUES ('GREEN'), ('BLUE'), ('ORANGE'), ('WHITE'), ('RED'), ('YELLOW');
 INSERT INTO country (name) VALUES ('RUSSIA'), ('INDIA'), ('THAILAND'), ('NORTH_KOREA');
+
+-- Админ аккаунт
+INSERT INTO users (username, password) values ('admin', 'admin');

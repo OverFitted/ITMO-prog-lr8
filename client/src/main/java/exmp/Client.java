@@ -18,6 +18,8 @@ import java.util.Scanner;
 public class Client {
     private final String host;
     private final int port;
+    static String jwtToken = null;
+    static Long userId = null;
 
     public Client(String host, int port) {
         this.host = host;
@@ -40,11 +42,16 @@ public class Client {
                 String commandName = inputParts[0];
                 String commandInput = inputParts.length > 1 ? inputParts[1] : "";
 
+                CommandData outCommand = new CommandData(commandName, commandInput);
+
                 if (commandName.equalsIgnoreCase("exit")) {
                     break;
+                } else if (commandName.equalsIgnoreCase("login") || commandName.equalsIgnoreCase("register")) {
+                    outCommand.setToken(null);
+                } else {
+                    outCommand.setToken(jwtToken);
+                    outCommand.setUserId(userId);
                 }
-
-                CommandData outCommand = new CommandData(commandName, commandInput);
 
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                 ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
@@ -67,10 +74,16 @@ public class Client {
                 ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
                 CommandResult result = (CommandResult) objectInputStream.readObject();
 
-                if (result.getStatusCode() == 0)
+                if (result.getStatusCode() == 0) {
                     System.out.println(result.getOutput());
-                else
+                    if (commandName.equalsIgnoreCase("login")) {
+                        jwtToken = result.getToken();
+                        userId = result.getUserId();
+                        System.out.println("Токен доступа получен");
+                    }
+                } else {
                     System.err.println("Ошибка выполнения команды: " + result.getErrorMessage());
+                }
             }
         } catch (IOException | ClassNotFoundException e) {
             System.err.println("Ошибка при подключении к серверу: " + e.getMessage());
