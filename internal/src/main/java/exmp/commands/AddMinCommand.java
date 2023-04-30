@@ -47,6 +47,7 @@ public class AddMinCommand implements exmp.commands.Command {
     public exmp.commands.CommandResult execute(App app, Object... args) {
         try {
             Product newProduct = (Product) args[0];
+            newProduct.setUserId((Long) args[1]);
             Product maxProduct = app.getProductRepository().findAll().stream().min(Product::compareTo).orElse(null);
 
             if (maxProduct == null || newProduct.compareTo(maxProduct) < 0) {

@@ -26,7 +26,9 @@ public class AddCommand implements exmp.commands.Command {
     @Override
     public exmp.commands.CommandResult execute(exmp.App app, Object... args) {
         try {
-            app.getProductRepository().save((Product) args[0]);
+            Product product = (Product) args[0];
+            product.setUserId((Long) args[1]);
+            app.getProductRepository().save(product);
 
             return new exmp.commands.CommandResult(0, "Продукт успешно добавлен", null);
         } catch (Exception e) {

@@ -55,7 +55,7 @@ public class App {
         return state;
     }
 
-    public CommandResult executeCommand(String commandName, String input) {
+    public CommandResult executeCommand(String commandName, String input, Long userId) {
         Command command = commandHandlers.get(commandName);
         if (command == null) {
             logger.error("Неизвестная команда: {}", commandName);
@@ -71,6 +71,7 @@ public class App {
             this.argHandlers.get(argDescriptor.type()).accept(scanner);
         }
 
+        args.add(userId);
         return command.execute(this, args.toArray());
     }
 
@@ -88,7 +89,7 @@ public class App {
         String commandName = inputParts[0];
         String arguments = inputParts.length > 1 ? inputParts[1] : "";
 
-        executeCommand(commandName, arguments);
+        executeCommand(commandName, arguments, 1L);
     }
 
     /**

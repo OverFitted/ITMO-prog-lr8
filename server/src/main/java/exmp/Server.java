@@ -155,7 +155,7 @@ public class Server {
                         try {
                             logger.debug("Получен запрос: {} {}", commandName, commandInput);
                             Jwts.parserBuilder().setSigningKey(jwtSecretKey).build().parseClaimsJws(commandData.getToken());
-                            result = app.executeCommand(commandName, commandInput);
+                            result = app.executeCommand(commandName, commandInput, commandData.getUserId());
                         } catch (io.jsonwebtoken.ExpiredJwtException e) {
                             result = new CommandResult(1, null, "Токен доступа истек");
                         } catch (io.jsonwebtoken.JwtException e) {

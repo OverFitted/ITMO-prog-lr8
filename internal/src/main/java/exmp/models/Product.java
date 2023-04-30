@@ -35,7 +35,7 @@ public class Product implements Comparable<Product> {
      * Координаты продукта.
      * Поле не может быть null.
      */
-    private Coordinates coordinates;
+    private exmp.models.Coordinates coordinates;
 
     /**
      * Дата создания объекта.
@@ -75,7 +75,7 @@ public class Product implements Comparable<Product> {
      * Владелец продукта.
      * Поле может быть null.
      */
-    private Person owner;
+    private exmp.models.Person owner;
 
     private long userId;
 
@@ -92,12 +92,12 @@ public class Product implements Comparable<Product> {
      */
     @JsonCreator
     public Product(@JsonProperty("name") String name,
-                   @JsonProperty("coordinates") Coordinates coordinates,
+                   @JsonProperty("coordinates") exmp.models.Coordinates coordinates,
                    @JsonProperty("price") int price,
                    @JsonProperty("partNumber") String partNumber,
                    @JsonProperty("manufactureCost") Float manufactureCost,
                    @JsonProperty("unitOfMeasure") UnitOfMeasure unitOfMeasure,
-                   @JsonProperty("owner") Person owner) {
+                   @JsonProperty("owner") exmp.models.Person owner) {
         this.id = idGenerator.getAndIncrement();
         setName(name);
         setCoordinates(coordinates);
@@ -111,12 +111,12 @@ public class Product implements Comparable<Product> {
 
     public Product(Long id,
                    String name,
-                   Coordinates coordinates,
+                   exmp.models.Coordinates coordinates,
                    int price,
                    String partNumber,
                    Float manufactureCost,
                    UnitOfMeasure unitOfMeasure,
-                   Person owner,
+                   exmp.models.Person owner,
                    Long userId) {
         this.id = id;
         setName(name);
@@ -218,7 +218,7 @@ public class Product implements Comparable<Product> {
      *
      * @return - координаты продукта.
      */
-    public Coordinates getCoordinates() {
+    public exmp.models.Coordinates getCoordinates() {
         return coordinates;
     }
 
@@ -227,7 +227,7 @@ public class Product implements Comparable<Product> {
      *
      * @param coordinates - координаты продукта.
      */
-    public void setCoordinates(Coordinates coordinates) {
+    public void setCoordinates(exmp.models.Coordinates coordinates) {
         if (coordinates == null) {
             System.err.println("Поле coordinates не может быть null");
         }
@@ -344,7 +344,7 @@ public class Product implements Comparable<Product> {
      *
      * @return - владелец продукта.
      */
-    public Person getOwner() {
+    public exmp.models.Person getOwner() {
         return owner;
     }
 
@@ -353,7 +353,7 @@ public class Product implements Comparable<Product> {
      *
      * @param owner - владелец продукта.
      */
-    public void setOwner(Person owner) {
+    public void setOwner(exmp.models.Person owner) {
         this.owner = owner;
     }
 
