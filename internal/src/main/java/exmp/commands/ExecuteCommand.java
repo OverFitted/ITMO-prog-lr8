@@ -52,8 +52,7 @@ public class ExecuteCommand implements exmp.commands.Command {
             String fileName = (String) args[0];
 
             if (recursionDepth >= RECURSION_LIMIT) {
-                System.out.println("Достигнут предел рекурсии для выполнения скриптов.");
-                return new exmp.commands.CommandResult(0, "", null);
+                return new exmp.commands.CommandResult(0, "Достигнут предел рекурсии для выполнения скриптов", null);
             }
 
             recursionDepth++;
