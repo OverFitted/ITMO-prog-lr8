@@ -4,6 +4,7 @@ import exmp.commands.CommandData;
 import exmp.commands.CommandResult;
 
 import java.io.*;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.nio.ByteBuffer;
@@ -37,14 +38,22 @@ public class Server {
 
     private void notifyGateway(InetSocketAddress gatewayAddress) {
         try (DatagramChannel channel = DatagramChannel.open()) {
-            ByteBuffer buffer = ByteBuffer.allocate(256);
-            buffer.put(("REGISTER " + this.port).getBytes());
-            buffer.flip();
-            channel.send(buffer, gatewayAddress);
+            InetAddress localAddress = InetAddress.getLocalHost();
+            InetSocketAddress serverAddress = new InetSocketAddress(localAddress, this.port);
+            exmp.gateway.GatewayNotification notification = new exmp.gateway.GatewayNotification(serverAddress);
+
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
+            objectOutputStream.writeObject(notification);
+            byte[] data = byteArrayOutputStream.toByteArray();
+
+            channel.send(ByteBuffer.wrap(data), gatewayAddress);
         } catch (IOException e) {
-            System.err.println("Ошибка при уведомлении GatewayLBService: " + e);
+            logger.error("Ошибка при уведомлении GatewayLBService: " + e);
         }
     }
+
+
 
     private exmp.database.UserCreds authUser(String username, String password) {
         long userId = isValidUser(username, password);
@@ -164,12 +173,12 @@ public class Server {
                     }
                 }
 
-                result.setClientAddress(commandData.getClientAddress());
                 logger.debug("Получен результат: {}", result.toString());
+                exmp.gateway.GatewayMessage gatewayResult = new exmp.gateway.GatewayMessage(commandData.getClientAddress(), result);
 
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                 ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
-                objectOutputStream.writeObject(result);
+                objectOutputStream.writeObject(gatewayResult);
                 byte[] data = byteArrayOutputStream.toByteArray();
 
                 channel.send(ByteBuffer.wrap(data), clientAddress);

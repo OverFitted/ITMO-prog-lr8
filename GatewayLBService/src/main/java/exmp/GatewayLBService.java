@@ -43,19 +43,16 @@ public class GatewayLBService {
                     continue;
                 }
 
-                String message = new String(buffer.array(), 0, buffer.limit());
-                if (message.startsWith("REGISTER")) {
-                    String portString = message.substring("REGISTER ".length()).replaceAll("[^0-9]", "");
-                    int serverPort = Integer.parseInt(portString);
-                    InetSocketAddress serverAddress = new InetSocketAddress(clientAddress.getAddress(), serverPort);
-                    serverAddresses.add(serverAddress);
-                    logger.info("Сервер зарегистрирован: " + serverAddress);
-                } else if (!serverAddresses.isEmpty()) {
-                    ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(buffer.array(), 0, buffer.limit());
-                    try {
-                        ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
-                        Object receivedObject = objectInputStream.readObject();
+                ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(buffer.array(), 0, buffer.limit());
+                try {
+                    ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
+                    Object receivedObject = objectInputStream.readObject();
 
+                    if (receivedObject instanceof exmp.gateway.GatewayNotification notification) {
+                        InetSocketAddress serverAddress = notification.getServerAddress();
+                        serverAddresses.add(serverAddress);
+                        logger.info("Сервер зарегистрирован: " + serverAddress);
+                    } else if (!serverAddresses.isEmpty()) {
                         if (receivedObject instanceof exmp.commands.CommandData commandData) {
                             InetSocketAddress serverAddress = getNextServer();
                             logger.info("Перенаправление запроса клиента " + clientAddress + " на сервер " + serverAddress);
@@ -67,9 +64,10 @@ public class GatewayLBService {
                             byte[] data = byteArrayOutputStream.toByteArray();
 
                             channel.send(ByteBuffer.wrap(data), serverAddress);
-                        } else if (receivedObject instanceof exmp.commands.CommandResult result) {
+                        } else if (receivedObject instanceof exmp.gateway.GatewayMessage gatewayData
+                                && gatewayData.getPayload() instanceof exmp.commands.CommandResult result) {
                             InetSocketAddress serverAddress = clientAddress;
-                            clientAddress = result.getClientAddress();
+                            clientAddress = gatewayData.getClientAddress();
                             logger.info("Перенаправление запроса сервера " + serverAddress + " на клиент " + clientAddress);
 
                             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -79,13 +77,13 @@ public class GatewayLBService {
 
                             channel.send(ByteBuffer.wrap(data), clientAddress);
                         } else {
-                            System.err.println("Неизвестный тип объекта: " + receivedObject.getClass().getName());
+                            logger.error("Неизвестный тип объекта: " + receivedObject.getClass().getName());
                         }
-                    } catch (ClassNotFoundException e) {
-                        System.err.println("Ошибка при чтении объекта: " + e);
+                    } else {
+                        logger.error("Нет доступных серверов");
                     }
-                } else {
-                    logger.error("Нет доступных серверов");
+                } catch (ClassNotFoundException e) {
+                    logger.error("Ошибка при чтении объекта: " + e);
                 }
             }
         } catch (IOException e) {
