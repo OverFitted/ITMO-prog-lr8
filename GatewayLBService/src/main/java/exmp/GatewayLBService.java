@@ -181,6 +181,8 @@ public class GatewayLBService {
 
                                     channel.send(ByteBuffer.wrap(data), serverAddress);
                                 } else {
+                                    logger.info("Получен запрос от неавторизованного клиента " + clientAddress);
+
                                     CommandResult result = new CommandResult(1, null, "Ошибка авторизации. Используйте login/register");
 
                                     ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
