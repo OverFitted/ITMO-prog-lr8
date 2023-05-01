@@ -1,5 +1,7 @@
 package exmp;
 
+import java.util.Random;
+
 /**
  * Главный класс приложения. Запускает приложение, и обрабатывает ввод пользователя.
  */
@@ -12,7 +14,8 @@ public class ServerApp {
      * @param args аргументы командной строки, не используются
      */
     public static void main(String[] args) {
-        exmp.Server server = new exmp.Server(12515, new exmp.App("src/main/resources/input.xml"));
+        Random rand = new Random();
+        exmp.Server server = new exmp.Server(rand.nextInt(65535 - 10000) + 10000, new exmp.App("src/main/resources/input.xml"));
         server.start();
     }
 }

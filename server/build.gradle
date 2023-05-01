@@ -16,10 +16,6 @@ repositories {
 dependencies {
     implementation project(':internal')
 
-    implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
-    implementation 'io.jsonwebtoken:jjwt-impl:0.11.2'
-    implementation 'io.jsonwebtoken:jjwt-jackson:0.11.2'
-
     implementation 'org.apache.logging.log4j:log4j-core:2.3.2'
     implementation 'org.apache.logging.log4j:log4j-api:2.3.2'
 
@@ -40,6 +36,9 @@ test {
 sourceSets.main.java.srcDirs =  ['src/main/java/exmp/']
 compileJava.options.encoding = 'UTF-8'
 
+application {
+    mainClass = "exmp.ServerApp"
+}
 
 tasks.register('runServer', ShadowJar) {
     group = 'shadow'
