@@ -15,6 +15,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -87,9 +88,12 @@ public class GatewayLBService {
     private exmp.database.UserCreds authUser(String username, String password) {
         long userId = isValidUser(username, password);
         if (userId != 0) {
+            Date now = new Date();
+            Date fiveMinutesLater = new Date(now.getTime() + (5 * 60 * 1000));
             String jwtToken = Jwts.builder()
                     .setSubject(username)
                     .signWith(jwtSecretKey)
+                    .setExpiration(fiveMinutesLater)
                     .compact();
             return new exmp.database.UserCreds(jwtToken, userId);
         } else {
@@ -225,7 +229,9 @@ public class GatewayLBService {
             return false;
         } else {
             try {
-                Jwts.parserBuilder().setSigningKey(jwtSecretKey).build().parseClaimsJws(commandData.getToken());
+                Date now = new Date();
+                Date fiveMinutesLater = new Date(now.getTime() + (5 * 60 * 1000));
+                Jwts.parserBuilder().setSigningKey(jwtSecretKey).build().parseClaimsJws(commandData.getToken()).getBody().setExpiration(fiveMinutesLater);
                 return true;
             } catch (JwtException e) {
                 return false;
