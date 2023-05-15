@@ -76,6 +76,7 @@ public class Client {
 
                 if (result.getStatusCode() == 0) {
                     System.out.println(result.getOutput());
+
                     if (commandName.equalsIgnoreCase("login")) {
                         jwtToken = result.getToken();
                         userId = result.getUserId();

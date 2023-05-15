@@ -14,39 +14,37 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 
-import javax.crypto.SecretKey;
-
 public class GatewayLBService {
     private final int port;
-    private final List<InetSocketAddress> serverAddresses;
     private final AtomicInteger currentServer;
     private final SecretKey jwtSecretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+
+    private final Map<InetSocketAddress, Long> serverHeartbeats = new ConcurrentHashMap<>();
+    private final ScheduledExecutorService executorService;
 
     private static final Logger logger = LogManager.getLogger(GatewayLBService.class);
 
     public GatewayLBService(int port) {
         this.port = port;
-        this.serverAddresses = new ArrayList<>();
         this.currentServer = new AtomicInteger(0);
+        this.executorService = Executors.newScheduledThreadPool(1);
     }
 
-    public void addServer(InetSocketAddress serverAddress) {
-        serverAddresses.add(serverAddress);
+    private void checkServerHeartbeats() {
+        long currentTime = System.currentTimeMillis();
+        serverHeartbeats.entrySet().removeIf(entry -> currentTime - entry.getValue() > 3500);
     }
 
     private exmp.commands.CommandResult handleAuth(exmp.commands.CommandData commandData) {
@@ -139,6 +137,7 @@ public class GatewayLBService {
         try (DatagramChannel channel = DatagramChannel.open()) {
             channel.configureBlocking(false);
             channel.bind(new InetSocketAddress(port));
+            executorService.scheduleAtFixedRate(this::checkServerHeartbeats, 5, 5, TimeUnit.SECONDS);
             logger.info("GatewayLBService запущен и ожидает подключений...");
 
             ByteBuffer buffer = ByteBuffer.allocate(65536);
@@ -157,10 +156,17 @@ public class GatewayLBService {
                     Object receivedObject = objectInputStream.readObject();
 
                     if (receivedObject instanceof exmp.gateway.GatewayNotification notification) {
-                        InetSocketAddress serverAddress = notification.getServerAddress();
-                        addServer(serverAddress);
-                        logger.info("Сервер зарегистрирован: " + serverAddress);
-                    } else if (!serverAddresses.isEmpty()) {
+                        switch (notification.getType()) {
+                            case SERVER_START -> {
+                                serverHeartbeats.put(notification.getServerAddress(), System.currentTimeMillis());
+                                logger.debug("Получено уведомление о запуске сервера от {}", notification.getServerAddress());
+                            }
+                            case HEARTBEAT -> {
+                                serverHeartbeats.put(notification.getServerAddress(), System.currentTimeMillis());
+                                logger.debug("Получено heartbeat от {}", notification.getServerAddress());
+                            }
+                        }
+                    } else if (!serverHeartbeats.isEmpty()) {
                         if (receivedObject instanceof exmp.commands.CommandData commandData) {
                             if (Objects.equals(commandData.getCommandName(), "login") || Objects.equals(commandData.getCommandName(), "register")) {
                                 logger.info("Авторизация клиента " + clientAddress);
@@ -240,10 +246,16 @@ public class GatewayLBService {
     }
 
     private InetSocketAddress getNextServer() {
-        int index = currentServer.getAndIncrement() % serverAddresses.size();
-        if (currentServer.get() >= serverAddresses.size()) {
+        List<InetSocketAddress> activeServerAddresses = serverHeartbeats.keySet().stream().toList();
+        int numberOfServers = activeServerAddresses.size();
+        if (numberOfServers == 0) {
+            return null;
+        }
+
+        int index = currentServer.getAndIncrement() % numberOfServers;
+        if (currentServer.get() >= numberOfServers) {
             currentServer.set(0);
         }
-        return serverAddresses.get(index);
+        return activeServerAddresses.get(index);
     }
 }

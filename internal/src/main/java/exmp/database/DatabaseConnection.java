@@ -3,9 +3,6 @@ package exmp.database;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import io.github.cdimascio.dotenv.Dotenv;
-import io.github.cdimascio.dotenv.DotenvException;
-
 import java.sql.*;
 
 public class DatabaseConnection {

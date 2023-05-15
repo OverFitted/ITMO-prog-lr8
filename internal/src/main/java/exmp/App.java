@@ -9,6 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.*;
+import java.util.concurrent.ForkJoinPool;
 import java.util.function.Consumer;
 
 /**
@@ -22,6 +23,7 @@ public class App {
     private final HashMap<String, exmp.commands.Command> commandHandlers;
     private final HashMap<Class<?>, Consumer<Scanner>> argHandlers;
     private static final Logger logger = LogManager.getLogger(App.class);
+    private final ForkJoinPool pool;
 
     /**
      * Конструктор класса App.
@@ -34,6 +36,7 @@ public class App {
         this.initializationDate = new Date();
         this.commandHandlers = new HashMap<>();
         this.argHandlers = new HashMap<>();
+        this.pool = new ForkJoinPool(12);
 
         initCommands();
         productRepository.loadData(this);
@@ -56,23 +59,25 @@ public class App {
     }
 
     public CommandResult executeCommand(String commandName, String input, Long userId) {
-        Command command = commandHandlers.get(commandName);
-        if (command == null) {
-            logger.error("Неизвестная команда: {}", commandName);
-            return new exmp.commands.CommandResult(3, null, "Команда не найдена");
-        }
+        return pool.submit(() -> {
+            Command command = commandHandlers.get(commandName);
+            if (command == null) {
+                logger.error("Неизвестная команда: {}", commandName);
+                return new exmp.commands.CommandResult(3, null, "Команда не найдена");
+            }
 
-        List<ArgDescriptor> argDescriptors = command.getArguments();
-        List<Object> args = new ArrayList<>();
-        initArgs(args);
+            List<ArgDescriptor> argDescriptors = command.getArguments();
+            List<Object> args = new ArrayList<>();
+            initArgs(args);
 
-        Scanner scanner = new Scanner(input);
-        for (ArgDescriptor argDescriptor : argDescriptors) {
-            this.argHandlers.get(argDescriptor.type()).accept(scanner);
-        }
+            Scanner scanner = new Scanner(input);
+            for (ArgDescriptor argDescriptor : argDescriptors) {
+                this.argHandlers.get(argDescriptor.type()).accept(scanner);
+            }
 
-        args.add(userId);
-        return command.execute(this, args.toArray());
+            args.add(userId);
+            return command.execute(this, args.toArray());
+        }).join();
     }
 
     /**
