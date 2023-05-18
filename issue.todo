@@ -1,11 +1,11 @@
 [] Auth handler
     [] Must be on server?
-[] DB creds
+[*] DB creds
 [*] Hikari pool (connection)
 [*] ForkJoinPool - multithreading
-    [] Server - all for nothing (2 queues)
+    [*] Server - all for nothing (2 queues)
 
 [] Lock free algorithms
-    - https://habr.com/ru/companies/wunderfund/articles/322094/
-    -
+    [*] https://habr.com/ru/companies/wunderfund/articles/322094/
+    []
 [] All about threading and stuff (heh)
