@@ -13,11 +13,6 @@ import java.util.Optional;
 public class PostgreSQLProductRepository implements exmp.repository.ProductRepository {
     private final List<Product> products = new ArrayList<>();
     private static final Logger logger = LogManager.getLogger(exmp.repository.PostgreSQLProductRepository.class);
-    Connection connection;
-
-    public PostgreSQLProductRepository() {
-        this.connection = DatabaseConnection.getConnection();
-    }
 
     @Override
     public List<Product> findAll() {
@@ -36,12 +31,15 @@ public class PostgreSQLProductRepository implements exmp.repository.ProductRepos
                 "JOIN country ON person.nationality_id = country.id " +
                 "JOIN location ON person.location_id = location.id";
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query);
-             ResultSet resultSet = preparedStatement.executeQuery()) {
+        try (Connection connection = DatabaseConnection.getConnection()) {
+            assert connection != null;
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query);
+                 ResultSet resultSet = preparedStatement.executeQuery()) {
 
-            while (resultSet.next()) {
-                Product product = extractProductFromResultSet(resultSet);
-                products.add(product);
+                while (resultSet.next()) {
+                    Product product = extractProductFromResultSet(resultSet);
+                    products.add(product);
+                }
             }
         } catch (SQLException e) {
             logger.error(e);
@@ -54,13 +52,15 @@ public class PostgreSQLProductRepository implements exmp.repository.ProductRepos
         String query = "SELECT * FROM product WHERE id = ?";
         Product product = null;
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        try (Connection connection = DatabaseConnection.getConnection()) {
+            assert connection != null;
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                preparedStatement.setLong(1, id);
+                ResultSet resultSet = preparedStatement.executeQuery();
 
-            preparedStatement.setLong(1, id);
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            if (resultSet.next()) {
-                product = extractProductFromResultSet(resultSet);
+                if (resultSet.next()) {
+                    product = extractProductFromResultSet(resultSet);
+                }
             }
         } catch (SQLException e) {
             logger.error(e);
@@ -71,6 +71,7 @@ public class PostgreSQLProductRepository implements exmp.repository.ProductRepos
     @Override
     public Product save(Product product) {
         try (Connection connection = DatabaseConnection.getConnection()) {
+            assert connection != null;
             connection.setAutoCommit(false);
 
             // Сохранение связанных сущностей и получение их идентификаторов
@@ -181,11 +182,12 @@ public class PostgreSQLProductRepository implements exmp.repository.ProductRepos
     public void delete(Product product) {
         String query = "DELETE FROM product WHERE id = ?";
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-
-            preparedStatement.setLong(1, product.getId());
-            preparedStatement.executeUpdate();
-
+        try (Connection connection = DatabaseConnection.getConnection()) {
+            assert connection != null;
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                preparedStatement.setLong(1, product.getId());
+                preparedStatement.executeUpdate();
+            }
         } catch (SQLException e) {
             logger.error(e);
         }
@@ -195,11 +197,12 @@ public class PostgreSQLProductRepository implements exmp.repository.ProductRepos
     public void deleteById(long id) {
         String query = "DELETE FROM product WHERE id = ?";
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-
-            preparedStatement.setLong(1, id);
-            preparedStatement.executeUpdate();
-
+        try (Connection connection = DatabaseConnection.getConnection()) {
+            assert connection != null;
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                preparedStatement.setLong(1, id);
+                preparedStatement.executeUpdate();
+            }
         } catch (SQLException e) {
             logger.error(e);
         }

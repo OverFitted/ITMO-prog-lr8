@@ -14,7 +14,7 @@ public class DatabaseConnection {
     private static final HikariDataSource ds;
 
     static {
-        Dotenv dotenv = Dotenv.load();
+        Dotenv dotenv = Dotenv.configure().directory("internal\\src\\main\\resources").load();
 
         String URL = "jdbc:postgresql://" + dotenv.get("HOST") + "/" + dotenv.get("TABLE");
         String USER = dotenv.get("LOGIN");
