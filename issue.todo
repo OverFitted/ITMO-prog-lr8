@@ -2,7 +2,7 @@
     [] Must be on server?
 [] DB creds
 [] Hikari pool (connection)
-[] ForkJoinPool - multithreading
+[*] ForkJoinPool - multithreading
     [] Server - all for nothing (2 queues)
 
 [] Lock free algorithms
