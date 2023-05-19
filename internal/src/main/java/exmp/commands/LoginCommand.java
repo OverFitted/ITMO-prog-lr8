@@ -6,7 +6,7 @@ import java.util.List;
 public class LoginCommand implements exmp.commands.Command {
     @Override
     public String getName() {
-        return "login";
+        return "Вход";
     }
 
     @Override

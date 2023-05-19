@@ -14,7 +14,7 @@ public class RemoveIndexCommand implements exmp.commands.Command {
      */
     @Override
     public String getName() {
-        return "remove_at";
+        return "Удалить по индексу";
     }
 
     @Override

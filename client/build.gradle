@@ -46,11 +46,20 @@ application {
     mainClass = "exmp.GUIApp"
 }
 
-tasks.register('runClient', ShadowJar) {
+tasks.register('runGui', ShadowJar) {
     group = 'shadow'
     mainClassName = 'exmp.GUIApp'
     archiveFileName = "GUIApp.jar"
     manifest {
         attributes 'Main-Class': 'exmp.GUIApp'
+    }
+}
+
+tasks.register('runClient', ShadowJar) {
+    group = 'shadow'
+    mainClassName = 'exmp.ClientApp'
+    archiveFileName = "ClientApp.jar"
+    manifest {
+        attributes 'Main-Class': 'exmp.ClientApp'
     }
 }

@@ -1,9 +1,11 @@
 package exmp.enums;
 
+import java.io.Serializable;
+
 /**
  * Перечисление стран.
  */
-public enum Country {
+public enum Country implements Serializable {
     /**
      * Россия.
      */

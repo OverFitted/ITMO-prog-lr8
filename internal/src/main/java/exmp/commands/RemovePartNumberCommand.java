@@ -17,7 +17,7 @@ public class RemovePartNumberCommand implements exmp.commands.Command {
      */
     @Override
     public String getName() {
-        return "remove_all_by_part_number";
+        return "Удалить по partNumber";
     }
 
     @Override

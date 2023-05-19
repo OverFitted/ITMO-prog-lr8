@@ -1,9 +1,11 @@
 package exmp.enums;
 
+import java.io.Serializable;
+
 /**
  * Перечисление единиц измерения
  */
-public enum UnitOfMeasure {
+public enum UnitOfMeasure implements Serializable {
     /**
      * Килограммы.
      */

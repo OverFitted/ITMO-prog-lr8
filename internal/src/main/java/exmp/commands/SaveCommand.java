@@ -18,7 +18,7 @@ public class SaveCommand implements exmp.commands.Command {
      */
     @Override
     public String getName() {
-        return "save";
+        return "Сохранить коллекцию";
     }
 
     @Override

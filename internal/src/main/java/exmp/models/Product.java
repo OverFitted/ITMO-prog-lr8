@@ -4,12 +4,13 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import exmp.enums.UnitOfMeasure;
 
+import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Класс Product, представляющий объект продукта в коллекции.
  */
-public class Product implements Comparable<Product> {
+public class Product implements Comparable<Product>, Serializable {
     /**
      * Генератор идентификаторов для объектов класса Product.
      */

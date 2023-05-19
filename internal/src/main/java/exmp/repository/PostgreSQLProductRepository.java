@@ -115,6 +115,41 @@ public class PostgreSQLProductRepository implements exmp.repository.ProductRepos
         return product;
     }
 
+    @Override
+    public List<Product> findByCountry(exmp.enums.Country country) {
+        List<Product> products = new ArrayList<>();
+        String query = "SELECT product.*, coordinates.x, coordinates.y, unit_of_measure.name as unit_of_measure_name, " +
+                "person.name as person_name, person.height, eye_color.name as eye_color_name, " +
+                "hair_color.name as hair_color_name, country.name as country_name, " +
+                "location.id as location_id, location.x as location_x, location.y as location_y, location.z as location_z, location.name as location_name " +
+                "FROM product " +
+                "JOIN coordinates ON product.coordinates_id = coordinates.id " +
+                "JOIN unit_of_measure ON product.unit_of_measure_id = unit_of_measure.id " +
+                "JOIN person ON product.owner_id = person.id " +
+                "JOIN color AS eye_color ON person.eye_color_id = eye_color.id " +
+                "JOIN color AS hair_color ON person.hair_color_id = hair_color.id " +
+                "JOIN country ON person.nationality_id = country.id " +
+                "JOIN location ON person.location_id = location.id " +
+                "WHERE country.name = ?";
+
+        try (Connection connection = DatabaseConnection.getConnection()) {
+            assert connection != null;
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                preparedStatement.setString(1, country.name());
+
+                try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                    while (resultSet.next()) {
+                        Product product = extractProductFromResultSet(resultSet);
+                        products.add(product);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            logger.error(e);
+        }
+        return products;
+    }
+
     private int saveCoordinates(Connection connection, exmp.models.Coordinates coordinates) {
         String query = "INSERT INTO coordinates (x, y) VALUES (?, ?) RETURNING id";
 

@@ -14,7 +14,7 @@ public class ExitCommand implements exmp.commands.Command {
      */
     @Override
     public String getName() {
-        return "exit";
+        return "Завершить программу";
     }
 
     @Override

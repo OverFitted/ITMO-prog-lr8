@@ -18,7 +18,7 @@ public class FilterUnitOfMeasureCommand implements exmp.commands.Command {
      */
     @Override
     public String getName() {
-        return "filter_by_unit_of_measure";
+        return "Отфильтровать по unit_of_measure";
     }
 
     @Override

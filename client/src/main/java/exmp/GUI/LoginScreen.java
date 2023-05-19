@@ -1,5 +1,7 @@
 package exmp.GUI;
 
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.VBox;
@@ -20,17 +22,24 @@ public class LoginScreen extends VBox {
 
         usernameField = new TextField();
         usernameField.setPromptText("Username");
+        usernameField.setMinWidth(200); // set minimum width
 
         passwordField = new PasswordField();
         passwordField.setPromptText("Password");
+        passwordField.setMinWidth(200); // set minimum width
 
         Button loginButton = new Button("Login");
+        loginButton.setMinWidth(200); // set minimum width
         loginButton.setOnAction(e -> login());
 
         Button registerButton = new Button("Register");
+        registerButton.setMinWidth(200); // set minimum width
         registerButton.setOnAction(e -> register());
 
         this.getChildren().addAll(usernameField, passwordField, loginButton, registerButton);
+        this.setPadding(new Insets(10, 10, 10, 10)); // set padding for the VBox
+        this.setSpacing(10); // set spacing between the elements
+        this.setAlignment(Pos.CENTER); // center the elements
     }
 
     private void login() {
@@ -46,9 +55,10 @@ public class LoginScreen extends VBox {
             alert.setContentText("You have successfully logged in.");
             alert.showAndWait();
 
-            exmp.GUI.MainApp mainApp = new exmp.GUI.MainApp();
-            Scene scene = new Scene(mainApp, 800, 600);
+            exmp.GUI.MainApp mainApp = new exmp.GUI.MainApp(client);
+            Scene scene = new Scene(mainApp, 1245, 850);
             stage.setScene(scene);
+            stage.setResizable(false);
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Login Failed");

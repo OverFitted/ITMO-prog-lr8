@@ -1,3 +1,5 @@
 package exmp.commands;
 
-public record ArgDescriptor(String description, Class<?> type) { }
+import java.io.Serializable;
+
+public record ArgDescriptor(String description, Class<?> type) implements Serializable { }

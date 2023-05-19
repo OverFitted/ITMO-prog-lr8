@@ -3,10 +3,12 @@ package exmp.models;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
+
 /**
  * Класс, представляющий местоположение.
  */
-public class Location {
+public class Location implements Serializable {
     private long id;
     private float x;
     private double y;

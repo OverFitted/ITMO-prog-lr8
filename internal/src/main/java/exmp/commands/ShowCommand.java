@@ -20,7 +20,7 @@ public class ShowCommand implements exmp.commands.Command {
      */
     @Override
     public String getName() {
-        return "show";
+        return "Вывести все элементы";
     }
 
     @Override

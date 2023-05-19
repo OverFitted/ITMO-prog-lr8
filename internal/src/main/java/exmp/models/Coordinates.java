@@ -3,10 +3,12 @@ package exmp.models;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
+
 /**
  * Класс, представляющий координаты объекта
  */
-public class Coordinates {
+public class Coordinates implements Serializable {
     private long id;
     private Double x; // Координата x. Поле не может быть null
     private Float y; // Координата y. Значение поля должно быть больше -452 и не может быть null

@@ -6,7 +6,7 @@ import java.util.List;
 public class RegisterCommand implements exmp.commands.Command {
     @Override
     public String getName() {
-        return "register";
+        return "Регистрация";
     }
 
     @Override

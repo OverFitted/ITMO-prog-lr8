@@ -20,7 +20,7 @@ public class ExecuteCommand implements exmp.commands.Command {
      */
     @Override
     public String getName() {
-        return "execute_script";
+        return "Выполнить скрипт";
     }
 
     @Override

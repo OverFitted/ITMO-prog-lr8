@@ -1,9 +1,11 @@
 package exmp.enums;
 
+import java.io.Serializable;
+
 /**
  * Перечисление цветов.
  */
-public enum Color {
+public enum Color implements Serializable {
     /**
      * Зеленый цвет.
      */

@@ -6,12 +6,12 @@ import java.util.List;
 public class ClearCommand implements exmp.commands.Command {
     @Override
     public String getName() {
-        return "clear";
+        return "Очистить коллекцию";
     }
 
     @Override
     public String getDescription() {
-        return "очистить коллекцию";
+        return "очистить коллекцию продуктов";
     }
 
     @Override

@@ -17,7 +17,7 @@ public class AddMinCommand implements exmp.commands.Command {
      */
     @Override
     public String getName() {
-        return "add_if_min";
+        return "Добавить минимальный продукт";
     }
 
     @Override

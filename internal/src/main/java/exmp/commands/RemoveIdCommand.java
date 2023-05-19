@@ -17,7 +17,7 @@ public class RemoveIdCommand implements exmp.commands.Command {
      */
     @Override
     public String getName() {
-        return "remove_by_id";
+        return "Удалить по id";
     }
 
     /**

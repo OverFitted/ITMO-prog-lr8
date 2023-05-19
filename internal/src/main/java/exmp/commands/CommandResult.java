@@ -1,11 +1,11 @@
 package exmp.commands;
 
 import java.io.Serializable;
-import java.net.InetSocketAddress;
 
-public class CommandResult implements Serializable {
+public class CommandResult<T> implements Serializable {
     private final int statusCode;
     private final String output;
+    private T raw = null;
     private final String errorMessage;
     private String token;
     private Long userId;
@@ -14,6 +14,13 @@ public class CommandResult implements Serializable {
         this.statusCode = statusCode;
         this.output = output;
         this.errorMessage = errorMessage;
+    }
+
+    public CommandResult(int statusCode, String output, T raw, String errorMessage) {
+        this.statusCode = statusCode;
+        this.output = output;
+        this.errorMessage = errorMessage;
+        this.raw = raw;
     }
 
     @Override
@@ -51,5 +58,9 @@ public class CommandResult implements Serializable {
 
     public String getErrorMessage() {
         return errorMessage;
+    }
+
+    public T getRawOutput() {
+        return raw;
     }
 }

@@ -16,7 +16,7 @@ public class InfoCommand implements exmp.commands.Command {
      */
     @Override
     public String getName() {
-        return "info";
+        return "Информация о коллекции";
     }
 
     @Override

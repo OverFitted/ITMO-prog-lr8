@@ -17,7 +17,7 @@ public class GroupCoordinatesCommand implements exmp.commands.Command {
      */
     @Override
     public String getName() {
-        return "group_counting_by_coordinates";
+        return "Группировать по coordinates";
     }
 
     @Override

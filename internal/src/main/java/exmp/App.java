@@ -110,8 +110,8 @@ public class App {
      * Инициализирует обработчики команд.
      */
     private void initCommands() {
-        this.commandHandlers.put("login", new exmp.commands.LoginCommand());
-        this.commandHandlers.put("register", new exmp.commands.RegisterCommand());
+//        this.commandHandlers.put("login", new exmp.commands.LoginCommand());
+//        this.commandHandlers.put("register", new exmp.commands.RegisterCommand());
         this.commandHandlers.put("help", new exmp.commands.HelpCommand());
         this.commandHandlers.put("info", new exmp.commands.InfoCommand());
         this.commandHandlers.put("show", new exmp.commands.ShowCommand());
@@ -120,13 +120,14 @@ public class App {
         this.commandHandlers.put("remove_by_id", new exmp.commands.RemoveIdCommand());
         this.commandHandlers.put("clear", new exmp.commands.ClearCommand());
         this.commandHandlers.put("execute_script", new exmp.commands.ExecuteCommand());
-        this.commandHandlers.put("exit", new exmp.commands.ExitCommand());
+//        this.commandHandlers.put("exit", new exmp.commands.ExitCommand());
         this.commandHandlers.put("remove_at", new exmp.commands.RemoveIndexCommand());
         this.commandHandlers.put("add_if_max", new exmp.commands.AddMaxCommand());
         this.commandHandlers.put("add_if_min", new exmp.commands.AddMinCommand());
         this.commandHandlers.put("remove_all_by_part_number", new exmp.commands.RemovePartNumberCommand());
         this.commandHandlers.put("group_counting_by_coordinates", new exmp.commands.GroupCoordinatesCommand());
         this.commandHandlers.put("filter_by_unit_of_measure", new exmp.commands.FilterUnitOfMeasureCommand());
+        this.commandHandlers.put("filter_by_country", new exmp.commands.FilterCountryCommand());
     }
 
     private void initArgs(List<Object> args) {

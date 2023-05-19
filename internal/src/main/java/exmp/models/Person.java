@@ -6,10 +6,12 @@ import exmp.enums.Color;
 import exmp.enums.Country;
 import exmp.models.Location;
 
+import java.io.Serializable;
+
 /**
  * Класс, представляющий сущность "Человек".
  */
-public class Person {
+public class Person implements Serializable {
     private Long id;
     private String name; // Поле не может быть null, Строка не может быть пустой
     private Long height; // Поле может быть null, Значение поля должно быть больше 0

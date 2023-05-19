@@ -17,7 +17,7 @@ public class AddMaxCommand implements exmp.commands.Command {
      */
     @Override
     public String getName() {
-        return "add_if_max";
+        return "Добавить максимальный продукт";
     }
 
     @Override

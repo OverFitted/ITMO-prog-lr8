@@ -22,7 +22,7 @@ public class UpdateIdCommand implements exmp.commands.Command {
      */
     @Override
     public String getName() {
-        return "update_by_id";
+        return "Обновить по id";
     }
 
     @Override

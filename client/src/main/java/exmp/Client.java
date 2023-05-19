@@ -7,13 +7,14 @@ import java.io.*;
 import java.net.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
+import java.util.List;
 import java.util.Scanner;
 
 public class Client {
     private final String host;
     private final int port;
-    private String jwtToken = null;
-    private Long userId = null;
+    private static String jwtToken = null;
+    private static Long userId = null;
 
     public Client(String host, int port) {
         this.host = host;
@@ -35,7 +36,7 @@ public class Client {
         System.out.println("Connected to server: " + host + ":" + port);
     }
 
-    public CommandResult sendCommand(String[] inputParts) {
+    public CommandResult<List<?>> sendCommand(String[] inputParts) {
         try {
             ByteBuffer buffer = ByteBuffer.allocate(65536);
             String commandName = inputParts[0];
@@ -47,8 +48,9 @@ public class Client {
 
             DatagramPacket receivePacket = sendAndReceivePacket(data, buffer);
             buffer.position(receivePacket.getLength());
-
-            return deserializeResult(buffer);
+            CommandResult<List<?>> result = deserializeResult(buffer);
+            processAuth(commandName, result);
+            return result;
         } catch (IOException | ClassNotFoundException e) {
             System.err.println("Error communicating with server: " + e.getMessage());
         }
@@ -76,7 +78,7 @@ public class Client {
                 DatagramPacket receivePacket = sendAndReceivePacket(data, buffer);
                 buffer.position(receivePacket.getLength());
 
-                CommandResult result = deserializeResult(buffer);
+                CommandResult<? extends List<?>> result = deserializeResult(buffer);
                 processResult(commandName, result);
             }
         } catch (IOException | ClassNotFoundException e) {
@@ -125,22 +127,25 @@ public class Client {
         return receivePacket;
     }
 
-    private CommandResult deserializeResult(ByteBuffer buffer) throws IOException, ClassNotFoundException {
+    private CommandResult<List<?>> deserializeResult(ByteBuffer buffer) throws IOException, ClassNotFoundException {
         buffer.flip();
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(buffer.array(), 0, buffer.limit());
         ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
-        return (CommandResult) objectInputStream.readObject();
+        return (CommandResult<List<?>>) objectInputStream.readObject();
     }
 
-    private void processResult(String commandName, CommandResult result) {
+    private void processAuth(String commandName, CommandResult<? extends List<?>> result) {
+        if (commandName.equalsIgnoreCase("login")) {
+            jwtToken = result.getToken();
+            userId = result.getUserId();
+        }
+    }
+
+    private void processResult(String commandName, CommandResult<? extends List<?>> result) {
         if (result.getStatusCode() == 0) {
             System.out.println(result.getOutput());
 
-            if (commandName.equalsIgnoreCase("login")) {
-                jwtToken = result.getToken();
-                userId = result.getUserId();
-                System.out.println("Access token received");
-            }
+            processAuth(commandName, result);
         } else {
             System.err.println("Command execution error: " + result.getErrorMessage());
         }
