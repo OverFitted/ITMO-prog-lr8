@@ -6,13 +6,15 @@ import java.util.List;
 public class CommandDescriptor implements Serializable {
     String name;
     String command;
+    String description;
 
     List<exmp.commands.ArgDescriptor> argDescriptors;
 
-    public CommandDescriptor(String name, String command, List<exmp.commands.ArgDescriptor> argDescriptors){
+    public CommandDescriptor(String name, String command, String description, List<exmp.commands.ArgDescriptor> argDescriptors){
         setName(name);
         setCommand(command);
         setArgDescriptors(argDescriptors);
+        setDescription(description);
     }
 
     public String getCommand() {
@@ -37,5 +39,13 @@ public class CommandDescriptor implements Serializable {
 
     public void setArgDescriptors(List<exmp.commands.ArgDescriptor> argDescriptors) {
         this.argDescriptors = argDescriptors;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

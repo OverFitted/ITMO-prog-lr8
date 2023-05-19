@@ -22,24 +22,25 @@ public class LoginScreen extends VBox {
 
         usernameField = new TextField();
         usernameField.setPromptText("Username");
-        usernameField.setMinWidth(200); // set minimum width
+        usernameField.setMinWidth(200);
 
         passwordField = new PasswordField();
         passwordField.setPromptText("Password");
-        passwordField.setMinWidth(200); // set minimum width
+        passwordField.setMinWidth(200);
 
         Button loginButton = new Button("Login");
-        loginButton.setMinWidth(200); // set minimum width
+        loginButton.setMinWidth(200);
         loginButton.setOnAction(e -> login());
+        loginButton.setDefaultButton(true);
 
         Button registerButton = new Button("Register");
-        registerButton.setMinWidth(200); // set minimum width
+        registerButton.setMinWidth(200);
         registerButton.setOnAction(e -> register());
 
         this.getChildren().addAll(usernameField, passwordField, loginButton, registerButton);
-        this.setPadding(new Insets(10, 10, 10, 10)); // set padding for the VBox
-        this.setSpacing(10); // set spacing between the elements
-        this.setAlignment(Pos.CENTER); // center the elements
+        this.setPadding(new Insets(10, 10, 10, 10));
+        this.setSpacing(10);
+        this.setAlignment(Pos.CENTER);
     }
 
     private void login() {
@@ -59,6 +60,10 @@ public class LoginScreen extends VBox {
             Scene scene = new Scene(mainApp, 1245, 850);
             stage.setScene(scene);
             stage.setResizable(false);
+            stage.setTitle("Products map");
+
+            exmp.GUI.ChatWindow chatWindow = new exmp.GUI.ChatWindow();
+            chatWindow.show();
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Login Failed");

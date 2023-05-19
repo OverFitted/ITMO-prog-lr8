@@ -24,7 +24,6 @@ public class EarthMap extends Pane {
         this.client = client;
         productIcons = new HashMap<exmp.enums.Country, StackPane>();
 
-        // Load the Earth image
         Image earthImage = new Image("world-map.png");
         ImageView earthImageView = new ImageView(earthImage);
         earthImageView.setFitWidth(995);

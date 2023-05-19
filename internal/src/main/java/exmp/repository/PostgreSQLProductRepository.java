@@ -74,12 +74,10 @@ public class PostgreSQLProductRepository implements exmp.repository.ProductRepos
             assert connection != null;
             connection.setAutoCommit(false);
 
-            // Сохранение связанных сущностей и получение их идентификаторов
             int coordinatesId = saveCoordinates(connection, product.getCoordinates());
             int ownerId = savePerson(connection, product.getOwner());
             long userId = product.getUserId();
 
-            // Запрос на сохранение Product
             String query = "INSERT INTO product (name, coordinates_id, price, part_number, manufacture_cost, unit_of_measure_id, owner_id, user_id) "
                     + "VALUES (?, ?, ?, ?, ?, ?, ?, ?) RETURNING id";
 

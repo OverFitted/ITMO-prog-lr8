@@ -54,7 +54,8 @@ public class HelpCommand implements Command {
             List<exmp.commands.CommandDescriptor> keyStrings = app.getCommandHandler()
                     .entrySet()
                     .stream()
-                    .map(entry -> new exmp.commands.CommandDescriptor(entry.getValue().getName(), entry.getKey(), entry.getValue().getArguments()))
+                    .map(entry -> new exmp.commands.CommandDescriptor(entry.getValue().getName(), entry.getKey(),
+                            entry.getValue().getDescription(), entry.getValue().getArguments()))
                     .toList();
 
             return new exmp.commands.CommandResult<List<exmp.commands.CommandDescriptor>>(0, output.toString(), keyStrings, null);

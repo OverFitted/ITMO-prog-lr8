@@ -16,6 +16,7 @@ public class GUIApp extends Application {
         exmp.GUI.LoginScreen loginScreen = new exmp.GUI.LoginScreen(client, primaryStage);
         Scene scene = new Scene(loginScreen, 250, 150);
         primaryStage.setScene(scene);
+        primaryStage.setTitle("Login");
         primaryStage.show();
     }
 }

@@ -5,13 +5,11 @@ import exmp.commands.CommandResult;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.control.ListView;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +27,25 @@ public class MainApp extends BorderPane {
 
         earthMap = new exmp.GUI.EarthMap(client);
         commandList = new ListView<>();
+        commandList.setCellFactory(new Callback<>() {
+            @Override
+            public ListCell<String> call(ListView<String> param) {
+                return new ListCell<>() {
+                    @Override
+                    protected void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty || item == null) {
+                            setText(null);
+                            setGraphic(null);
+                        } else {
+                            setText(item);
+                            setStyle("-fx-font-weight: bold; -fx-padding: 5;");
+                        }
+                    }
+                };
+            }
+        });
+
         outputArea = new TextArea();
         outputArea.setEditable(false);
         outputArea.setWrapText(true);
@@ -53,7 +70,6 @@ public class MainApp extends BorderPane {
     }
 
     private void executeCommand(String command) {
-        // Get the command descriptor for the selected command
         CommandDescriptor commandDescriptor = commands.stream()
                 .filter(c -> c.getName().equals(command))
                 .findFirst()
@@ -68,20 +84,24 @@ public class MainApp extends BorderPane {
 
         VBox form = new VBox();
         form.setSpacing(10);
-        form.setPadding(new Insets(10, 10, 10, 10)); // set padding
-        form.setAlignment(Pos.CENTER); // align elements to the center
+        form.setPadding(new Insets(10, 10, 10, 10));
+        form.setAlignment(Pos.CENTER);
+        form.setStyle("-fx-background-color: #EEE; -fx-border-color: #666; -fx-border-width: 2px; -fx-border-radius: 5px; -fx-background-radius: 5px;");
+        form.setPrefWidth(320);
 
         List<TextField> argFields = new ArrayList<>();
 
         for (exmp.commands.ArgDescriptor argDescriptor : commandDescriptor.getArgDescriptors()) {
             TextField argField = new TextField();
             argField.setPromptText(argDescriptor.description());
+            argField.setStyle("-fx-padding: 3; -fx-border-color: #AAA; -fx-border-radius: 3px;");
             form.getChildren().add(argField);
             argFields.add(argField);
         }
 
         Button executeButton = new Button("Execute");
         executeButton.setMinWidth(100);
+        executeButton.setStyle("-fx-background-color: #228B22; -fx-text-fill: white; -fx-font-weight: bold; -fx-border-radius: 5px; -fx-background-radius: 5px;");
         executeButton.setOnAction(e -> {
             List<String> args = argFields.stream()
                     .map(TextField::getText)
@@ -98,6 +118,7 @@ public class MainApp extends BorderPane {
         Button cancelButton = new Button("Cancel");
         cancelButton.setOnAction(e -> commandArgsStage.close());
         cancelButton.setMinWidth(100);
+        cancelButton.setStyle("-fx-background-color: #DC143C; -fx-text-fill: white; -fx-font-weight: bold; -fx-border-radius: 5px; -fx-background-radius: 5px;");
 
         form.getChildren().addAll(executeButton, cancelButton);
 
