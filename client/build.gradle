@@ -4,6 +4,7 @@ plugins {
     id 'java'
     id 'application'
     id 'com.github.johnrengelman.shadow' version '7.1.2'
+    id 'org.openjfx.javafxplugin' version '0.0.13'
 }
 
 group 'org.example'
@@ -25,6 +26,11 @@ dependencies {
     testImplementation 'org.mockito:mockito-core:5.2.0'
 }
 
+javafx {
+    version = "20"
+    modules = ['javafx.controls', 'javafx.fxml']
+}
+
 run {
     standardInput = System.in
 }
@@ -37,14 +43,14 @@ sourceSets.main.java.srcDirs = ['src/main/java/exmp/']
 compileJava.options.encoding = 'UTF-8'
 
 application {
-    mainClass = "exmp.ClientApp"
+    mainClass = "exmp.GUIApp"
 }
 
 tasks.register('runClient', ShadowJar) {
     group = 'shadow'
-    mainClassName = 'exmp.ClientApp'
-    archiveFileName = "ClientApp.jar"
+    mainClassName = 'exmp.GUIApp'
+    archiveFileName = "GUIApp.jar"
     manifest {
-        attributes 'Main-Class': 'exmp.ClientApp'
+        attributes 'Main-Class': 'exmp.GUIApp'
     }
 }

@@ -1,4 +1,4 @@
-rootProject.name = 'ITMO-prog-lr7'
+rootProject.name = 'ITMO-prog-lr8'
 include 'client'
 include 'server'
 include 'internal'

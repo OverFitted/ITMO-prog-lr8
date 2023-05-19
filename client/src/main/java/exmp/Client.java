@@ -3,14 +3,8 @@ package exmp;
 import exmp.commands.CommandData;
 import exmp.commands.CommandResult;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetSocketAddress;
+import java.io.*;
+import java.net.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
 import java.util.Scanner;
@@ -18,8 +12,8 @@ import java.util.Scanner;
 public class Client {
     private final String host;
     private final int port;
-    static String jwtToken = null;
-    static Long userId = null;
+    private String jwtToken = null;
+    private Long userId = null;
 
     public Client(String host, int port) {
         this.host = host;
@@ -28,66 +22,131 @@ public class Client {
 
     public void start() {
         try (DatagramChannel channel = DatagramChannel.open()) {
-            channel.configureBlocking(false);
-            channel.connect(new InetSocketAddress(host, port));
-            System.out.println("Подключено к серверу: " + host + ":" + port);
+            connectToServer(channel);
+            interactWithServer();
+        } catch (IOException e) {
+            System.err.println("Error connecting to server: " + e.getMessage());
+        }
+    }
 
+    private void connectToServer(DatagramChannel channel) throws IOException {
+        channel.configureBlocking(false);
+        channel.connect(new InetSocketAddress(host, port));
+        System.out.println("Connected to server: " + host + ":" + port);
+    }
+
+    public CommandResult sendCommand(String[] inputParts) {
+        try {
+            ByteBuffer buffer = ByteBuffer.allocate(65536);
+            String commandName = inputParts[0];
+            String commandInput = inputParts.length > 1 ? inputParts[1] : "";
+
+            CommandData outCommand = new CommandData(commandName, commandInput);
+            adjustCommandData(commandName, outCommand);
+            byte[] data = serializeCommand(outCommand);
+
+            DatagramPacket receivePacket = sendAndReceivePacket(data, buffer);
+            buffer.position(receivePacket.getLength());
+
+            return deserializeResult(buffer);
+        } catch (IOException | ClassNotFoundException e) {
+            System.err.println("Error communicating with server: " + e.getMessage());
+        }
+        return null;
+    }
+
+    private void interactWithServer() {
+        try {
             Scanner scanner = new Scanner(System.in);
             ByteBuffer buffer = ByteBuffer.allocate(65536);
 
             while (true) {
-                System.out.print("$ ");
-                String line = scanner.nextLine();
-                String[] inputParts = line.trim().split("\\s+", 2);
+                String[] inputParts = getInput(scanner);
                 String commandName = inputParts[0];
                 String commandInput = inputParts.length > 1 ? inputParts[1] : "";
 
-                CommandData outCommand = new CommandData(commandName, commandInput);
-
                 if (commandName.equalsIgnoreCase("exit")) {
                     break;
-                } else if (commandName.equalsIgnoreCase("login") || commandName.equalsIgnoreCase("register")) {
-                    outCommand.setToken(null);
-                } else {
-                    outCommand.setToken(jwtToken);
-                    outCommand.setUserId(userId);
                 }
 
-                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
-                objectOutputStream.writeObject(outCommand);
-                byte[] data = byteArrayOutputStream.toByteArray();
+                CommandData outCommand = new CommandData(commandName, commandInput);
+                adjustCommandData(commandName, outCommand);
+                byte[] data = serializeCommand(outCommand);
 
-                DatagramPacket sendPacket = new DatagramPacket(data, data.length, new InetSocketAddress(host, port));
-                DatagramPacket receivePacket;
-                try (DatagramSocket datagramSocket = new DatagramSocket()) {
-                    datagramSocket.send(sendPacket);
-
-                    buffer.clear();
-                    receivePacket = new DatagramPacket(buffer.array(), buffer.capacity());
-                    datagramSocket.receive(receivePacket);
-                }
+                DatagramPacket receivePacket = sendAndReceivePacket(data, buffer);
                 buffer.position(receivePacket.getLength());
 
-                buffer.flip();
-                ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(buffer.array(), 0, buffer.limit());
-                ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
-                CommandResult result = (CommandResult) objectInputStream.readObject();
-
-                if (result.getStatusCode() == 0) {
-                    System.out.println(result.getOutput());
-
-                    if (commandName.equalsIgnoreCase("login")) {
-                        jwtToken = result.getToken();
-                        userId = result.getUserId();
-                        System.out.println("Токен доступа получен");
-                    }
-                } else {
-                    System.err.println("Ошибка выполнения команды: " + result.getErrorMessage());
-                }
+                CommandResult result = deserializeResult(buffer);
+                processResult(commandName, result);
             }
         } catch (IOException | ClassNotFoundException e) {
-            System.err.println("Ошибка при подключении к серверу: " + e.getMessage());
+            System.err.println("Error communicating with server: " + e.getMessage());
         }
+    }
+
+    public String[] getInputParts(String line){
+        return line.trim().split("\\s+", 2);
+    }
+
+    private String[] getInput(Scanner scanner) {
+        System.out.print("$ ");
+        String line = scanner.nextLine();
+        return getInputParts(line);
+    }
+
+    private void adjustCommandData(String commandName, CommandData outCommand) {
+        if (commandName.equalsIgnoreCase("login") || commandName.equalsIgnoreCase("register")) {
+            outCommand.setToken(null);
+        } else {
+            outCommand.setToken(jwtToken);
+            outCommand.setUserId(userId);
+        }
+    }
+
+    private byte[] serializeCommand(CommandData outCommand) throws IOException {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
+        objectOutputStream.writeObject(outCommand);
+        return byteArrayOutputStream.toByteArray();
+    }
+
+    private DatagramPacket sendAndReceivePacket(byte[] data, ByteBuffer buffer) throws IOException {
+        DatagramPacket sendPacket = new DatagramPacket(data, data.length, new InetSocketAddress(host, port));
+        DatagramPacket receivePacket;
+
+        try (DatagramSocket datagramSocket = new DatagramSocket()) {
+            datagramSocket.send(sendPacket);
+
+            buffer.clear();
+            receivePacket = new DatagramPacket(buffer.array(), buffer.capacity());
+            datagramSocket.receive(receivePacket);
+        }
+
+        return receivePacket;
+    }
+
+    private CommandResult deserializeResult(ByteBuffer buffer) throws IOException, ClassNotFoundException {
+        buffer.flip();
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(buffer.array(), 0, buffer.limit());
+        ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
+        return (CommandResult) objectInputStream.readObject();
+    }
+
+    private void processResult(String commandName, CommandResult result) {
+        if (result.getStatusCode() == 0) {
+            System.out.println(result.getOutput());
+
+            if (commandName.equalsIgnoreCase("login")) {
+                jwtToken = result.getToken();
+                userId = result.getUserId();
+                System.out.println("Access token received");
+            }
+        } else {
+            System.err.println("Command execution error: " + result.getErrorMessage());
+        }
+    }
+
+    public Long getUserId() {
+        return userId;
     }
 }
