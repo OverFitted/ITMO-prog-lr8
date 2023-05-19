@@ -87,7 +87,13 @@ public class MainApp extends BorderPane {
         form.setPadding(new Insets(10, 10, 10, 10));
         form.setAlignment(Pos.CENTER);
         form.setStyle("-fx-background-color: #EEE; -fx-border-color: #666; -fx-border-width: 2px; -fx-border-radius: 5px; -fx-background-radius: 5px;");
-        form.setPrefWidth(320);
+
+        String description = commandDescriptor.getDescription();
+        Label commandDescriptionLabel = new Label(description.substring(0, 1).toUpperCase() + description.substring(1));
+        commandDescriptionLabel.setWrapText(true);
+        commandDescriptionLabel.setAlignment(Pos.CENTER);
+        commandDescriptionLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #333;");
+        form.getChildren().add(commandDescriptionLabel);
 
         List<TextField> argFields = new ArrayList<>();
 
