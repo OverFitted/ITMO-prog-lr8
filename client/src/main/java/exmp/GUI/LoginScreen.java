@@ -62,7 +62,7 @@ public class LoginScreen extends VBox {
             stage.setResizable(false);
             stage.setTitle("Products map");
 
-            exmp.GUI.ChatWindow chatWindow = new exmp.GUI.ChatWindow();
+            exmp.GUI.ChatWindow chatWindow = new exmp.GUI.ChatWindow(client.getUserId());
             chatWindow.show();
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);

@@ -1,5 +1,6 @@
 package exmp.GUI;
 
+import exmp.ChatClient;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -12,7 +13,12 @@ public class ChatWindow extends Stage {
     private TextArea chatArea;
     private TextField messageField;
 
-    public ChatWindow() {
+    private final long userId;
+    private final exmp.ChatClient chatClient = new ChatClient();
+
+    public ChatWindow(long userId) {
+        this.userId = userId;
+
         VBox layout = new VBox();
         layout.setSpacing(10);
         layout.setPadding(new Insets(10, 10, 10, 10));
@@ -35,11 +41,12 @@ public class ChatWindow extends Stage {
 
     private void sendMessage() {
         String message = messageField.getText();
-        if (!message.isEmpty()) {
-            chatArea.appendText(message + "\n");
-            messageField.clear();
 
-            // Implement chat message sending logic here
+        if (!message.isEmpty()) {
+            chatArea.appendText(userId + ": " + message + "\n");
+            chatClient.sendMessage(new exmp.chat.ChatMessage(userId, message));
+            messageField.clear();
         }
+
     }
 }
