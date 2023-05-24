@@ -10,6 +10,8 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+
 public class LoginScreen extends VBox {
     private final exmp.Client client;
     private final TextField usernameField;
@@ -30,7 +32,13 @@ public class LoginScreen extends VBox {
 
         Button loginButton = new Button("Login");
         loginButton.setMinWidth(200);
-        loginButton.setOnAction(e -> login());
+        loginButton.setOnAction(e -> {
+            try {
+                login();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
         loginButton.setDefaultButton(true);
 
         Button registerButton = new Button("Register");
@@ -43,7 +51,7 @@ public class LoginScreen extends VBox {
         this.setAlignment(Pos.CENTER);
     }
 
-    private void login() {
+    private void login() throws IOException {
         String username = usernameField.getText();
         String password = passwordField.getText();
         String[] commandParts = client.getInputParts(String.format("login %s %s", username, password));

@@ -1,30 +1,50 @@
 package exmp;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*;
+import java.net.InetSocketAddress;
+import java.nio.ByteBuffer;
+import java.nio.channels.DatagramChannel;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ChatServer {
-    private List<ClientHandler> clients;
+    private final int port;
+    private final Map<Long, InetSocketAddress> clientAddresses = new ConcurrentHashMap<>();
 
-    public ChatServer() {
-        clients = new ArrayList<>();
+    public ChatServer(int port) {
+        this.port = port;
     }
 
     public void start() {
-        // Start the server...
-    }
+        try (DatagramChannel channel = DatagramChannel.open()) {
+            channel.bind(new InetSocketAddress(port));
+            ByteBuffer buffer = ByteBuffer.allocate(65536);
 
-    public void broadcastMessage(exmp.chat.ChatMessage message) {
-        for (ClientHandler client : clients) {
-            client.sendMessage(message);
-        }
-    }
+            while (true) {
+                buffer.clear();
+                InetSocketAddress clientAddress = (InetSocketAddress) channel.receive(buffer);
 
-    private class ClientHandler {
-        // ...
+                if (clientAddress == null) {
+                    continue;
+                }
 
-        public void sendMessage(exmp.chat.ChatMessage message) {
-            // Send the message to the client...
+                buffer.flip();
+                ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(buffer.array(), 0, buffer.limit());
+                ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
+                exmp.chat.ChatMessage chatMessage = (exmp.chat.ChatMessage) objectInputStream.readObject();
+
+                clientAddresses.put(chatMessage.getUserId(), clientAddress);
+
+                // Broadcast the received message to all connected clients.
+                for (InetSocketAddress otherClient : clientAddresses.values()) {
+                    if (!otherClient.equals(clientAddress)) {
+                        buffer.flip();
+                        channel.send(buffer, otherClient);
+                    }
+                }
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 }
