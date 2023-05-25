@@ -35,7 +35,6 @@ public class ChatServer {
 
                 clientAddresses.put(chatMessage.getUserId(), clientAddress);
 
-                // Broadcast the received message to all connected clients.
                 for (InetSocketAddress otherClient : clientAddresses.values()) {
                     if (!otherClient.equals(clientAddress)) {
                         buffer.flip();

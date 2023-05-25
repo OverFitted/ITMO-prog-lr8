@@ -72,6 +72,8 @@ public class LoginScreen extends VBox {
 
             exmp.GUI.ChatWindow chatWindow = new exmp.GUI.ChatWindow(client.getUserId());
             chatWindow.show();
+
+            stage.setOnCloseRequest(e -> chatWindow.close());
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Login Failed");

@@ -56,7 +56,7 @@ public class ShowCommand implements exmp.commands.Command {
                 return new exmp.commands.CommandResult(1, null, "Коллекция не содержит продуктов.");
             }
 
-            return new exmp.commands.CommandResult(0, output.toString(), null);
+            return new exmp.commands.CommandResult(0, output.toString(), products, null);
         } catch (Exception e) {
             return new exmp.commands.CommandResult(1, null, e.toString());
         }
