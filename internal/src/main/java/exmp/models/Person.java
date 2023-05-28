@@ -31,28 +31,13 @@ public class Person implements Serializable {
      * @param location    - местонахождение человека.
      */
     @JsonCreator
-    public Person(@JsonProperty("name") String name,
+    public Person(@JsonProperty("id") Long id,
+                  @JsonProperty("name") String name,
                   @JsonProperty("height") Long height,
                   @JsonProperty("eyeColor") Color eyeColor,
                   @JsonProperty("hairColor") Color hairColor,
                   @JsonProperty("nationality") Country nationality,
                   @JsonProperty("location") Location location) {
-        setName(name);
-        setHeight(height);
-        setEyeColor(eyeColor);
-        setHairColor(hairColor);
-        setNationality(nationality);
-        setLocation(location);
-    }
-
-    @JsonCreator
-    public Person(Long id,
-                  String name,
-                  Long height,
-                  Color eyeColor,
-                  Color hairColor,
-                  Country nationality,
-                  Location location) {
         setId(id);
         setName(name);
         setHeight(height);
@@ -61,6 +46,37 @@ public class Person implements Serializable {
         setNationality(nationality);
         setLocation(location);
     }
+
+    public Person(String name,
+                  Long height,
+                  Color eyeColor,
+                  Color hairColor,
+                  Country nationality,
+                  Location location) {
+        setName(name);
+        setHeight(height);
+        setEyeColor(eyeColor);
+        setHairColor(hairColor);
+        setNationality(nationality);
+        setLocation(location);
+    }
+
+//    @JsonCreator
+//    public Person(Long id,
+//                  String name,
+//                  Long height,
+//                  Color eyeColor,
+//                  Color hairColor,
+//                  Country nationality,
+//                  Location location) {
+//        setId(id);
+//        setName(name);
+//        setHeight(height);
+//        setEyeColor(eyeColor);
+//        setHairColor(hairColor);
+//        setNationality(nationality);
+//        setLocation(location);
+//    }
 
     public void setId(long id) {
         this.id = id;
@@ -77,14 +93,8 @@ public class Person implements Serializable {
      */
     @Override
     public String toString() {
-        return "Person{" +
-                "name=" + this.getName() +
-                ", Height=" + this.getHeight() +
-                ", EyeColor=" + this.getEyeColor() +
-                ", HairColor=" + this.getHairColor() +
-                ", Nationality=" + this.getNationality() +
-                ", Location=" + this.getLocation() +
-                '}';
+        return String.format("{\"id\": %d, \"name\": \"%s\", \"height\": %d, \"eyeColor\": \"%s\", \"hairColor\": \"%s\", \"nationality\": \"%s\", \"location\": %s}",
+                id, name, height, eyeColor.toString(), hairColor.toString(), nationality.toString(), location.toString());
     }
 
     /**

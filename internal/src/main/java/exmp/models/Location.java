@@ -24,23 +24,35 @@ public class Location implements Serializable {
      * @param name название местоположения
      */
     @JsonCreator
-    public Location(@JsonProperty("x") float x,
+    public Location(@JsonProperty("id") Long id,
+                    @JsonProperty("x") float x,
                     @JsonProperty("y") double y,
                     @JsonProperty("z") double z,
                     @JsonProperty("name") String name) {
-        setX(x);
-        setY(y);
-        setZ(z);
-        setName(name);
-    }
-
-    public Location(Long id, float x, double y, double z, String name) {
         setId(id);
         setX(x);
         setY(y);
         setZ(z);
         setName(name);
     }
+
+    public Location(float x,
+                    double y,
+                    double z,
+                    String name) {
+        setX(x);
+        setY(y);
+        setZ(z);
+        setName(name);
+    }
+
+//    public Location(Long id, float x, double y, double z, String name) {
+//        setId(id);
+//        setX(x);
+//        setY(y);
+//        setZ(z);
+//        setName(name);
+//    }
 
     public void setId(long id) {
         this.id = id;
@@ -57,12 +69,8 @@ public class Location implements Serializable {
      */
     @Override
     public String toString() {
-        return "Location{" +
-                "X=" + this.getX() +
-                ", Y=" + this.getY() +
-                ", Z=" + this.getZ() +
-                ", Name=" + this.getName() +
-                '}';
+        return String.format("{\"id\": %d, \"x\": %.2f, \"y\": %.2f, \"z\": %.2f, \"name\": \"%s\"}",
+                id, x, y, z, name);
     }
 
     /**

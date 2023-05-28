@@ -59,7 +59,7 @@ public class MainApp extends BorderPane {
         String[] commandShowParts = client.getInputParts("show");
         CommandResult<List<?>> commandShowResult = client.sendCommand(commandShowParts);
         List<exmp.models.Product> products = (List<exmp.models.Product>) commandShowResult.getRawOutput();
-        productTableView = new exmp.GUI.ProductTableView(products);
+        productTableView = new exmp.GUI.ProductTableView(products, client);
         ToggleButton toggleButton = new ToggleButton("Toggle View");
         toggleButton.setOnAction(e -> {
             if (toggleButton.isSelected()) {

@@ -20,17 +20,23 @@ public class Coordinates implements Serializable {
      * @param y координата y
      * @throws IllegalArgumentException если x == null или y <= -452
      */
-    @JsonCreator
-    public Coordinates(@JsonProperty("x") Double x, @JsonProperty("y") Float y) {
+    public Coordinates(Double x, Float y) {
         setX(x);
         setY(y);
     }
 
-    public Coordinates(Long id, Double x, Float y) {
+    @JsonCreator
+    public Coordinates(@JsonProperty("id") Long id, @JsonProperty("x") Double x, @JsonProperty("y") Float y) {
         setId(id);
         setX(x);
         setY(y);
     }
+
+//    public Coordinates(Long id, Double x, Float y) {
+//        setId(id);
+//        setX(x);
+//        setY(y);
+//    }
 
     public void setId(long id){
         this.id = id;
@@ -47,10 +53,8 @@ public class Coordinates implements Serializable {
      */
     @Override
     public String toString() {
-        return "Coordinates{" +
-                "X=" + this.getX() +
-                ", Y=" + this.getY() +
-                '}';
+        return String.format("{\"id\": %d, \"x\": %.2f, \"y\": %.2f}",
+                id, x, y);
     }
 
     /**

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import exmp.enums.UnitOfMeasure;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -91,14 +92,13 @@ public class Product implements Comparable<Product>, Serializable {
      * @param unitOfMeasure   - единица измерения продукта.
      * @param owner           - владелец продукта.
      */
-    @JsonCreator
-    public Product(@JsonProperty("name") String name,
-                   @JsonProperty("coordinates") exmp.models.Coordinates coordinates,
-                   @JsonProperty("price") int price,
-                   @JsonProperty("partNumber") String partNumber,
-                   @JsonProperty("manufactureCost") Float manufactureCost,
-                   @JsonProperty("unitOfMeasure") UnitOfMeasure unitOfMeasure,
-                   @JsonProperty("owner") exmp.models.Person owner) {
+    public Product(String name,
+                   exmp.models.Coordinates coordinates,
+                   int price,
+                   String partNumber,
+                   Float manufactureCost,
+                   UnitOfMeasure unitOfMeasure,
+                   exmp.models.Person owner) {
         this.id = idGenerator.getAndIncrement();
         setName(name);
         setCoordinates(coordinates);
@@ -110,16 +110,17 @@ public class Product implements Comparable<Product>, Serializable {
         setOwner(owner);
     }
 
-    public Product(Long id,
-                   String name,
-                   exmp.models.Coordinates coordinates,
-                   int price,
-                   String partNumber,
-                   Float manufactureCost,
-                   UnitOfMeasure unitOfMeasure,
-                   exmp.models.Person owner,
-                   Long userId) {
-        this.id = id;
+    @JsonCreator
+    public Product(@JsonProperty("id") Long id,
+                   @JsonProperty("name") String name,
+                   @JsonProperty("coordinates") exmp.models.Coordinates coordinates,
+                   @JsonProperty("price") int price,
+                   @JsonProperty("partNumber") String partNumber,
+                   @JsonProperty("manufactureCost") Float manufactureCost,
+                   @JsonProperty("unitOfMeasure") UnitOfMeasure unitOfMeasure,
+                   @JsonProperty("owner") exmp.models.Person owner,
+                   @JsonProperty("userId") Long userId) {
+        setId(id);
         setName(name);
         setCoordinates(coordinates);
         setCreationDate(new java.util.Date());
@@ -129,6 +130,38 @@ public class Product implements Comparable<Product>, Serializable {
         setUnitOfMeasure(unitOfMeasure);
         setOwner(owner);
         setUserId(userId);
+    }
+
+//    public Product(Long id,
+//                   String name,
+//                   exmp.models.Coordinates coordinates,
+//                   int price,
+//                   String partNumber,
+//                   Float manufactureCost,
+//                   UnitOfMeasure unitOfMeasure,
+//                   exmp.models.Person owner,
+//                   Long userId) {
+//        this.id = id;
+//        setName(name);
+//        setCoordinates(coordinates);
+//        setCreationDate(new java.util.Date());
+//        setPrice(price);
+//        setPartNumber(partNumber);
+//        setManufactureCost(manufactureCost);
+//        setUnitOfMeasure(unitOfMeasure);
+//        setOwner(owner);
+//        setUserId(userId);
+//    }
+
+    /**
+     * Возвращает строковое представление объекта Product.
+     *
+     * @return строковое представление объекта Product, содержащее значения всех полей объекта
+     */
+    @Override
+    public String toString() {
+        return String.format("{\"id\": %d, \"name\": \"%s\", \"coordinates\": %s, \"creationDate\": \"%s\", \"price\": %d, \"partNumber\": \"%s\", \"manufactureCost\": %.2f, \"unitOfMeasure\": \"%s\", \"owner\": %s, \"userId\": %d}",
+                id, name, coordinates.toString(), new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy").format(creationDate), price, partNumber, manufactureCost, unitOfMeasure.toString(), owner.toString(), userId);
     }
 
     public void setUserId(long userId) {
@@ -142,25 +175,6 @@ public class Product implements Comparable<Product>, Serializable {
      */
     public Long getUserId() {
         return userId;
-    }
-
-    /**
-     * Возвращает строковое представление объекта Product.
-     *
-     * @return строковое представление объекта Product, содержащее значения всех полей объекта
-     */
-    @Override
-    public String toString() {
-        return "Product{" +
-                "id=" + id +
-                ", name=" + name +
-                ", coordinates=" + coordinates +
-                ", creationDate=" + creationDate +
-                ", price=" + price +
-                ", partNumber=" + partNumber +
-                ", unitOfMeasure=" + unitOfMeasure +
-                ", owner=" + owner +
-                '}';
     }
 
     /**
